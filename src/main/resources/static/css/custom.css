@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+.write-box{
+	max-width:1000px;
+	margin: 30px auto;
+}
+
+.list-box{
+	max-width:1000px;
+	margin: 30px auto;
+}
+
+.search-box{
+	margin-bottom: 10px;
+}
