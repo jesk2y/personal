@@ -1,6 +1,7 @@
 package org.jeskey;
 
 import org.jeskey.domain.Board;
+import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,16 +17,66 @@ public class MapperTests {
 	private BoardMapper boardMapper;
 	
 	@Test
+	public void getList() {
+		
+		PageDTO page = new PageDTO();
+		page.setPage(3);//3페이지로 설정
+		
+		page.setCount(boardMapper.totalCount(page));	//카운트 먼저 설정
+		
+		
+		log.info("시작: "+page.getStart() 
+				+ ", 끝: "+page.getEnd() 
+				+ ", 이전 페이지: "+page.isPrev() 
+				+", 다음 페이지: "+page.isNext());
+		
+		for(Board b : boardMapper.getListBoard(page)) {
+			log.info(b);
+		}
+	}
+
+	@Test
+	public void getListWithSearch() {
+		
+		PageDTO page = new PageDTO();
+		
+		page.setType("tc");
+		page.setKeyword("9");
+		page.setCount(boardMapper.totalCount(page));
+		
+		for(Board b : boardMapper.getListBoard(page)) {
+			log.info(b);
+		}
+	}
+	
+	@Test
 	public void insert() {
 		
-		for(int i = 0; i< 25; i++) {
+		for(int i = 0; i< 555; i++) {
 			Board board = Board.builder()
 					.title("제목" + i)
 					.content("내용" + i)
-					.password("1111")
+					.user_id("user1")
 					.build();	
-			log.info(i);
 			boardMapper.insertBoard(board);
 		}
 	}
+	
+	@Test
+	public void update() {
+
+		Board board = Board.builder()
+				.bno(25L)
+				.title("수정테스트")
+				.content("수정테스트").build();
+		
+		log.info(boardMapper.updateBoard(board));	//1 출력
+		log.info(boardMapper.getOneBoard(25L));	
+	}
+	
+	@Test
+	public void delete() {
+		log.info(boardMapper.deleteBoard(24L));	//1 출력
+	}
+
 }

@@ -17,9 +17,11 @@ import lombok.ToString;
 @NoArgsConstructor
 public class BoardDTO {
 	
+	private Long bno;
 	private String title;
 	private String content;
-	private String password;
+	private Long count_visit;
 	private LocalDateTime regdate;
-
+	
+	private String user_id;
 }

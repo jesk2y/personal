@@ -4,58 +4,55 @@
 <div layout:fragment="content">
 	<div class="row mt-3">
 		<div class="col list-box">
-		
-			<!-- search -->
-			<form>
-				<div class="col search-box">
-					<div class="input-group">
-						<div class="input-group-prepend">
-							<select class="form-select" name="type">
-								<option value="">선택</option>
-								<option value="t">제목</option>
-								<option value="c">내용</option>
-								<option value="tc">제목+내용</option>
-
-							</select>
-						</div>
-						<input type="text" class"form-control" name="keyword">
-						<div class="input-group-append">
-							<button class="btn btn-outline-secondary searchBtn"
-								type="submit">검색</button>
-						</div>
-					</div>
-				</div>
-			</form>
-			<!-- search end -->
+			
 			<div class="card">
 				<div class="card-header">글 목록</div>
-				<div class="card-body">
-					<table class="table">
-						<thead>
-							<tr>
-								<th scope="col">번호</th>
-								<th scope="col">제목</th>
-								<th scope="col"></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<th scope="row">1</th>
-								<td>Title</td>
-								<td>2020-02-12</td>
-							</tr>
-						</tbody>
-					</table>
+				<div class="card-body list-body">
+					<ul>
+						<li class="list-body-wrap" th:each="dto:${responseDTO}" >
+							<div class="list-title">
+								<a th:href="@{/board/list(page=${pageObj.start-1})}" th:text="${dto.title}"></a>
+							</div>
+							<div class="list-info"
+							th:text="${#temporals.format(dto.regdate, 'yyyy-MM-dd')}"></div>
+						</li>
+					</ul>
 
 					<!-- pagination -->
-					<div class="float-end">
-						<ul class="pagination">
-							<li class="page-item"><a class="page-link">Previous</a></li>
-
-							<li><a class="page-link">1</a></li>
-
-							<li><a class="page-link">Next</a></li>
-						</ul>
+					<div class="float-end" >
+						<form id="actionForm">
+							<!-- search -->
+							<div class="col search-box">
+								<div class="input-group">
+									<div class="input-group-prepend">
+										<select class="form-select" name="type">
+											<option value="tc" selected>제목+내용</option>
+											<option value="t">제목</option>
+											<option value="c">내용</option>
+											<option value="w">작성자</option>
+										</select>
+									</div>
+									<input type="text" class="form-control" name="keyword" th:value="${pageObj.keyword}">
+									<div class="input-group-append">
+										<button class="btn btn-outline-secondary searchBtn"
+											type="submit">검색</button>
+									</div>
+								</div>
+							</div>
+							<!-- search end -->
+							<ul class="pagination" th:if="${pageObj.count > pageObj.display}">
+								<li class="page-item" th:if="${pageObj.prev}">
+									<a class="page-link" th:data-page="${pageObj.start-1}">Previous</a></li>
+								
+								<li class="page-item" th:each="num: ${#numbers.sequence(pageObj.start, pageObj.end)}">
+									<a class="page-link" th:classappend="${pageObj.page == num} ? 'active' : ''"
+											th:data-page="${num}" th:text="${num}"></a></li>
+								
+								<li class="page-item" th:if="${pageObj.next}">
+									<a class="page-link" th:data-page="${pageObj.end+1}">Next</a></li>
+							</ul>
+							
+						</form>
 					</div>
 					<!-- pagination end -->
 				</div>
@@ -66,5 +63,28 @@
 
 <script layout:fragment="script" th:inline="javascript">
 	
+	const form = document.querySelector("#actionForm")
+	
+	console.log([[${pageObj}]])
+	
+	function read(bno){
+		form.setAttribute("action","/content")
+		form.append("bno", bno)	
+		
+		form.submit()
+	}
+	
+	document.querySelector(".pagination").addEventListener("click",function(e){
+		
+		const el = document.createElement("input")
+		
+		el.setAttribute("type", "hidden")
+		el.setAttribute("name", "page")
+		el.setAttribute("value", e.target.dataset.page)
+		
+		form.appendChild(el)
+		
+		form.submit()
+	})
 </script>
 </html>
