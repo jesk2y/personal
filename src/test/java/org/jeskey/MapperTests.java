@@ -40,7 +40,7 @@ public class MapperTests {
 		
 		PageDTO page = new PageDTO();
 		
-		page.setType("tc");
+		page.setTarget("tc");
 		page.setKeyword("9");
 		page.setCount(boardMapper.totalCount(page));
 		

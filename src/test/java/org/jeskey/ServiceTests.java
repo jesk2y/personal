@@ -22,7 +22,7 @@ public class ServiceTests {
 		
 		PageDTO page = new PageDTO();
 		
-		page.setType("tc");
+		page.setTarget("tc");
 		page.setKeyword("9");
 		
 		for(BoardDTO b : boardService.getList(page)) {

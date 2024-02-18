@@ -4,8 +4,8 @@
 
 	
 	<sql id="search">
-		<if test="types != null">
-			<foreach collection="types" item="item" open="and (" close=")" separator="or">
+		<if test="targets != null">
+			<foreach collection="targets" item="item" open="and (" close=")" separator="or">
 			<if test="item == 't'.toString()">
 			title LIKE CONCAT("%", #{keyword},"%")
 			</if>
@@ -13,7 +13,7 @@
 			content LIKE CONCAT("%", #{keyword},"%")
 			</if>
 			<if test="item == 'w'.toString()">
-			writer LIKE CONCAT("%", #{keyword},"%")
+			user_id LIKE CONCAT("%", #{keyword},"%")
 			</if>
 			</foreach>
 		</if>
@@ -41,7 +41,6 @@
 	</insert>
 	
 	<update id="updateBoard">
-	
 		update board set title = #{title}, content = #{content}
 		where bno = #{bno}   
 		    		

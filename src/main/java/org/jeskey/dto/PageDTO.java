@@ -19,8 +19,8 @@ public class PageDTO {
 	private int start, end, page, count, bno;
 	private boolean prev, next;
 	
-	private String keyword, type;
-	private String[] types;
+	private String keyword, target;
+	private String[] targets;
 
 	private String link;
 	
@@ -30,16 +30,15 @@ public class PageDTO {
 		this.next = false;
 	}
 	
-	public void setType(String type) {
-		this.type = type;
+	public void setTarget(String target) {
+		this.target = target;
 		
-		if(type.length() == 0) {
-			this.type = null;
+		if(target.length() == 0) {
+			this.target = null;
 			return;
 		}
 		
-		this.types = this.type.split("");
-		
+		this.targets = this.target.split("");
 	}
 
 	public void setCount(int count) {
@@ -55,17 +54,17 @@ public class PageDTO {
 
 		if (display * this.end >= this.count) {
 
-			this.end = (int) Math.ceil(this.count / (double) display);
-			this.start = (int) (this.end - length + 1);
+			this.end = (int) Math.ceil(this.count / (double) display) + 1;
+			this.start = (int) (end == 1? 1 : this.end - length);
 		}else{
 			this.next = true;
 		}
 
-		if (this.start != 1) {
+		if (this.start > 1) {
 			this.prev = true;
+		}else {
+			this.start = 1;
 		}
-		
-		
 	}
 
 	private int getSkip() {
@@ -73,24 +72,20 @@ public class PageDTO {
 		return (this.page - 1) * display;
 	}
 	
-	public String setLink(String path) {
+	public void setLink() {
 		
-		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath(path);
+		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance();
 		
-		if(page > 1) {
-			System.out.println("hi");
+		if(this.page > 1) {
 			uriComponentsBuilder.queryParam("page", this.page);
 		}
 		
-		if(type != null || keyword != null) {
+		if(this.target != null && this.keyword != null) {
 			
-			uriComponentsBuilder.queryParam("type", this.type)
+			uriComponentsBuilder.queryParam("target", this.target)
 			.queryParam("keyword", this.keyword);
 		}
 		
 		this.link = uriComponentsBuilder.toUriString();
-		
-		return this.link;
-		
 	}
 }

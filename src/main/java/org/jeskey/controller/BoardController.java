@@ -20,9 +20,7 @@ public class BoardController {
 	private final BoardService boardService;
 	
 	@GetMapping("/list")
-	public void list(@ModelAttribute("pageObj") PageDTO dto, Model model) {
-		
-		dto.setLink(null);
+	public void listGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
 		
 		model.addAttribute("responseDTO",boardService.getList(dto));
 	}
@@ -30,5 +28,11 @@ public class BoardController {
 	@GetMapping("/register")
 	public String registerGET() {
 		return "/board/register";
+	}
+	
+	@GetMapping("/content")
+	public String contentGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
+		
+		return "/board/content";
 	}
 }
