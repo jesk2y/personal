@@ -16,8 +16,9 @@ public class PageDTO {
 	private static double length = 7.0; // 페이지네이션 길이
 	private int display = 15; // 한 페이지의 글 수
 
-	private int start, end, page, count, bno;
+	private int start, end, page, count;
 	private boolean prev, next;
+	private Long bno;
 	
 	private String keyword, target;
 	private String[] targets;

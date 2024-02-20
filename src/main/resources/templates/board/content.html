@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
+<head>
+<title>글 작성</title>
+</head>
+<div layout:fragment="content">
+	<div class="row mt-3">
+		<div class="col">
+			<div class="card write-box">
+				<div class="card-header">
+					<b>[[${contentDTO.title}]]</b>
+				</div>
+				<div class="card-body">
+					<div class="input-group mb-3 user-input">
+						<span class="input-group-text">작성자</span> <input type="text"
+							class="form-control" style="max-width: 200px"
+							th:value="${contentDTO.user_id}" readonly="readonly">
+					</div>
+					<div class="input-group mb-3 date-input">
+						<span class="input-group-text">작성일</span> <input type="text"
+							class="form-control" style="max-width: 200px"
+							th:value="${#temporals.format(contentDTO.regdate, 'yyyy-MM-dd')}" readonly="readonly">
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">내용</span>
+						<textarea rows="10" class="form-control col-sm-5"
+							readonly="readonly">
+								[[${contentDTO.content}]]</textarea>
+					</div>
+					<div class="float-end">
+						<div style="float: left">
+							<a class="btn btn-secondary" th:href=@{/board/list}>글목록</a>
+						</div>
+						<div style="float: right">
+							<button class="btn btn-primary">글쓰기</button>
+							<button class="btn btn-success">수정</button>
+							<a class="btn btn-danger" onclick="history.back()">삭제</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:insert="~{/board/list.html :: listFragment}"></div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+	
+</script>
+</html>

@@ -11,7 +11,12 @@
 }
 
 .search-box{
-	margin-bottom: 10px;
+	float : left;
+	margin-left:5px;
+}
+
+.float-end{
+	float : none !important;
 }
 
 ul, ol {
@@ -20,7 +25,7 @@ ul, ol {
 }
 
 .list-body{
-	padding: 0px
+	padding:0px;
 }
 
 .list-body-wrap{
@@ -40,4 +45,28 @@ ul, ol {
 
 .page-item .active{
 	background-color:#aaa !important
+}
+
+.pagination{
+	float:right;
+	margin-right:5px;
+}
+
+textarea {
+    text-align: justify;
+    white-space: normal;
+}
+
+.user-input{
+	float: left; 
+	width:unset
+}
+
+.date-input{
+	float: right; 
+	width:unset
+}
+
+.list-ul .active{
+	background:#f4f6ff;
 }

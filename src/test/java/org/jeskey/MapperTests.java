@@ -24,7 +24,6 @@ public class MapperTests {
 		
 		page.setCount(boardMapper.totalCount(page));	//카운트 먼저 설정
 		
-		
 		log.info("시작: "+page.getStart() 
 				+ ", 끝: "+page.getEnd() 
 				+ ", 이전 페이지: "+page.isPrev() 
