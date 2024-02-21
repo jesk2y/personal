@@ -13,17 +13,20 @@
     					글 작성
     				</div>
     				<div class="card-body">
-    					<form>
+    					<form method="POST" 
+    						th:action="${contentDTO == null} ? '/board/register' : '/board/update'">
     						<div class="input-group mb-3">
     							<span class="input-group-text">제목</span>
-    							<input type="text" name="title" class="form-control" placeholder="Title">
+    							<input type="text" name="title" class="form-control" 
+    							th:value="${contentDTO == null} ? '' : ${contentDTO.title}">
     						</div>
     						
     						<div class="input-group mb-3">
     							<span class="input-group-text">내용</span>
-    							<textarea name="content" rows="10" class="form-control col-sm-5"></textarea>
+    							<textarea name="content" rows="10" class="form-control col-sm-5"
+    							><th:block th:if="${contentDTO != null}">[[${contentDTO.content}]]</th:block></textarea>
     						</div>
-    						
+    						<input type="hidden" name="user_id" value="user1"/><!--/* 임시값 */-->
     						<div class="my-4">
     							<div class="float-end">
     								<button type="submit" class="btn btn-primary">등록</button>

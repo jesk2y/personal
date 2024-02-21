@@ -47,9 +47,14 @@ ul, ol {
 	background-color:#aaa !important
 }
 
+.page-div{
+	display:block;
+	width:100%
+}
+
 .pagination{
 	float:right;
-	margin-right:5px;
+	margin-right:10px;
 }
 
 textarea {
@@ -69,4 +74,9 @@ textarea {
 
 .list-ul .active{
 	background:#f4f6ff;
+}
+
+.list-btn{
+	float:left;
+	margin-left:10px;
 }

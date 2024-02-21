@@ -1,12 +1,15 @@
 package org.jeskey.controller;
 
+import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.service.BoardService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,12 +27,7 @@ public class BoardController {
 		
 		model.addAttribute("listDTO",boardService.getList(dto));
 	}
-	
-	@GetMapping("/register")
-	public String registerGET() {
-		return "/board/register";
-	}
-	
+
 	@GetMapping("/content")
 	public String contentGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
 		
@@ -37,5 +35,47 @@ public class BoardController {
 		model.addAttribute("listDTO",boardService.getList(dto));
 		
 		return "/board/content";
+	}
+	
+	@GetMapping("/register")
+	public String registerGET() {
+		
+		return "/board/write";
+	}
+	
+	@PostMapping("/register")
+	public String registerPOST(BoardDTO dto) {
+		
+		Long bno = boardService.insert(dto);
+		
+		return "redirect:/board/content?bno="+ bno;
+	}
+	
+	
+	@GetMapping("/update")
+	public String updateGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
+		
+		model.addAttribute("contentDTO", boardService.getOne(dto.getBno()));
+		
+		return "/board/write";
+	}
+
+	@PostMapping("/update")
+	public String updatePOST(BoardDTO dto) {
+		
+		Long bno = boardService.insert(dto);
+		
+		return "redirect:/board/content?bno="+ bno;
+	}
+	
+	@PostMapping("/delete")
+	public String deletePOST(@RequestParam("bno")Long bno) {
+		//post는 requestParam 안붙이면 에러남? 
+		
+		System.out.println(bno);
+		
+		boardService.delete(bno);
+		
+		return "redirect:/board/list";
 	}
 }

@@ -44,11 +44,13 @@ public class BoardServiceImpl implements BoardService{
 
 	
 	@Override
-	public int insert(BoardDTO dto) {
+	public Long insert(BoardDTO dto) {
 		
 		Board board = DtoToEntity(dto);
 		
-		return boardMapper.insertBoard(board);
+		int i = boardMapper.insertBoard(board);
+		
+		return board.getBno();
 	}
 
 	@Override
@@ -60,11 +62,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int update(BoardDTO dto) {
+	public Long update(BoardDTO dto) {
 		
 		Board board = DtoToEntity(dto);
 		
-		return boardMapper.updateBoard(board);
+		int i = boardMapper.updateBoard(board);
+		
+		return board.getBno();
 	}
 
 	@Override

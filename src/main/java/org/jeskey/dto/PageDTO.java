@@ -69,15 +69,18 @@ public class PageDTO {
 	}
 
 	private int getSkip() {
-		System.out.println((this.page - 1) * display);
 		return (this.page - 1) * display;
 	}
 	
-	public void setLink() {
+	public String getLink(Long bno) {
 		
 		UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance();
 		
-		if(this.page > 1) {
+		if(bno != null && bno > 0) {
+			uriComponentsBuilder.queryParam("bno", bno);
+		}
+		
+		if(this.page > 0) {
 			uriComponentsBuilder.queryParam("page", this.page);
 		}
 		
@@ -88,5 +91,7 @@ public class PageDTO {
 		}
 		
 		this.link = uriComponentsBuilder.toUriString();
+		
+		return this.link;
 	}
 }

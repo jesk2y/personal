@@ -57,8 +57,22 @@ public class MapperTests {
 					.content("내용" + i)
 					.user_id("user1")
 					.build();	
-			boardMapper.insertBoard(board);
+			System.out.println(boardMapper.insertBoard(board));
 		}
+	}
+
+	@Test
+	public void insertOne() {
+	
+		Board board = Board.builder()
+				.title("작성테스트")
+				.content("내용" )
+				.user_id("user1")
+				.build();	
+		
+		boardMapper.insertBoard(board);
+		
+		System.out.println(board.getBno());
 	}
 	
 	@Test

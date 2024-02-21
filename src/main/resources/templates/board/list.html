@@ -5,17 +5,14 @@
 	<div class="row mt-3" th:fragment="listFragment">
 		<div class="col list-box">
 			<div class="card">
-				<div class="card-header">글 목록</div>
-				<div class="card-body list-body"
-					th:with="search='__(${#strings.isEmpty(pageObj.keyword)} 
-								? '' : ('&keyword=' + ${pageObj.keyword} + '&target='+ ${pageObj.target}))__'">
-					<!--/* url 검색 파라미터 추가 */-->
+				<a class="card-header" th:href="@{/board/list}"><b>글 목록</b></a>
+				<div class="card-body list-body">
 					<ul class="list-ul">
 						<li class="list-body-wrap" th:each="dto:${listDTO}"
 						th:classappend="${pageObj.bno == dto.bno} ? 'active' : ''">
 							<div class="list-title">
 								<a
-									th:href="@{/board/content(bno=${dto.bno}, page=${pageObj.page})} + ${search}"
+									th:href="@{/board/content} + ${pageObj.getLink(dto.bno)}"
 									th:text="${dto.title}"></a>
 							</div>
 							<div class="list-info"
@@ -23,15 +20,17 @@
 						</li>
 					</ul>
 					<div class="float-end">
+						<a class="btn btn-primary" style="float:left; margin-left:10px;"
+							th:href="@{/board/register}">글쓰기</a>
 						<!-- search -->
 						<div class="col search-box">
 							<div class="input-group">
 								<div class="input-group-prepend">
 									<select class="form-select">
-										<option value="tc">제목+내용</option>
-										<option value="t">제목</option>
-										<option value="c">내용</option>
-										<option value="w">작성자</option>
+										<option value="tc" th:selected="${pageObj.target =='tc'}">제목+내용</option>
+										<option value="t" th:selected="${pageObj.target =='t'}">제목</option>
+										<option value="c" th:selected="${pageObj.target =='c'}">내용</option>
+										<option value="w" th:selected="${pageObj.target =='w'}">작성자</option>
 									</select>
 								</div>
 								<input type="text" class="form-control keyword" name="keyword"
@@ -42,9 +41,11 @@
 								</div>
 							</div>
 						</div>
-						<!-- search end -->
 						<!-- pagination -->
-						<th:block name="uriSetting">
+						<th:block name="uriSetting"
+					th:with="search='__(${#strings.isEmpty(pageObj.keyword)} 
+								? '' : ('&keyword=' + ${pageObj.keyword} + '&target='+ ${pageObj.target}))__'">
+						<!--/* url 검색 파라미터 추가 */-->
 							<ul class="pagination">
 								<li class="page-item" th:if="${pageObj.prev}"><a
 									class="page-link"
@@ -66,76 +67,44 @@
 						</th:block>
 					</div>
 				</div>
-				<form id="actionForm"></form>
+				<form id="actionForm" action="/board/list"></form>
 			</div>
 		</div>
+		<script>
+		const actionForm = document.querySelector("#actionForm")
+		
+		document.querySelector(".searchBtn").addEventListener("click",function(e){
+			
+			const keyword = document.querySelector(".keyword")
+			const select = document.querySelector("select")
+			
+			if(keyword.value.length == 0 || keyword.value == null){
+				
+				alert("키워드를 입력해주세요")
+				return
+			}
+			
+			const keywordInput = document.createElement("input")
+			const targetInput = document.createElement("input")
+			
+			keywordInput.setAttribute("type", "hidden")
+			keywordInput.setAttribute("name", "keyword")
+			keywordInput.setAttribute("value", keyword.value)
+			
+			targetInput.setAttribute("type", "hidden")
+			targetInput.setAttribute("name", "target")
+			targetInput.setAttribute("value", select.options[select.selectedIndex].value)
+			
+			actionForm.appendChild(keywordInput)
+			actionForm.appendChild(targetInput)
+			
+			actionForm.submit()
+		})
+		</script>
 	</div>
 </div>
 <script layout:fragment="script" th:inline="javascript">
 	
-	const form = document.querySelector("#actionForm")
-	console.log([[${pageObj}]])
-	/* 	//form 방식 페이지네이션
-		document.querySelector(".pagination").addEventListener("click",function(e){
 
-		let pageObj = [[${pageObj}]]
-		
-		const pageInput = document.createElement("input")
-		
-		el.setAttribute("type", "hidden")
-		el.setAttribute("name", "page")
-		el.setAttribute("value", e.target.dataset.page)
-	
-		form.appendChild(pageInput)
-		
-		if(pageObj.keyword != null || pageObj.keyword.length > 0){
-			const keywordInput = document.createElement("input")
-			
-			el.setAttribute("type", "hidden")
-			el.setAttribute("name", "keyward")
-			el.setAttribute("value", pageObj.keyword)
-		
-			form.appendChild(pageInput)
-		}
-		
-		if(pageObj.target != null || pageObj.target.length > 0){
-			const typeInput = document.createElement("input")
-			
-			el.setAttribute("type", "hidden")
-			el.setAttribute("name", "target")
-			el.setAttribute("value", pageObj.target)
-		
-			form.appendChild(pageInput)
-		}
-		form.submit()
-	})*/	
-	
-	document.querySelector(".searchBtn").addEventListener("click",function(e){
-		
-		const keyword = document.querySelector(".keyword")
-		const select = document.querySelector("select")
-		
-		if(keyword.value.length == 0 || keyword.value == null){
-			
-			alert("키워드를 입력해주세요")
-			return
-		}
-		
-		const keywordInput = document.createElement("input")
-		const targetInput = document.createElement("input")
-		
-		keywordInput.setAttribute("type", "hidden")
-		keywordInput.setAttribute("name", "keyword")
-		keywordInput.setAttribute("value", keyword.value)
-		
-		targetInput.setAttribute("type", "hidden")
-		targetInput.setAttribute("name", "target")
-		targetInput.setAttribute("value", select.options[select.selectedIndex].value)
-		
-		form.appendChild(keywordInput)
-		form.appendChild(targetInput)
-		
-		form.submit()
-	})
 </script>
 </html>

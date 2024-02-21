@@ -25,26 +25,40 @@
 					<div class="input-group mb-3">
 						<span class="input-group-text">내용</span>
 						<textarea rows="10" class="form-control col-sm-5"
-							readonly="readonly">
-								[[${contentDTO.content}]]</textarea>
+							readonly="readonly">[[${contentDTO.content}]]</textarea>
 					</div>
 					<div class="float-end">
 						<div style="float: left">
-							<a class="btn btn-secondary" th:href=@{/board/list}>글목록</a>
+							<a class="btn btn-secondary" th:href="@{/board/list}">목록</a>
 						</div>
 						<div style="float: right">
-							<button class="btn btn-primary">글쓰기</button>
-							<button class="btn btn-success">수정</button>
-							<a class="btn btn-danger" onclick="history.back()">삭제</a>
+							<a class="btn btn-success" th:href="@{/board/update}+${pageObj.getLink(contentDTO.bno)}">수정</a>
+							<a class="btn btn-danger delete">삭제</a>
 						</div>
 					</div>
 				</div>
 			</div>
+		<a class="btn btn-primary" style="float: right" th:href="@{/board/register}">글쓰기</a>
+		<form id="deleteForm" action="/board/delete" method="post"></form>
 		</div>
 	</div>
 	<div th:insert="~{/board/list.html :: listFragment}"></div>
 </div>
 <script layout:fragment="script" th:inline="javascript">
-	
+
+	const deleteForm = document.querySelector("#deleteForm")
+
+	document.querySelector(".delete").addEventListener("click", function(e){
+		
+		const deleteInput = document.createElement("input")
+		
+		deleteInput.setAttribute("type", "hidden")
+		deleteInput.setAttribute("name", "bno")
+		deleteInput.setAttribute("value",  [[${contentDTO.bno}]])
+		
+		deleteForm.appendChild(deleteInput)
+		
+		deleteForm.submit()
+	})
 </script>
 </html>

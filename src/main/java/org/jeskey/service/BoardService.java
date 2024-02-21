@@ -9,11 +9,11 @@ public interface BoardService {
 	
 	public List<BoardDTO> getList(PageDTO dto);
 	
-	public int insert(BoardDTO dto);
+	public Long insert(BoardDTO dto);
 	
 	public BoardDTO getOne(Long bno);
 	
-	public int update(BoardDTO dto);
+	public Long update(BoardDTO dto);
 	
 	public int delete(Long bno);
 	
