@@ -31,6 +31,11 @@
 		select * from board where bno = #{bno}
 	</select>
 	
+	<update id="addCount">
+		update board set count_visit = count_visit + 1
+		where bno = #{bno}   
+	</update>
+	
 	<insert id="insertBoard">
        insert into board(title, content, user_id) 
        		values (#{title}, #{content}, #{user_id}) 
@@ -47,7 +52,6 @@
        	<selectKey resultType="long" keyProperty="bno">
        		SELECT LAST_INSERT_ID()
   		</selectKey>
-  		
 	</update>
 	       
 	<delete id="deleteBoard">

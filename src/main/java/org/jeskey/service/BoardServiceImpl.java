@@ -16,9 +16,9 @@ import lombok.RequiredArgsConstructor;
 public class BoardServiceImpl implements BoardService{
 
 	private final BoardMapper boardMapper;
-	
+
 	private BoardDTO EntityToDto(Board vo) {
-		
+
 		BoardDTO dto = BoardDTO.builder()
 				.bno(vo.getBno())
 				.title(vo.getTitle())
@@ -27,53 +27,54 @@ public class BoardServiceImpl implements BoardService{
 				.regdate(vo.getRegdate())
 				.count_visit(vo.getCount_visit())
 				.build();
-		
+
 		return dto;
 	}
-	
+
 	private Board DtoToEntity(BoardDTO dto) {
-		
+
 		Board vo = Board.builder()
 				.title(dto.getTitle())
 				.content(dto.getContent())
 				.user_id(dto.getUser_id())
 				.build();
-		
+
 		return vo;
 	}
 
-	
 	@Override
 	public Long insert(BoardDTO dto) {
-		
+
 		Board board = DtoToEntity(dto);
-		
+
 		int i = boardMapper.insertBoard(board);
-		
+
 		return board.getBno();
 	}
 
 	@Override
 	public BoardDTO getOne(Long bno) {
-		
+
 		Board board = boardMapper.getOneBoard(bno);
-		
+
+		boardMapper.addCount(bno);//조회수 증가
+
 		return EntityToDto(board);
 	}
 
 	@Override
 	public Long update(BoardDTO dto) {
-		
+
 		Board board = DtoToEntity(dto);
-		
+
 		int i = boardMapper.updateBoard(board);
-		
+
 		return board.getBno();
 	}
 
 	@Override
 	public int delete(Long bno) {
-		
+
 		return boardMapper.deleteBoard(bno);
 	}
 
@@ -81,7 +82,7 @@ public class BoardServiceImpl implements BoardService{
 	public List<BoardDTO> getList(PageDTO dto) {
 
 		dto.setCount(boardMapper.totalCount(dto));
-		List<BoardDTO> dtoList = 
+		List<BoardDTO> dtoList =
 				boardMapper.getListBoard(dto).stream().map(vo -> EntityToDto(vo)).toList();
 		return dtoList;
 	}

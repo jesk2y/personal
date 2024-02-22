@@ -12,6 +12,8 @@ public interface BoardMapper {
 	List<Board> getListBoard(PageDTO page);	//페이지 파라미터 추가
 	
 	Board getOneBoard(Long bno);
+	
+	int addCount(Long bno);
 
 	int insertBoard(Board board);
 	

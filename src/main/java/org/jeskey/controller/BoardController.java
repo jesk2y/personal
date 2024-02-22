@@ -51,7 +51,6 @@ public class BoardController {
 		return "redirect:/board/content?bno="+ bno;
 	}
 	
-	
 	@GetMapping("/update")
 	public String updateGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
 		
@@ -61,11 +60,11 @@ public class BoardController {
 	}
 
 	@PostMapping("/update")
-	public String updatePOST(BoardDTO dto) {
+	public String updatePOST(@ModelAttribute("pageObj") PageDTO pageDTO, BoardDTO boardDTO) {
 		
-		Long bno = boardService.insert(dto);
+		Long bno = boardService.insert(boardDTO);
 		
-		return "redirect:/board/content?bno="+ bno;
+		return "redirect:/board/content"+pageDTO.getLink(bno);
 	}
 	
 	@PostMapping("/delete")

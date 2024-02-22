@@ -15,8 +15,11 @@
 									th:href="@{/board/content} + ${pageObj.getLink(dto.bno)}"
 									th:text="${dto.title}"></a>
 							</div>
-							<div class="list-info"
-								th:text="${#temporals.format(dto.regdate, 'yyyy-MM-dd')}"></div>
+							<div class="list-info">
+								<span>[[${#temporals.format(dto.regdate, 'yyyy-MM-dd')}]]</span> |
+								<span>[[${dto.user_id}]]</span>
+								<span style="float:right">조회수: [[${dto.count_visit}]]</span>
+							</div>
 						</li>
 					</ul>
 					<div class="float-end">
