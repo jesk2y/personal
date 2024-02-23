@@ -80,3 +80,9 @@ textarea {
 	float:left;
 	margin-left:10px;
 }
+
+.valid-warning{
+	display:block;
+	text-align:right;
+	color:red;
+}

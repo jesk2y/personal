@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		xmlns:th="http://www.thymeleaf.org"
+		layout:decorate="~{basic.html}">
+    <head>
+    	<title>글 작성</title>
+    </head>
+    <div layout:fragment="content">
+    	<div class="row mt-3">
+    		<div class="col">
+    			<div class="card write-box">
+    				<div class="card-header" th:text="${boardDTO == null} ? '글 작성':'글 수정'">
+    				</div>
+    				<div class="card-body">
+					<form method="POST" id="submitForm" th:object="${boardDTO}"
+						th:action="${boardDTO == null} ? '/board/register' : '/board/update'">
+						<div class="input-group mb-3">
+							<span class="input-group-text">제목</span>
+							<input type="text" th:field="*{title}" class="form-control" >
+						</div>
+						<p class="valid-warning" th:errors=*{title}></p>
+						
+						<div class="input-group mb-3">
+							<span class="input-group-text">내용</span>
+							<textarea th:field="*{content}" rows="10" 
+								class="form-control col-sm-5"
+							></textarea>
+						</div>
+						<p class="valid-warning" th:errors=*{content}></p>
+						
+						<input type="hidden" name="user_id" value="user1"/><!--/* 임시값 */-->
+						<div class="my-4">
+							<div class="float-end">
+								<button type="submit" class="btn btn-primary submit">등록</button>
+								<a class="btn btn-secondary" onclick="history.back()">취소</a>
+							</div>
+						</div>
+						<th:block th:if="${pageObj != null}">
+							<input type="hidden" name="page" th:value="${pageObj.page}">
+							<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
+							<input type="hidden" name="target" th:value="${pageObj.target}"> 			
+						</th:block>	
+					</form>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    <script layout:fragment="script" th:inline="javascript">
+    	const form = document.querySelector("#submitForm");
+    	document.querySelector(".submit").addEventListener("click", function(e){
+    		e.preventDefault()
+    	
+    		form.submit()
+    	})
+    	
+    	//서버 에러 처리
+    	const errors=[[${errors}]]
+    	
+    	console.log(errors)
+    	
+    	let errorMsg = ''
+    	
+    	if(errors){
+    		for(let i = 0; i < errors.length; i++){
+    			errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+    		}
+    		alert(errorMsg)
+    	}
+    </script>
+</html>
