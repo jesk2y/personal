@@ -38,11 +38,11 @@
 					</div>
 				</div>
 			</div>
-		<a class="btn btn-primary" style="float: right" th:href="@{/board/register}">글쓰기</a>
 		<form id="deleteForm" action="/board/delete" method="post"></form>
 		</div>
 	</div>
-	<div th:insert="~{/board/list.html :: listFragment}"></div>
+	<div th:insert="~{/board/list.html :: listFragment}">
+	</div>
 </div>
 <script layout:fragment="script" th:inline="javascript">
 
@@ -50,15 +50,20 @@
 
 	document.querySelector(".delete").addEventListener("click", function(e){
 		
-		var deleteInput = document.createElement("input")
 		
-		deleteInput.setAttribute("type", "hidden")
-		deleteInput.setAttribute("name", "bno")
-		deleteInput.setAttribute("value",  [[${contentDTO.bno}]])
+		if(confirm("글을 삭제하시겠습니까? 삭제된 글은 복구되지 않습니다.")){
+			var deleteInput = document.createElement("input")
+			
+			deleteInput.setAttribute("type", "hidden")
+			deleteInput.setAttribute("name", "bno")
+			deleteInput.setAttribute("value",  [[${contentDTO.bno}]])
+			
+			deleteForm.appendChild(deleteInput)
+			
+			deleteForm.submit()
+		}
 		
-		deleteForm.appendChild(deleteInput)
 		
-		deleteForm.submit()
 	})
 </script>
 </html>
