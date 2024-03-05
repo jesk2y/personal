@@ -73,7 +73,7 @@ public class BoardController {
 			return "/board/writePage";
 		}
 
-		Long bno = boardService.insert(boardDTO);
+		Long bno = boardService.update(boardDTO);
 
 		return "redirect:/board/content"+pageDTO.getLink(bno);
 	}

@@ -26,10 +26,6 @@
 	    order by bno desc
 	    limit #{skip}, #{display} 
 	</select>
-
-	<select id="getOneBoard" resultType="org.jeskey.domain.Board">
-		select * from board where bno = #{bno}
-	</select>
 	
 	<update id="addCount">
 		update board set count_visit = count_visit + 1
@@ -48,10 +44,6 @@
 	<update id="updateBoard">
 		update board set title = #{title}, content = #{content}
 		where bno = #{bno}   
-		    		
-       	<selectKey resultType="long" keyProperty="bno">
-       		SELECT LAST_INSERT_ID()
-  		</selectKey>
 	</update>
 	       
 	<delete id="deleteBoard">
@@ -63,4 +55,32 @@
 		where bno > 0
 	    <include refid="search"></include>
 	</select>
+	
+	<!-- 이미지 관련 -->
+	<select id="getOneBoard" resultMap="boardResult">
+		select * from board where board.bno = #{bno}
+	</select>
+	
+	<resultMap id="boardResult" type="org.jeskey.domain.Board">
+		<id property="bno" column="bno"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="count_visit" column="count_visit"/>
+		<result property="regdate" column="regdate"/>
+		<collection property="imageSet" column="bno = bno" ofType="org.jeskey.domain.BoardImage"
+				javaType="java.util.Set" select="getImageList"></collection>
+	</resultMap>
+	
+	<select id="getImageList" resultType="org.jeskey.domain.BoardImage">
+		select * from image where bno = #{bno}
+	</select>
+	
+	<insert id="insertImage">
+    	insert into image(uuid, file_name, ord, bno) 
+       	values (#{uuid}, #{fileName}, #{ord}, #{bno}) 
+	</insert>
+	
+	<delete id="clearImage">
+		delete from image where bno = #{bno}
+	</delete>
 </mapper>

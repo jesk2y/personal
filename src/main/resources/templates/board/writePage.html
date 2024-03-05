@@ -14,6 +14,7 @@
     				<div class="card-body">
 					<form method="POST" id="submitForm" th:object="${boardDTO}"
 						th:action="${boardDTO == null} ? '/board/register' : '/board/update'">
+						<input type="hidden" th:field="*{bno}" >
 						<div class="input-group mb-3">
 							<span class="input-group-text">제목</span>
 							<input type="text" th:field="*{title}" class="form-control" >
