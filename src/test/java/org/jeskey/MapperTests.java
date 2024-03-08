@@ -1,7 +1,8 @@
 package org.jeskey;
 
+import java.util.UUID;
+
 import org.jeskey.domain.Board;
-import org.jeskey.domain.BoardImage;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,7 @@ public class MapperTests {
 
 	@Test
 	public void getOne() {
-		log.info(boardMapper.getOneBoard(1347L));
+		log.info(boardMapper.getOneBoard(561L));
 	}
 
 	@Test
@@ -99,19 +100,26 @@ public class MapperTests {
 	}
 
 	@Test
-	public void insertImage() {
+	public void insertWithImage() {
 
+		Board board = Board.builder()
+				.title("이미지첨부테스트")
+				.content("내용" )
+				.user_id("user1")
+				.build();
+
+		long bno = boardMapper.insertBoard(board);
 
 		for(int i = 0; i<3; i++) {
-
-			BoardImage image = BoardImage.builder()
-					.uuid("111"+i)
-					.bno(1347L)
-					.fileName("파일"+i)
-					.ord(i).build();
-
-			boardMapper.insertImage(image);
+			board.addImage(UUID.randomUUID().toString(), "file"+i+".jpg");
 		}
+
+		log.info("bno: "+board.getBno());
+	}
+
+	@Test
+	public void getOneWithImage() {
+		log.info(boardMapper.getOneBoard(1119L));
 	}
 
 }

@@ -1,8 +1,6 @@
 package org.jeskey.domain;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,19 +22,15 @@ public class Board {
 	private LocalDateTime regdate;
 
 	private String user_id;
-
-	private Set<BoardImage> imageSet = new HashSet<>();
-
-	public void addImage(String uuid, String fileName) {
-
-		BoardImage boardImage = BoardImage.builder()
-				.uuid(uuid)
-				.fileName(fileName)
-				.bno(this.bno)
-				.ord(imageSet.size())
-				.build();
-
-		imageSet.add(boardImage);
-	}
+	/*
+	 * @Builder.Default private List<File> fileList = new arrayList<>();
+	 *
+	 * public void addFile(String uuid, String fileName, String date) {
+	 *
+	 * File file = File.builder() .uuid(uuid) .file_name(fileName) .date(date)
+	 * .bno(this.bno) .ord(fileList.size()) .build();
+	 *
+	 * fileList.add(file); }
+	 */
 
 }

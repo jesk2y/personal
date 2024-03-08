@@ -1,22 +1,21 @@
 package org.jeskey.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jeskey.domain.Board;
-import org.jeskey.domain.BoardImage;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class BoardServiceImpl implements BoardService{
 
 	private final BoardMapper boardMapper;
@@ -24,7 +23,6 @@ public class BoardServiceImpl implements BoardService{
 	private BoardDTO EntityToDto(Board vo) {
 
 		BoardDTO dto = BoardDTO.builder()
-				.bno(vo.getBno())
 				.title(vo.getTitle())
 				.content(vo.getContent())
 				.user_id(vo.getUser_id())
@@ -32,19 +30,21 @@ public class BoardServiceImpl implements BoardService{
 				.count_visit(vo.getCount_visit())
 				.build();
 
-		if(vo.getImageSet() != null){
-			List<String> fileNames = vo.getImageSet().stream().sorted().map(
-					boardImage -> boardImage.getUuid()+"_"+boardImage.getFileName())
-						.collect(Collectors.toList());
-			dto.setFileNames(fileNames);
+		if(dto.getBno() != null) {
+			dto.setBno(vo.getBno());
 		}
+
+		/*
+		 * if(vo.getImageSet() != null){ List<String> fileNames =
+		 * vo.getImageSet().stream().sorted().map( boardImage ->
+		 * boardImage.getUuid()+"_"+boardImage.getFile_name())
+		 * .collect(Collectors.toList()); dto.setFileNames(fileNames); }
+		 */
 
 		return dto;
 	}
 
 	private Board DtoToEntity(BoardDTO dto) {
-
-		Set<BoardImage> set = new HashSet<>();
 
 		Board vo = Board.builder()
 				.bno(dto.getBno())
@@ -52,13 +52,6 @@ public class BoardServiceImpl implements BoardService{
 				.content(dto.getContent())
 				.user_id(dto.getUser_id())
 				.build();
-
-		if(dto.getFileNames() != null){
-			dto.getFileNames().forEach(fileName -> {
-				String[] arr = fileName.split("_");
-				vo.addImage(arr[0], arr[1]);
-			});
-		}
 
 		return vo;
 	}
@@ -68,13 +61,8 @@ public class BoardServiceImpl implements BoardService{
 
 		Board board = DtoToEntity(dto);
 
-		int i = boardMapper.insertBoard(board);
+		boardMapper.insertBoard(board);
 
-		if(board.getImageSet() != null) {
-			for(BoardImage image: board.getImageSet()) {
-				boardMapper.insertImage(image);
-			}
-		}
 		return board.getBno();
 	}
 
@@ -89,14 +77,19 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
+	@Transactional
 	public Long update(BoardDTO dto) {
 
-		boardMapper.clearImage(dto.getBno());
+		//boardMapper.clearImage(dto.getBno());
 
 		Board board = DtoToEntity(dto);
 
-		int i = boardMapper.updateBoard(board);
+		boardMapper.updateBoard(board);
 
+		/*
+		 * if(board.getImageSet() != null) { for(File image: board.getImageSet()) {
+		 * image.setBno(board.getBno()); //boardMapper.insertImage(image); } }
+		 */
 		return dto.getBno();
 	}
 

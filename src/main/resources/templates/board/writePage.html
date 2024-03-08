@@ -9,11 +9,11 @@
     	<div class="row mt-3">
     		<div class="col">
     			<div class="card write-box">
-    				<div class="card-header" th:text="${boardDTO == null} ? '글 작성':'글 수정'">
+    				<div class="card-header" th:text="${boardDTO.bno == null} ? '글 작성':'글 수정'">
     				</div>
     				<div class="card-body">
 					<form method="POST" id="submitForm" th:object="${boardDTO}"
-						th:action="${boardDTO == null} ? '/board/register' : '/board/update'">
+						th:action="${boardDTO.bno == null} ? '/board/register' : '/board/update'">
 						<input type="hidden" th:field="*{bno}" >
 						<div class="input-group mb-3">
 							<span class="input-group-text">제목</span>
@@ -42,14 +42,20 @@
 							<input type="hidden" name="target" th:value="${pageObj.target}"> 			
 						</th:block>	
 					</form>
-    				</div>
+					<div class="filebox">
+						<input type="file" accept="image/*" onchange="addFiles(event);" multiple />
+						<ul id="preview"></ul>
+					</div>
     			</div>
     		</div>
     	</div>
     </div>
     <script layout:fragment="script" th:inline="javascript">
     	const form = document.querySelector("#submitForm");
+
+    	
     	document.querySelector(".submit").addEventListener("click", function(e){
+    		
     		e.preventDefault()
     	
     		form.submit()
@@ -57,9 +63,6 @@
     	
     	//서버 에러 처리
     	const errors=[[${errors}]]
-    	
-    	console.log(errors)
-    	
     	let errorMsg = ''
     	
     	if(errors){
@@ -68,5 +71,52 @@
     		}
     		alert(errorMsg)
     	}
+    	
+		const formObj = new FormData();
+    	
+    	function addFiles(event){
+    		
+    		const fileList = event.target.files
+    		
+    		for(let i=0; i<fileList.length; i++){
+        		formObj.append("file", fileList[i])
+    		}
+  		
+    		uploadToServer(formObj).then(result => {
+    			console.log(result)
+    		})
+    		
+    	}
+    	
+    	function delFile(item){
+    		
+    		delThumbnail(item)
+    	}
+    	
+    	//이미지 첨부    
+    	function addThumbnail(event) {    
+    		
+    		for (var image of event.target.files) {
+    			
+    			var str = '<li class="img-item">';
+    	        var reader = new FileReader();
+
+    	        reader.onload = function(event) {
+    	        	  str += '<img src="'+event.target.result+'" title="'+image.name+'" width=100 height=100>';
+                      str += '<span class="delBtn" onclick="delThumbnail(this)">x</span>';
+                      str += '</li>';
+    	            document.querySelector("ul#preview").innerHTML += str
+    	          };
+
+    	          reader.readAsDataURL(image); 
+    	        }
+    	}
+    	
+   	  	function delThumbnail(item){
+   			item.parentNode.remove();
+   	  	}
+    	
+    	
+    	
     </script>
 </html>

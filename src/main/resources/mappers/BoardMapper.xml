@@ -67,20 +67,30 @@
 		<result property="content" column="content"/>
 		<result property="count_visit" column="count_visit"/>
 		<result property="regdate" column="regdate"/>
-		<collection property="imageSet" column="bno = bno" ofType="org.jeskey.domain.BoardImage"
-				javaType="java.util.Set" select="getImageList"></collection>
+		<!-- <collection property="fileList" column="bno = bno"
+				javaType="java.util.List" select="getFileList"></collection> -->
 	</resultMap>
-	
-	<select id="getImageList" resultType="org.jeskey.domain.BoardImage">
-		select * from image where bno = #{bno}
+	<!-- 
+	<select id="getFileList" resultType="org.jeskey.domain.File">
+		select * from file where bno = #{bno}
+		order by ord asc
 	</select>
 	
-	<insert id="insertImage">
-    	insert into image(uuid, file_name, ord, bno) 
-       	values (#{uuid}, #{fileName}, #{ord}, #{bno}) 
+	<insert id="saveFiles">
+    	insert into file(uuid, file_name, date, ord, bno) 
+       	values
+       	<foreach item="file" collection="list" separator=",">
+        (
+              #{file.uuid}
+            , #{file.file_name}
+            , #{file.date}
+            , #{file.ord}
+            , #{file.bno}
+        )
+        </foreach>
 	</insert>
 	
-	<delete id="clearImage">
-		delete from image where bno = #{bno}
-	</delete>
+	<delete id="clearFile">
+		delete from file where bno = #{bno}
+	</delete> -->
 </mapper>

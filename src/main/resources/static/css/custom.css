@@ -86,3 +86,38 @@ textarea {
 	text-align:right;
 	color:red;
 }
+
+
+.inputFile{
+    margin-bottom: 10px;
+}
+
+#Preview{
+    margin-left: 20px;
+    width: 100%;
+    list-style:none;
+}
+
+.img-item{
+    margin-left: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    border: 1px solid #ececec;
+    cursor:move;
+    float:left
+}
+
+.delBtn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 13px;
+    background-color: #000;
+    color: #fff;
+    width: 18px;
+    height: 18px;
+    line-height: 16px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
