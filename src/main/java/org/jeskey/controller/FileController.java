@@ -28,7 +28,7 @@ public class FileController {
 
 	@Operation(summary = "Upload POST", description = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<FileDTO> upload(@RequestPart("files") List<MultipartFile> uploadFile) {
+	public List<FileDTO> upload(@RequestPart("file") List<MultipartFile> uploadFile) {
 
 		List<FileDTO> list = fileUtils.uploadFiles(uploadFile);
 

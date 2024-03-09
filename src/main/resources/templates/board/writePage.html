@@ -41,6 +41,9 @@
 							<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
 							<input type="hidden" name="target" th:value="${pageObj.target}"> 			
 						</th:block>	
+						<input type="hidden" name="fileNames" value="hi">
+						<input type="hidden" name="fileNames" value="hellow">
+						<input type="hidden" name="fileNames" value="hey">
 					</form>
 					<div class="filebox">
 						<input type="file" accept="image/*" onchange="addFiles(event);" multiple />
@@ -50,6 +53,7 @@
     		</div>
     	</div>
     </div>
+    <script th:src="@{/js/file.js}"></script>
     <script layout:fragment="script" th:inline="javascript">
     	const form = document.querySelector("#submitForm");
 
@@ -72,19 +76,20 @@
     		alert(errorMsg)
     	}
     	
-		const formObj = new FormData();
     	
     	function addFiles(event){
+
+    		const formObj = new FormData();
     		
     		const fileList = event.target.files
     		
     		for(let i=0; i<fileList.length; i++){
         		formObj.append("file", fileList[i])
     		}
-  		
+  		 
     		uploadToServer(formObj).then(result => {
-    			console.log(result)
-    		})
+    			addThumbnail(result)
+    		}) 
     		
     	}
     	
@@ -94,22 +99,15 @@
     	}
     	
     	//이미지 첨부    
-    	function addThumbnail(event) {    
-    		
-    		for (var image of event.target.files) {
-    			
-    			var str = '<li class="img-item">';
-    	        var reader = new FileReader();
-
-    	        reader.onload = function(event) {
-    	        	  str += '<img src="'+event.target.result+'" title="'+image.name+'" width=100 height=100>';
-                      str += '<span class="delBtn" onclick="delThumbnail(this)">x</span>';
-                      str += '</li>';
-    	            document.querySelector("ul#preview").innerHTML += str
-    	          };
-
-    	          reader.readAsDataURL(image); 
-    	        }
+    	function addThumbnail(images){
+    		for (var image of images) {
+    			var str = `<li class="img-item">
+    							<img src="/view/${image.date}/${image.uuid}_${image.fileName}" title="${image.fileName}" width=100 height=100>
+                				<span class="delBtn" onclick="delThumbnail(this)">x</span>
+                			</li>`;
+                
+    	        document.querySelector("ul#preview").innerHTML += str
+    	   }
     	}
     	
    	  	function delThumbnail(item){
