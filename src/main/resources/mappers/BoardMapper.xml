@@ -67,10 +67,10 @@
 		<result property="content" column="content"/>
 		<result property="count_visit" column="count_visit"/>
 		<result property="regdate" column="regdate"/>
-		<!-- <collection property="fileList" column="bno = bno"
-				javaType="java.util.List" select="getFileList"></collection> -->
+		<collection property="fileList" column="bno = bno"
+				javaType="java.util.List" select="getFileList"></collection>
 	</resultMap>
-	<!-- 
+	
 	<select id="getFileList" resultType="org.jeskey.domain.File">
 		select * from file where bno = #{bno}
 		order by ord asc
@@ -92,5 +92,5 @@
 	
 	<delete id="clearFile">
 		delete from file where bno = #{bno}
-	</delete> -->
+	</delete> 
 </mapper>

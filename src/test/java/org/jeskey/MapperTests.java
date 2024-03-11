@@ -1,7 +1,5 @@
 package org.jeskey;
 
-import java.util.UUID;
-
 import org.jeskey.domain.Board;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
@@ -110,9 +108,10 @@ public class MapperTests {
 
 		long bno = boardMapper.insertBoard(board);
 
-		for(int i = 0; i<3; i++) {
-			board.addImage(UUID.randomUUID().toString(), "file"+i+".jpg");
-		}
+		/*
+		 * for(int i = 0; i<3; i++) { board.addImage(UUID.randomUUID().toString(),
+		 * "file"+i+".jpg"); }
+		 */
 
 		log.info("bno: "+board.getBno());
 	}

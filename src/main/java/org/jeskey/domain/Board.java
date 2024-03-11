@@ -1,6 +1,7 @@
 package org.jeskey.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,9 +23,10 @@ public class Board {
 	private LocalDateTime regdate;
 
 	private String user_id;
+
+	private List<File> fileList;
+
 	/*
-	 * @Builder.Default private List<File> fileList = new arrayList<>();
-	 *
 	 * public void addFile(String uuid, String fileName, String date) {
 	 *
 	 * File file = File.builder() .uuid(uuid) .file_name(fileName) .date(date)
@@ -32,5 +34,6 @@ public class Board {
 	 *
 	 * fileList.add(file); }
 	 */
+
 
 }

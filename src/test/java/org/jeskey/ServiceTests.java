@@ -33,6 +33,16 @@ public class ServiceTests {
 	}
 
 	@Test
+	public void getOne() {
+
+		PageDTO page = new PageDTO();
+
+		page.setTarget("tc");
+		page.setKeyword("9");
+
+		log.info(boardService.getOne(651L));
+	}
+	@Test
 	public void insert() {
 
 		BoardDTO dto = BoardDTO.builder()

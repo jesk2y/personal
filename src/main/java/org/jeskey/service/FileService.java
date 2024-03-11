@@ -25,7 +25,6 @@ public class FileService {
 		List<File> files = new ArrayList<>();
 
 		fileNameList.forEach(fileName -> {
-
 			String[] arr = fileName.split("_");
 
 			File file = File.builder()
@@ -35,7 +34,6 @@ public class FileService {
 					.ord(files.size())
 					.bno(bno)
 					.build();
-
 			files.add(file);
 		});
 

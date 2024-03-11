@@ -57,7 +57,7 @@ public class BoardController {
 		}
 
 		Long bno = boardService.insert(dto);	//게시물 업로드
-		//fileService.saveFiles(bno, dto.getFileNames());	//파일 DB 업로드
+		fileService.saveFiles(bno, dto.getFileNames());	//파일 DB 업로드
 
 		return "redirect:/board/content?bno="+ bno;
 	}

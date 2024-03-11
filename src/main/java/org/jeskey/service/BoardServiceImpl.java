@@ -23,17 +23,13 @@ public class BoardServiceImpl implements BoardService{
 	private BoardDTO EntityToDto(Board vo) {
 
 		BoardDTO dto = BoardDTO.builder()
+				.bno(vo.getBno())
 				.title(vo.getTitle())
 				.content(vo.getContent())
 				.user_id(vo.getUser_id())
 				.regdate(vo.getRegdate())
 				.count_visit(vo.getCount_visit())
 				.build();
-
-		if(dto.getBno() != null) {
-			dto.setBno(vo.getBno());
-		}
-
 		/*
 		 * if(vo.getImageSet() != null){ List<String> fileNames =
 		 * vo.getImageSet().stream().sorted().map( boardImage ->
@@ -52,6 +48,10 @@ public class BoardServiceImpl implements BoardService{
 				.content(dto.getContent())
 				.user_id(dto.getUser_id())
 				.build();
+
+		if(dto.getBno() != null) {
+			dto.setBno(vo.getBno());
+		}
 
 		return vo;
 	}
