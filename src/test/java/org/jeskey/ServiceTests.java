@@ -108,4 +108,10 @@ public class ServiceTests {
 
 		boardService.update(dto);
 	}
+
+	@Test
+	public void getOneWithImage() {
+
+		log.info(boardService.getOne(1144L));
+	}
 }

@@ -77,20 +77,20 @@
 	</select>
 	
 	<insert id="saveFiles">
-    	insert into file(uuid, file_name, date, ord, bno) 
-       	values
-       	<foreach item="file" collection="list" separator=",">
-        (
-              #{file.uuid}
-            , #{file.file_name}
-            , #{file.date}
-            , #{file.ord}
-            , #{file.bno}
-        )
-        </foreach>
+	   	insert into file(uuid, file_name, date, ord, bno) 
+	      	values
+	      	<foreach item="file" collection="list" separator=",">
+	       (
+	             #{file.uuid}
+	           , #{file.file_name}
+	           , #{file.date}
+	           , #{file.ord}
+	           , #{file.bno}
+	       )
+	       </foreach>
 	</insert>
 	
-	<delete id="clearFile">
+	<delete id="clearFiles">
 		delete from file where bno = #{bno}
 	</delete> 
 </mapper>

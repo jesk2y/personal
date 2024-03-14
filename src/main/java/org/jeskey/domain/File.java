@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class File implements Comparable<File>{
+public class File{
 
 	private String uuid;
 	private String file_name;
@@ -19,12 +19,6 @@ public class File implements Comparable<File>{
 	private String date;
 
 	private Long bno;
-
-	@Override
-	public int compareTo(File other) {
-
-		return this.ord - other.ord;
-	}
 
 	public void setBno(Long bno) {
 		this.bno = bno;

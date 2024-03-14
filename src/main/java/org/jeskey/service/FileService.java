@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jeskey.domain.File;
-import org.jeskey.mapper.FileMapper;
+import org.jeskey.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FileService {
 
-	private final FileMapper fileMapper;
+	private final BoardMapper boardMapper;
 
-	public void saveFiles(long bno, List<String> fileNameList) {
+	public void saveFiles(Long bno, List<String> fileNameList) {
 
 		if(CollectionUtils.isEmpty(fileNameList)) {
 			return;
@@ -25,18 +25,24 @@ public class FileService {
 		List<File> files = new ArrayList<>();
 
 		fileNameList.forEach(fileName -> {
+			//date_uuid_fileName
 			String[] arr = fileName.split("_");
 
 			File file = File.builder()
-					.uuid(arr[0])
-					.file_name(arr[1])
-					.date(arr[2])
+					.date(arr[0])
+					.uuid(arr[1])
+					.file_name(arr[2])
 					.ord(files.size())
 					.bno(bno)
 					.build();
 			files.add(file);
 		});
 
-		fileMapper.saveFiles(files);
+		boardMapper.saveFiles(files);
+	}
+
+	public void clearFiles(Long bno) {
+
+		boardMapper.clearFiles(bno);
 	}
 }

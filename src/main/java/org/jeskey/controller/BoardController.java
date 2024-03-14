@@ -50,14 +50,12 @@ public class BoardController {
 	@PostMapping("/register")
 	public String registerPOST(@Valid BoardDTO dto, BindingResult bindingResult) {
 
-		System.out.println(dto);
-
 		if(bindingResult.hasErrors()) {
 			return "/board/writePage";
 		}
 
 		Long bno = boardService.insert(dto);	//게시물 업로드
-		fileService.saveFiles(bno, dto.getFileNames());	//파일 DB 업로드
+		fileService.saveFiles(bno, dto.getFileNames());	//파일정보 DB 업로드
 
 		return "redirect:/board/content?bno="+ bno;
 	}
@@ -72,14 +70,16 @@ public class BoardController {
 
 	@PostMapping("/update")
 	public String updatePOST(@ModelAttribute("pageObj") PageDTO pageDTO,
-			@Valid BoardDTO boardDTO, BindingResult bindingResult) {
+			@Valid BoardDTO dto, BindingResult bindingResult) {
 
 		if(bindingResult.hasErrors()) {
 
 			return "/board/writePage";
 		}
 
-		Long bno = boardService.update(boardDTO);
+		Long bno = boardService.update(dto);	//게시물 수정
+		fileService.clearFiles(dto.getBno());	//DB 파일정보 전부 삭제
+		fileService.saveFiles(bno, dto.getFileNames());	//파일정보 DB 업로드
 
 		return "redirect:/board/content"+pageDTO.getLink(bno);
 	}

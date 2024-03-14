@@ -24,8 +24,9 @@
 					</div>
 					<div class="input-group mb-3">
 						<span class="input-group-text">내용</span>
-						<textarea rows="10" class="form-control col-sm-5"
-							readonly="readonly">[[${contentDTO.content}]]</textarea>
+						<div class="form-control col-sm-5 contentBox"
+						contentEditable="false">
+						</div>
 					</div>
 					<div class="float-end">
 						<div style="float: left">
@@ -46,24 +47,56 @@
 </div>
 <script layout:fragment="script" th:inline="javascript">
 
+	const contentDTO = /*[[${contentDTO}]]*/null;
 	const deleteForm = document.querySelector("#deleteForm")
 
 	document.querySelector(".delete").addEventListener("click", function(e){
-		
 		
 		if(confirm("글을 삭제하시겠습니까? 삭제된 글은 복구되지 않습니다.")){
 			var deleteInput = document.createElement("input")
 			
 			deleteInput.setAttribute("type", "hidden")
 			deleteInput.setAttribute("name", "bno")
-			deleteInput.setAttribute("value",  [[${contentDTO.bno}]])
+			deleteInput.setAttribute("value",  contentDTO.bno)
 			
 			deleteForm.appendChild(deleteInput)
 			
 			deleteForm.submit()
 		}
 		
-		
 	})
+	
+	//내용 출력
+	setContent()
+	
+	//컨텐츠 추가
+	function setContent(){
+		
+		//이미지 추가
+		if(contentDTO.fileNames != null){
+			var imgStr = ''
+				
+			for(var img of contentDTO.fileNames){
+				var fileInfo = getFileInfo(img)
+				imgStr += `<img src="/view/${fileInfo.date}/${fileInfo.uuid}_${fileInfo.fileName}">`
+			}
+			
+			document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);
+		}
+		
+		const contentText = [[${contentDTO.content}]].replace(/(?:\r\n|\r|\n)/g, '<br>') //엔터 변환
+		document.querySelector(".contentBox").insertAdjacentHTML("beforeend", contentText);
+	}
+	
+	//파일이름에서 파일 정보 추출
+	function getFileInfo(src){
+		
+		var fileArr = src.split("_")
+		var date = fileArr[0]
+		var uuid = fileArr[1]
+		var fileName = fileArr[2]
+		
+		return {date, uuid, fileName}
+	}
 </script>
 </html>

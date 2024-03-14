@@ -118,7 +118,10 @@ public class MapperTests {
 
 	@Test
 	public void getOneWithImage() {
-		log.info(boardMapper.getOneBoard(1119L));
+		log.info(boardMapper.getOneBoard(1144L));
 	}
+
+
+
 
 }

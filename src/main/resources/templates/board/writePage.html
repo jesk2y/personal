@@ -41,6 +41,7 @@
 							<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
 							<input type="hidden" name="target" th:value="${pageObj.target}"> 			
 						</th:block>
+						
 					</form>
 					<div class="filebox">
 						<input type="file" accept="image/*" onchange="addFiles(event);" multiple />
@@ -50,68 +51,147 @@
     		</div>
     	</div>
     </div>
-    <script th:src="@{/js/file.js}"></script>
-    <script layout:fragment="script" th:inline="javascript">
-    	const form = document.querySelector("#submitForm");
+	<script th:src="@{/js/file.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
+	
 
-    	
-    	document.querySelector(".submit").addEventListener("click", function(e){
-    		
-    		e.preventDefault()
-    	
-    		form.submit()
-    	})
-    	
-    	//서버 에러 처리
-    	const errors=[[${errors}]]
-    	let errorMsg = ''
-    	
-    	if(errors){
-    		for(let i = 0; i < errors.length; i++){
-    			errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
-    		}
-    		alert(errorMsg)
-    	}
-    	
-    	
-    	function addFiles(event){
+		if([[${boardDTO.bno}]] != null){
+			setThumbnail()
+		}
+	
+		const form = document.querySelector("#submitForm");
+		
+		//글 작성
+		document.querySelector(".submit").addEventListener("click", function(e){
+			
+			e.preventDefault()
+			
+			const uploadFiles = document.querySelector("#preview").querySelectorAll("img");
+			
+			let str = ''
+		
+			for(var uploadFile of uploadFiles){
+				
+				var fileInfo = getFileInfo(uploadFile.src)
+				str += `<input type="hidden" name="fileNames" value="${fileInfo.date}_${fileInfo.fullname}">`
+			}
+		
+			form.insertAdjacentHTML("beforeend", str)
+			form.submit()
+		})
+		
+		//서버 에러 처리
+		const errors = /*[[${errors}]]*/null;
+		let errorMsg = ''
+		
+		if(errors){
+			for(let i = 0; i < errors.length; i++){
+				errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+			}
+			alert(errorMsg)
+		}
+		
+		
+		//수정 작업시 이미지 섬네일 출력
+		function setThumbnail(){
+			
+			var fileNames = /*[[${boardDTO.fileNames}]]*/null;
+			var imgList = []
+			
+			for(var i = 0; i < fileNames.length; i++){
 
-    		const formObj = new FormData();
-    		
-    		const fileList = event.target.files
-    		
-    		for(let i=0; i<fileList.length; i++){
-        		formObj.append("file", fileList[i])
-    		}
-  		 
-    		uploadToServer(formObj).then(result => {
-    			addThumbnail(result)
-    		}) 
-    		
-    	}
-    	
-    	function delFile(item){
-    		
-    		delThumbnail(item)
-    	}
-    	
-    	//이미지 첨부    
-    	function addThumbnail(images){
-    		for (var image of images) {
-    			var str = `<li class="img-item">
-    							<img src="/view/${image.date}/${image.uuid}_${image.fileName}" title="${image.fileName}" width=100 height=100>
-                				<span class="delBtn" onclick="delThumbnail(this)">x</span>
-                			</li>`;
-                
-    	        document.querySelector("ul#preview").innerHTML += str
-    	   }
-    	}
-    	
-   	  	function delThumbnail(item){
-   			item.parentNode.remove();
-   	  	}
-    	
-    	
-    	
-    </script>
+				imgList[i] = getFileInfoFromName(fileNames[i])
+			}
+			
+			addThumbnail(imgList);
+		}
+		
+		//파일이름에서 파일 정보 추출
+		function getFileInfoFromName(src){
+			
+			var fileArr = src.split("_")
+			var date = fileArr[0]
+			var uuid = fileArr[1]
+			var fileName = fileArr[2]
+			
+			return {date, uuid, fileName}
+		}
+		
+		//파일 업로드
+		function addFiles(event){
+			
+			const fileList = event.target.files
+					
+			//파일 선택 창에서 취소를 누른 경우
+			if(fileList == null || fileList.length == 0){
+				return false
+			}
+
+			const formObj = new FormData();
+			
+			for(let i=0; i<fileList.length; i++){
+
+				//파일 사이즈가 5MB를 초과하는 경우
+				const fileSize = Math.floor(fileList[i].size / 1024 / 1024);
+				if(fileSize > 5){
+					alert(`파일명 : "${fileList[i].name}"\n5MB 이하의 파일만 업로드 가능합니다`)
+					event.target.value = ""
+					return false;
+					
+				//파일이 이미지가 아닌 경우
+				}else if(checkImg(fileList[i].type)){
+					alert(`파일명 : "${fileList[i].name}"\n이미지 파일만 업로드 가능합니다`)
+					event.target.value = ""
+					return false;
+				}
+				
+		   		formObj.append("file", fileList[i])
+			}
+			
+			uploadToServer(formObj).then(result => {
+				addThumbnail(result)
+				event.target.value = ""
+			}).catch(error => {
+				console.log(error)
+			})
+		}
+		
+		//파일 확장자 검사
+		function checkImg(fileType){
+			var fileVal = fileType.slice(fileType.indexOf("/")+1).toLowerCase();
+			
+			return fileVal != "jpg" && fileVal != "png" && fileVal != "jpeg" && fileVal != "gif" && fileVal != "bmp";
+		}
+		
+		//이미지 주소에서 파일 정보 추출
+		function getFileInfo(src){
+			
+			var fileArr = src.split("/")
+			var fullname = fileArr[fileArr.length-1].substr(2) //앞의 's_' 제거
+			var date = fileArr[fileArr.length-2]
+			
+			return {date, fullname}
+		}
+
+		//섬네일 출력 
+		function addThumbnail(images){
+			for (var image of images) {
+				var str = `<li class="img-item">
+								<img src="/view/${image.date}/s_${image.uuid}_${image.fileName}" 
+									title="${image.fileName}" width=100 height=100>
+		           				<span class="delBtn" onclick="delThumbnail(this)">x</span>
+		           			</li>`;
+		           
+		        document.querySelector("ul#preview").insertAdjacentHTML("beforeend", str)
+		        //document.querySelector("ul#preview").innerHTML += str
+		   }
+		}
+		
+		//섬네일 삭제
+		 function delThumbnail(item){
+			item.parentNode.remove();
+		 }
+		
+	
+	</script>
 </html>

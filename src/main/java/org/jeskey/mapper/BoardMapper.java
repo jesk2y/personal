@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.jeskey.domain.Board;
+import org.jeskey.domain.File;
 import org.jeskey.dto.PageDTO;
 
 @Mapper
@@ -22,4 +23,9 @@ public interface BoardMapper {
 	int deleteBoard(Long bno);
 
 	int totalCount(PageDTO page);
+
+	//파일
+	int saveFiles(List<File> files);
+
+	int clearFiles(Long bno);
 }

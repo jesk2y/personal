@@ -80,7 +80,8 @@ public class FileUtils {
 	//파일 삭제
 	public void deleteFile(String date, String fileName){
 
-		Path path = Paths.get(uploadPath,date,fileName);
+		Path path = Paths.get(uploadPath, date, fileName);
+
 		File file = new File(path.toString());
 
 		try {
@@ -91,17 +92,18 @@ public class FileUtils {
 			}
 
 		}catch(Exception e){
-
+			e.printStackTrace();
 		}
 	}
 
 	//파일들 삭제
 	public void deleteFiles(List<FileDTO> files) {
+
 		for(FileDTO file : files) {
-			deleteFile(file.getDate(), file.getFileName());
+			deleteFile(file.getDate(),
+					file.getUuid() + "_" + file.getFileName());
 		}
 	}
-
 
 	//섬네일 이미지 삭제
 	public void deleteThumbnail(String date, String fileName) {
@@ -125,6 +127,7 @@ public class FileUtils {
 
 	//이미지 화면 출력용 Path 리턴
 	public String getPath(String date, String fileName) {
+
 		return Paths.get(uploadPath, date, fileName).toString();
 	}
 }

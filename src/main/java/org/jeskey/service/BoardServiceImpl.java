@@ -12,11 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-
 @Service
 @RequiredArgsConstructor
 @Log4j2
-public class BoardServiceImpl implements BoardService{
+public class BoardServiceImpl implements BoardService {
 
 	private final BoardMapper boardMapper;
 
@@ -28,28 +27,25 @@ public class BoardServiceImpl implements BoardService{
 				.content(vo.getContent())
 				.user_id(vo.getUser_id())
 				.regdate(vo.getRegdate())
-				.count_visit(vo.getCount_visit())
-				.build();
-		/*
-		 * if(vo.getImageSet() != null){ List<String> fileNames =
-		 * vo.getImageSet().stream().sorted().map( boardImage ->
-		 * boardImage.getUuid()+"_"+boardImage.getFile_name())
-		 * .collect(Collectors.toList()); dto.setFileNames(fileNames); }
-		 */
+				.count_visit(vo.getCount_visit()).build();
+
+		if (vo.getFileList() != null) {
+			List<String> fileNameList = vo.getFileList().stream().map(
+					file -> file.getDate() + "_" + file.getUuid() + "_" + file.getFile_name()
+					).toList();
+
+			dto.setFileNames(fileNameList);
+		}
 
 		return dto;
 	}
 
 	private Board DtoToEntity(BoardDTO dto) {
 
-		Board vo = Board.builder()
-				.bno(dto.getBno())
-				.title(dto.getTitle())
-				.content(dto.getContent())
-				.user_id(dto.getUser_id())
-				.build();
+		Board vo = Board.builder().bno(dto.getBno()).title(dto.getTitle()).content(dto.getContent())
+				.user_id(dto.getUser_id()).build();
 
-		if(dto.getBno() != null) {
+		if (dto.getBno() != null) {
 			dto.setBno(vo.getBno());
 		}
 
@@ -60,7 +56,6 @@ public class BoardServiceImpl implements BoardService{
 	public Long insert(BoardDTO dto) {
 
 		Board board = DtoToEntity(dto);
-
 		boardMapper.insertBoard(board);
 
 		return board.getBno();
@@ -71,7 +66,7 @@ public class BoardServiceImpl implements BoardService{
 
 		Board board = boardMapper.getOneBoard(bno);
 
-		boardMapper.addCount(bno);//조회수 증가
+		boardMapper.addCount(bno);// 조회수 증가
 
 		return EntityToDto(board);
 	}
@@ -80,7 +75,7 @@ public class BoardServiceImpl implements BoardService{
 	@Transactional
 	public Long update(BoardDTO dto) {
 
-		//boardMapper.clearImage(dto.getBno());
+		// boardMapper.clearImage(dto.getBno());
 
 		Board board = DtoToEntity(dto);
 
@@ -103,8 +98,7 @@ public class BoardServiceImpl implements BoardService{
 	public List<BoardDTO> getList(PageDTO dto) {
 
 		dto.setCount(boardMapper.totalCount(dto));
-		List<BoardDTO> dtoList =
-				boardMapper.getListBoard(dto).stream().map(vo -> EntityToDto(vo)).toList();
+		List<BoardDTO> dtoList = boardMapper.getListBoard(dto).stream().map(vo -> EntityToDto(vo)).toList();
 		return dtoList;
 	}
 }

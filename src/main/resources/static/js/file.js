@@ -1,5 +1,4 @@
 async function uploadToServer(formObj){
-	
 	const response = await axios({
 		method: 'post',
 		url: '/upload',
@@ -12,6 +11,14 @@ async function uploadToServer(formObj){
 	return response.data
 }
 
-async function removeFileToServer(){
+async function removeFileToServer(date, fileName){
+	const response = await axios({
+		method : 'delete',
+		url: '/delete/'+date+'/'+fileName,
+		headers:{
+			'Content-Type':'String'
+		}
+	})
 	
+	return response.data
 }
