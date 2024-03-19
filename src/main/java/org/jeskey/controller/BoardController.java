@@ -1,10 +1,8 @@
 package org.jeskey.controller;
 
-import org.jeskey.common.FileUtils;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.service.BoardService;
-import org.jeskey.service.FileService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardService boardService;
-	private final FileService fileService;
-	private final FileUtils fileUtils;
 
 	@GetMapping("/list")
 	public void listGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
@@ -50,12 +46,13 @@ public class BoardController {
 	@PostMapping("/register")
 	public String registerPOST(@Valid BoardDTO dto, BindingResult bindingResult) {
 
+		System.out.println(dto.getFileList());
+
 		if(bindingResult.hasErrors()) {
 			return "/board/writePage";
 		}
 
-		Long bno = boardService.insert(dto);	//게시물 업로드
-		fileService.saveFiles(bno, dto.getFileNames());	//파일정보 DB 업로드
+		long bno = boardService.insert(dto);
 
 		return "redirect:/board/content?bno="+ bno;
 	}
@@ -77,9 +74,7 @@ public class BoardController {
 			return "/board/writePage";
 		}
 
-		Long bno = boardService.update(dto);	//게시물 수정
-		fileService.clearFiles(dto.getBno());	//DB 파일정보 전부 삭제
-		fileService.saveFiles(bno, dto.getFileNames());	//파일정보 DB 업로드
+		Long bno = boardService.update(dto);
 
 		return "redirect:/board/content"+pageDTO.getLink(bno);
 	}

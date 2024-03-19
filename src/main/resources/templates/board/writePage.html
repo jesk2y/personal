@@ -54,12 +54,12 @@
 	<script th:src="@{/js/file.js}"></script>
 	<script layout:fragment="script" th:inline="javascript">
 	
-
-		if([[${boardDTO.bno}]] != null){
-			setThumbnail()
-		}
-	
+		const boardDTO = /*[[${boardDTO}]]*/null;
 		const form = document.querySelector("#submitForm");
+		
+		if(boardDTO.bno != null){	//수정 페이지일시 섬네일 보여주기
+			addThumbnail(boardDTO.fileList)
+		}
 		
 		//글 작성
 		document.querySelector(".submit").addEventListener("click", function(e){
@@ -67,13 +67,14 @@
 			e.preventDefault()
 			
 			const uploadFiles = document.querySelector("#preview").querySelectorAll("img");
-			
 			let str = ''
 		
-			for(var uploadFile of uploadFiles){
+			for(let i = 0; i < uploadFiles.length; i++){
 				
-				var fileInfo = getFileInfo(uploadFile.src)
-				str += `<input type="hidden" name="fileNames" value="${fileInfo.date}_${fileInfo.fullname}">`
+				const fileInfo = getFileInfo(uploadFiles[i].src)
+				str += `<input type="hidden" name="fileNames" 
+								value="${fileInfo.date}/${fileInfo.uuid}/${fileInfo.fileName}">`
+	
 			}
 		
 			form.insertAdjacentHTML("beforeend", str)
@@ -89,32 +90,6 @@
 				errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
 			}
 			alert(errorMsg)
-		}
-		
-		
-		//수정 작업시 이미지 섬네일 출력
-		function setThumbnail(){
-			
-			var fileNames = /*[[${boardDTO.fileNames}]]*/null;
-			var imgList = []
-			
-			for(var i = 0; i < fileNames.length; i++){
-
-				imgList[i] = getFileInfoFromName(fileNames[i])
-			}
-			
-			addThumbnail(imgList);
-		}
-		
-		//파일이름에서 파일 정보 추출
-		function getFileInfoFromName(src){
-			
-			var fileArr = src.split("_")
-			var date = fileArr[0]
-			var uuid = fileArr[1]
-			var fileName = fileArr[2]
-			
-			return {date, uuid, fileName}
 		}
 		
 		//파일 업로드
@@ -158,7 +133,7 @@
 		
 		//파일 확장자 검사
 		function checkImg(fileType){
-			var fileVal = fileType.slice(fileType.indexOf("/")+1).toLowerCase();
+			const fileVal = fileType.slice(fileType.indexOf("/")+1).toLowerCase();
 			
 			return fileVal != "jpg" && fileVal != "png" && fileVal != "jpeg" && fileVal != "gif" && fileVal != "bmp";
 		}
@@ -166,17 +141,20 @@
 		//이미지 주소에서 파일 정보 추출
 		function getFileInfo(src){
 			
-			var fileArr = src.split("/")
-			var fullname = fileArr[fileArr.length-1].substr(2) //앞의 's_' 제거
-			var date = fileArr[fileArr.length-2]
+			const fileArr = src.split("/")
+			const date = fileArr[fileArr.length-2]
 			
-			return {date, fullname}
+			const nameArr = fileArr[fileArr.length-1].substr(2).split("_") //앞의 's_' 제거후 uuid와 fileName 분리
+			const uuid = nameArr[0]
+			const fileName = nameArr[1]
+			
+			return {date, uuid, fileName}
 		}
 
 		//섬네일 출력 
 		function addThumbnail(images){
-			for (var image of images) {
-				var str = `<li class="img-item">
+			for (let image of images) {
+				const str = `<li class="img-item">
 								<img src="/view/${image.date}/s_${image.uuid}_${image.fileName}" 
 									title="${image.fileName}" width=100 height=100>
 		           				<span class="delBtn" onclick="delThumbnail(this)">x</span>

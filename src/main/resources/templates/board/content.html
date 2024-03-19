@@ -53,7 +53,7 @@
 	document.querySelector(".delete").addEventListener("click", function(e){
 		
 		if(confirm("글을 삭제하시겠습니까? 삭제된 글은 복구되지 않습니다.")){
-			var deleteInput = document.createElement("input")
+			const deleteInput = document.createElement("input")
 			
 			deleteInput.setAttribute("type", "hidden")
 			deleteInput.setAttribute("name", "bno")
@@ -63,7 +63,6 @@
 			
 			deleteForm.submit()
 		}
-		
 	})
 	
 	//내용 출력
@@ -73,30 +72,18 @@
 	function setContent(){
 		
 		//이미지 추가
-		if(contentDTO.fileNames != null){
-			var imgStr = ''
+		if(contentDTO.fileList != null){
+			let imgStr = ''
 				
-			for(var img of contentDTO.fileNames){
-				var fileInfo = getFileInfo(img)
-				imgStr += `<img src="/view/${fileInfo.date}/${fileInfo.uuid}_${fileInfo.fileName}">`
+			for(var dto of contentDTO.fileList){
+				imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.fileName}">`
 			}
 			
-			document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);
+			document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);	//이미지 출력
 		}
 		
 		const contentText = [[${contentDTO.content}]].replace(/(?:\r\n|\r|\n)/g, '<br>') //엔터 변환
-		document.querySelector(".contentBox").insertAdjacentHTML("beforeend", contentText);
-	}
-	
-	//파일이름에서 파일 정보 추출
-	function getFileInfo(src){
-		
-		var fileArr = src.split("_")
-		var date = fileArr[0]
-		var uuid = fileArr[1]
-		var fileName = fileArr[2]
-		
-		return {date, uuid, fileName}
+		document.querySelector(".contentBox").insertAdjacentHTML("beforeend", contentText);	//텍스트 출력
 	}
 </script>
 </html>

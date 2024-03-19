@@ -25,8 +25,9 @@ public class FileService {
 		List<File> files = new ArrayList<>();
 
 		fileNameList.forEach(fileName -> {
+			System.out.println(fileName);
 			//date_uuid_fileName
-			String[] arr = fileName.split("_");
+			String[] arr = fileName.split("/");
 
 			File file = File.builder()
 					.date(arr[0])
@@ -39,10 +40,5 @@ public class FileService {
 		});
 
 		boardMapper.saveFiles(files);
-	}
-
-	public void clearFiles(Long bno) {
-
-		boardMapper.clearFiles(bno);
 	}
 }

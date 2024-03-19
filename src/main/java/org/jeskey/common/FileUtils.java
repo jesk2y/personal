@@ -44,6 +44,7 @@ public class FileUtils {
 		try {
 			multipartFile.transferTo(path);	//파일 저장
 
+			//섬네일 생성
 			if(Files.probeContentType(path).startsWith("image")){
 
 				File thumbFile = new File(savePath, "s_"+ path.getFileName());

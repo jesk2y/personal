@@ -25,15 +25,4 @@ public class Board {
 	private String user_id;
 
 	private List<File> fileList;
-
-	/*
-	 * public void addFile(String uuid, String fileName, String date) {
-	 *
-	 * File file = File.builder() .uuid(uuid) .file_name(fileName) .date(date)
-	 * .bno(this.bno) .ord(fileList.size()) .build();
-	 *
-	 * fileList.add(file); }
-	 */
-
-
 }

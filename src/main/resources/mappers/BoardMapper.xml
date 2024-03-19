@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeskey.mapper.BoardMapper">
 
-	
 	<sql id="search">
 		<if test="targets != null">
 			<foreach collection="targets" item="item" open="and (" close=")" separator="or">

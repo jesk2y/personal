@@ -1,8 +1,5 @@
 package org.jeskey;
 
-import java.util.Arrays;
-import java.util.UUID;
-
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.service.BoardService;
@@ -80,13 +77,6 @@ public class ServiceTests {
 				.user_id("user1")
 				.build();
 
-		boardDTO.setFileNames(
-				Arrays.asList(
-					UUID.randomUUID()+"_aaa.jpg",
-					UUID.randomUUID()+"_bbb.jpg",
-					UUID.randomUUID()+"_ccc.jpg"
-				));
-
 		Long bno = boardService.insert(boardDTO);
 
 		log.info("bno: "+bno);
@@ -99,12 +89,6 @@ public class ServiceTests {
 				.bno(561L)
 				.title("이미지 수정테스트")
 				.content("수정테스트").build();
-
-		dto.setFileNames(
-				Arrays.asList(
-					UUID.randomUUID()+"_aaa_수정.jpg",
-					UUID.randomUUID()+"_bbb_수정.jpg"
-				));
 
 		boardService.update(dto);
 	}

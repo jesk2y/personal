@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jeskey.domain.Board;
 import org.jeskey.dto.BoardDTO;
+import org.jeskey.dto.FileDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import lombok.extern.log4j.Log4j2;
 public class BoardServiceImpl implements BoardService {
 
 	private final BoardMapper boardMapper;
+	private final FileService fileService;
 
 	private BoardDTO EntityToDto(Board vo) {
 
@@ -30,11 +32,14 @@ public class BoardServiceImpl implements BoardService {
 				.count_visit(vo.getCount_visit()).build();
 
 		if (vo.getFileList() != null) {
-			List<String> fileNameList = vo.getFileList().stream().map(
-					file -> file.getDate() + "_" + file.getUuid() + "_" + file.getFile_name()
+			List<FileDTO> fileList = vo.getFileList().stream().map(
+					file -> FileDTO.builder()
+							.date(file.getDate())
+							.uuid(file.getUuid())
+							.fileName(file.getFile_name()).build()
 					).toList();
 
-			dto.setFileNames(fileNameList);
+			dto.setFileList(fileList);
 		}
 
 		return dto;
@@ -42,12 +47,11 @@ public class BoardServiceImpl implements BoardService {
 
 	private Board DtoToEntity(BoardDTO dto) {
 
-		Board vo = Board.builder().bno(dto.getBno()).title(dto.getTitle()).content(dto.getContent())
+		Board vo = Board.builder()
+				.bno(dto.getBno())
+				.title(dto.getTitle())
+				.content(dto.getContent())
 				.user_id(dto.getUser_id()).build();
-
-		if (dto.getBno() != null) {
-			dto.setBno(vo.getBno());
-		}
 
 		return vo;
 	}
@@ -58,7 +62,10 @@ public class BoardServiceImpl implements BoardService {
 		Board board = DtoToEntity(dto);
 		boardMapper.insertBoard(board);
 
-		return board.getBno();
+		Long bno = board.getBno();
+		fileService.saveFiles(bno, dto.getFileNames());	//파일정보 DB 업로드
+
+		return bno;
 	}
 
 	@Override
@@ -75,16 +82,12 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	public Long update(BoardDTO dto) {
 
-		// boardMapper.clearImage(dto.getBno());
-
 		Board board = DtoToEntity(dto);
 
-		boardMapper.updateBoard(board);
+		boardMapper.updateBoard(board);	//게시물 수정
+		boardMapper.clearFiles(dto.getBno());	//DB 파일정보 전부 삭제
+		fileService.saveFiles(dto.getBno(), dto.getFileNames());	//파일정보 DB 업로드
 
-		/*
-		 * if(board.getImageSet() != null) { for(File image: board.getImageSet()) {
-		 * image.setBno(board.getBno()); //boardMapper.insertImage(image); } }
-		 */
 		return dto.getBno();
 	}
 
