@@ -1,5 +1,6 @@
 package org.jeskey.controller;
 
+import org.jeskey.common.CookieUtils;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.service.BoardService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardService boardService;
+	private final CookieUtils cookieUtils;
 
 	@GetMapping("/list")
 	public void listGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
@@ -29,10 +33,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/content")
-	public String contentGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
+	public String contentGET(@ModelAttribute("pageObj") PageDTO dto, Model model,
+			HttpServletRequest request, HttpServletResponse response) {
 
 		model.addAttribute("contentDTO", boardService.getOne(dto.getBno()));
 		model.addAttribute("listDTO",boardService.getList(dto));
+
+		cookieUtils.viewCountValidation(dto.getBno(), request, response);
 
 		return "/board/content";
 	}
@@ -44,9 +51,9 @@ public class BoardController {
 	}
 
 	@PostMapping("/register")
-	public String registerPOST(@Valid BoardDTO dto, BindingResult bindingResult) {
+	public String registerPOST(@Valid  BoardDTO dto, BindingResult bindingResult) {
 
-		System.out.println(dto.getFileList());
+		System.out.println(dto);
 
 		if(bindingResult.hasErrors()) {
 			return "/board/writePage";

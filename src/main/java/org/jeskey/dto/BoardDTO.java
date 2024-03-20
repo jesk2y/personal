@@ -9,11 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
 @Builder
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardDTO {
@@ -35,9 +37,9 @@ public class BoardDTO {
 	private String user_id;
 
 	private List<String> fileNames;	//컨트롤러에서 받아올 때
-	private List<FileDTO> fileList;	//컨트롤러로 보낼 때
+	private List<BoardAttachDTO> fileList;	//컨트롤러로 보낼 때
 
-	public void setFileList(List<FileDTO> list){
+	public void setFileList(List<BoardAttachDTO> list){
 		this.fileList = list;
 	}
 }

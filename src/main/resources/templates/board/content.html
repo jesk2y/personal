@@ -6,7 +6,7 @@
 </head>
 <div layout:fragment="content">
 	<div class="row mt-3">
-		<div class="col">
+		<div class="col" th:if="${contentDTO != null}">
 			<div class="card write-box">
 				<div class="card-header">
 					<b>[[${contentDTO.title}]]</b>
@@ -46,6 +46,17 @@
 	</div>
 </div>
 <script layout:fragment="script" th:inline="javascript">
+
+	//서버 에러 처리
+	const errors = /*[[${errors}]]*/null;
+	let errorMsg = ''
+	
+	if(errors){
+		for(let i = 0; i < errors.length; i++){
+			errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+		}
+		alert(errorMsg)
+	}
 
 	const contentDTO = /*[[${contentDTO}]]*/null;
 	const deleteForm = document.querySelector("#deleteForm")

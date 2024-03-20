@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeskey.mapper.BoardMapper">
+
+	<select id="getListReply" resultType="org.jeskey.domain.Reply">
+		select * from reply
+		where bno = #{bno}
+		order by rno desc
+	</select>
+
+	<select id="getOneReply" resultType="org.jeskey.domain.Reply">
+		select * from reply where rno = #{rno}
+	</select>
+
+	<insert id="insertReply">
+		insert into reply(content, user_id, bno)
+		values (#{content}, #{user_id}, #{bno})
+
+		<selectKey resultType="long" keyProperty="rno">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateReply">
+		update reply set content = #{content}
+		where rno =
+		#{rno}
+	</update>
+
+	<delete id="deleteReply">
+		delete from reply where rno = #{rno}
+	</delete>
+</mapper>

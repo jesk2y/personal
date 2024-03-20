@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.jeskey.dto.FileDTO;
+import org.jeskey.dto.BoardAttachDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +25,7 @@ public class FileUtils {
 	private String uploadPath;
 
 	//이미지 업로드
-	public FileDTO uploadFile(MultipartFile multipartFile) {
+	public BoardAttachDTO uploadFile(MultipartFile multipartFile) {
 
 		if(multipartFile.isEmpty()) {
 			return null;
@@ -55,7 +55,7 @@ public class FileUtils {
 			e.printStackTrace();
 		}
 
-		FileDTO dto = FileDTO.builder()
+		BoardAttachDTO dto = BoardAttachDTO.builder()
 						.uuid(uuid)
 						.fileName(fileName)
 						.date(today).build();
@@ -64,9 +64,9 @@ public class FileUtils {
 	}
 
 	//이미지 리스트 업로드
-	public List<FileDTO> uploadFiles(List<MultipartFile> multipartFiles){
+	public List<BoardAttachDTO> uploadFiles(List<MultipartFile> multipartFiles){
 
-		List<FileDTO> files = new ArrayList<>();
+		List<BoardAttachDTO> files = new ArrayList<>();
 
 		for(MultipartFile multipartFile : multipartFiles) {
 			if(multipartFile.isEmpty()) {
@@ -98,9 +98,9 @@ public class FileUtils {
 	}
 
 	//파일들 삭제
-	public void deleteFiles(List<FileDTO> files) {
+	public void deleteFiles(List<BoardAttachDTO> files) {
 
-		for(FileDTO file : files) {
+		for(BoardAttachDTO file : files) {
 			deleteFile(file.getDate(),
 					file.getUuid() + "_" + file.getFileName());
 		}

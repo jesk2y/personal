@@ -1,10 +1,11 @@
 package org.jeskey.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jeskey.domain.Board;
+import org.jeskey.dto.BoardAttachDTO;
 import org.jeskey.dto.BoardDTO;
-import org.jeskey.dto.FileDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class BoardServiceImpl implements BoardService {
 				.count_visit(vo.getCount_visit()).build();
 
 		if (vo.getFileList() != null) {
-			List<FileDTO> fileList = vo.getFileList().stream().map(
-					file -> FileDTO.builder()
+			List<BoardAttachDTO> fileList = vo.getFileList().stream().map(
+					file -> BoardAttachDTO.builder()
 							.date(file.getDate())
 							.uuid(file.getUuid())
 							.fileName(file.getFile_name()).build()
@@ -71,10 +72,9 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardDTO getOne(Long bno) {
 
-		Board board = boardMapper.getOneBoard(bno);
-
-		boardMapper.addCount(bno);// 조회수 증가
-
+		//null이면 예외 발생
+		Board board = Optional.ofNullable(boardMapper.getOneBoard(bno))
+					.orElseThrow(() -> new NullPointerException("존재하지 않는 글입니다"));
 		return EntityToDto(board);
 	}
 

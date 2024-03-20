@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FileDTO {
+public class BoardAttachDTO {
 	private String uuid;
 	private String fileName;
 	private String date;

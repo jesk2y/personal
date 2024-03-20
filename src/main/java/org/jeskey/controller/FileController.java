@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.util.List;
 
 import org.jeskey.common.FileUtils;
-import org.jeskey.dto.FileDTO;
+import org.jeskey.dto.BoardAttachDTO;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -29,9 +29,9 @@ public class FileController {
 
 	@Operation(summary = "Upload POST", description = "POST 방식으로 파일 등록")
 	@PostMapping(value = "/upload",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<FileDTO> upload(@RequestPart("file") List<MultipartFile> uploadFile) {
+	public List<BoardAttachDTO> upload(@RequestPart("file") List<MultipartFile> uploadFile) {
 
-		List<FileDTO> list = fileUtils.uploadFiles(uploadFile);
+		List<BoardAttachDTO> list = fileUtils.uploadFiles(uploadFile);
 
 		return list;
 	}

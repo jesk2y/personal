@@ -3,7 +3,7 @@ package org.jeskey.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jeskey.domain.File;
+import org.jeskey.domain.BoardAttach;
 import org.jeskey.mapper.BoardMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -22,14 +22,14 @@ public class FileService {
 			return;
 		}
 
-		List<File> files = new ArrayList<>();
+		List<BoardAttach> files = new ArrayList<>();
 
 		fileNameList.forEach(fileName -> {
 			System.out.println(fileName);
 			//date_uuid_fileName
 			String[] arr = fileName.split("/");
 
-			File file = File.builder()
+			BoardAttach file = BoardAttach.builder()
 					.date(arr[0])
 					.uuid(arr[1])
 					.file_name(arr[2])

@@ -55,7 +55,6 @@
 	    <include refid="search"></include>
 	</select>
 	
-	<!-- 이미지 관련 -->
 	<select id="getOneBoard" resultMap="boardResult">
 		select * from board where board.bno = #{bno}
 	</select>
@@ -70,7 +69,8 @@
 				javaType="java.util.List" select="getFileList"></collection>
 	</resultMap>
 	
-	<select id="getFileList" resultType="org.jeskey.domain.File">
+	<!-- 파일 관련 -->
+	<select id="getFileList" resultType="org.jeskey.domain.BoardAttach">
 		select * from file where bno = #{bno}
 		order by ord asc
 	</select>
@@ -92,4 +92,8 @@
 	<delete id="clearFiles">
 		delete from file where bno = #{bno}
 	</delete> 
+	
+	<select id="getOldFiles" resultType = "org.jeskey.domain.BoardAttach">
+		select * from file where date = date_format(now()-1, '%y%m%d')
+	</select>
 </mapper>

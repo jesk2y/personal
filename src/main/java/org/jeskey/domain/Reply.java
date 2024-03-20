@@ -1,7 +1,6 @@
 package org.jeskey.domain;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,15 +13,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Board {
-
-	private Long bno;
-	private String title;
+public class Reply {
+	private long rno;
 	private String content;
-	private Long count_visit;
-	private LocalDateTime regdate;
-
 	private String user_id;
+	private LocalDateTime regDate;
 
-	private List<BoardAttach> fileList;
+	private long bno;
 }

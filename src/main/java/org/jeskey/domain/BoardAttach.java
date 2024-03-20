@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class File{
+public class BoardAttach{
 
 	private String uuid;
 	private String file_name;
