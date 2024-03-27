@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -26,34 +27,44 @@ public class BoardController {
 	private final BoardService boardService;
 	private final CookieUtils cookieUtils;
 
+	@Operation(summary = "Upload POST", description = "POST 방식으로 파일 등록")
 	@GetMapping("/list")
-	public void listGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
+	public void listGET(@ModelAttribute("pageObj") @Valid PageDTO dto, BindingResult bindingResult, Model model) {
+
+		if(bindingResult.hasErrors()) {
+			dto = new PageDTO(); //추가
+		}
 
 		model.addAttribute("listDTO",boardService.getList(dto));
 	}
 
 	@GetMapping("/content")
-	public String contentGET(@ModelAttribute("pageObj") PageDTO dto, Model model,
+	public String contentGET(@ModelAttribute("pageObj") @Valid PageDTO dto, BindingResult bindingResult,
+			@RequestParam("bno") Long bno, Model model,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		model.addAttribute("contentDTO", boardService.getOne(dto.getBno()));
+		if(bindingResult.hasErrors()) {
+			dto = new PageDTO();
+		}
+
+		model.addAttribute("contentDTO", boardService.getOne(bno));
 		model.addAttribute("listDTO",boardService.getList(dto));
 
-		cookieUtils.viewCountValidation(dto.getBno(), request, response);
+		cookieUtils.viewCountValidation(bno, request, response);
 
 		return "/board/content";
 	}
 
 	@GetMapping("/register")
 	public String registerGET(Model model) {
+
 		model.addAttribute("boardDTO", new BoardDTO());
+
 		return "/board/writePage";
 	}
 
 	@PostMapping("/register")
-	public String registerPOST(@Valid  BoardDTO dto, BindingResult bindingResult) {
-
-		System.out.println(dto);
+	public String registerPOST(@Valid BoardDTO dto, BindingResult bindingResult) {
 
 		if(bindingResult.hasErrors()) {
 			return "/board/writePage";
@@ -65,9 +76,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/update")
-	public String updateGET(@ModelAttribute("pageObj") PageDTO dto, Model model) {
+	public String updateGET(@ModelAttribute("pageObj") @Valid PageDTO dto, BindingResult bindingResult,
+			@RequestParam("bno") Long bno, Model model) {
 
-		model.addAttribute("boardDTO", boardService.getOne(dto.getBno()));
+		if(bindingResult.hasErrors()) {
+		}
+
+		model.addAttribute("boardDTO", boardService.getOne(bno));
 
 		return "/board/writePage";
 	}

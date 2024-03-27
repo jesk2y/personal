@@ -37,6 +37,21 @@
 							<a class="btn btn-danger delete">삭제</a>
 						</div>
 					</div>
+					<div class="row mt-3">
+						<div class="col-md-12">
+							<div class="my-4">
+								댓글 입력
+							</div>
+							<ul class="list-group replyList">
+							</ul>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col">
+							<ul class="pagination replyPaging">
+							</ul>
+						</div>
+					</div>
 				</div>
 			</div>
 		<form id="deleteForm" action="/board/delete" method="post"></form>
@@ -44,57 +59,65 @@
 	</div>
 	<div th:insert="~{/board/list.html :: listFragment}">
 	</div>
-</div>
-<script layout:fragment="script" th:inline="javascript">
-
-	//서버 에러 처리
-	const errors = /*[[${errors}]]*/null;
-	let errorMsg = ''
+	<script th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
+	<script th:src="@{/js/reply.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
 	
-	if(errors){
-		for(let i = 0; i < errors.length; i++){
-			errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
-		}
-		alert(errorMsg)
-	}
-
-	const contentDTO = /*[[${contentDTO}]]*/null;
-	const deleteForm = document.querySelector("#deleteForm")
-
-	document.querySelector(".delete").addEventListener("click", function(e){
-		
-		if(confirm("글을 삭제하시겠습니까? 삭제된 글은 복구되지 않습니다.")){
-			const deleteInput = document.createElement("input")
+		document.addEventListener("DOMContentLoaded", function(){
 			
-			deleteInput.setAttribute("type", "hidden")
-			deleteInput.setAttribute("name", "bno")
-			deleteInput.setAttribute("value",  contentDTO.bno)
+			const errorMsg = /*[[${errorMsg}]]*/null;
 			
-			deleteForm.appendChild(deleteInput)
-			
-			deleteForm.submit()
-		}
-	})
-	
-	//내용 출력
-	setContent()
-	
-	//컨텐츠 추가
-	function setContent(){
-		
-		//이미지 추가
-		if(contentDTO.fileList != null){
-			let imgStr = ''
+			if(errorMsg){
 				
-			for(var dto of contentDTO.fileList){
-				imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.fileName}">`
+				alert(errorMsg)
+			}
+		});
+		
+	
+		const contentDTO = /*[[${contentDTO}]]*/null;
+	
+		// 글 삭제
+		const deleteForm = document.querySelector("#deleteForm")
+		document.querySelector(".delete").addEventListener("click", function(e){
+			
+			if(confirm("글을 삭제하시겠습니까? 삭제된 글은 복구되지 않습니다.")){
+				const deleteInput = document.createElement("input")
+				
+				deleteInput.setAttribute("type", "hidden")
+				deleteInput.setAttribute("name", "bno")
+				deleteInput.setAttribute("value",  contentDTO.bno)
+				
+				deleteForm.appendChild(deleteInput)
+				
+				deleteForm.submit()
+			}
+		})
+		
+		//내용 출력
+		setContent()
+		
+		//컨텐츠 추가
+		function setContent(){
+			
+			//이미지 추가
+			if(contentDTO.fileList != null){
+				let imgStr = ''
+					
+				for(var dto of contentDTO.fileList){
+					imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.fileName}">`
+				}
+				
+				document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);	//이미지 출력
 			}
 			
-			document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);	//이미지 출력
+			const contentText = [[${contentDTO.content}]].replace(/(?:\r\n|\r|\n)/g, '<br>'); //엔터 변환
+			document.querySelector(".contentBox").insertAdjacentHTML("beforeend", contentText);	//텍스트 출력
 		}
 		
-		const contentText = [[${contentDTO.content}]].replace(/(?:\r\n|\r|\n)/g, '<br>') //엔터 변환
-		document.querySelector(".contentBox").insertAdjacentHTML("beforeend", contentText);	//텍스트 출력
-	}
-</script>
+	 	//댓글 불러오기
+		getReplyList(contentDTO.bno).then(result => {
+			console.log(result)
+		})
+		 
+	</script>
 </html>

@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.jeskey.domain.Reply;
+import org.jeskey.dto.PageDTO;
 
 @Mapper
 public interface ReplyMapper {
 
-	List<Reply> getListReply(Long bno);
+	List<Reply> getListReply(PageDTO page);
 
 	Reply getOneReply(Long rno);
 
@@ -16,5 +17,7 @@ public interface ReplyMapper {
 
 	int updateReply(Reply reply);
 
-	int deleteReply(Long bno);
+	int deleteReply(Long rno);
+
+	int totalCount(Long bno);
 }

@@ -14,10 +14,17 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class Reply {
-	private long rno;
+	private Long rno;
+
 	private String content;
+
 	private String user_id;
+
 	private LocalDateTime regDate;
 
-	private long bno;
+	private char del;
+
+	private Long pno;
+
+	private Long bno;
 }

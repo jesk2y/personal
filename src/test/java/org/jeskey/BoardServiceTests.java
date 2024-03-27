@@ -11,13 +11,13 @@ import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest
 @Log4j2
-public class ServiceTests {
+public class BoardServiceTests {
 
 	@Autowired
 	private BoardService boardService;
 
 	@Test
-	public void getList() {
+	void getList() {
 
 		PageDTO page = new PageDTO();
 
@@ -30,7 +30,7 @@ public class ServiceTests {
 	}
 
 	@Test
-	public void getOne() {
+	void getOne() {
 
 		PageDTO page = new PageDTO();
 
@@ -40,7 +40,7 @@ public class ServiceTests {
 		log.info(boardService.getOne(651L));
 	}
 	@Test
-	public void insert() {
+	void insert() {
 
 		BoardDTO dto = BoardDTO.builder()
 				.title("작성테스트")
@@ -53,7 +53,7 @@ public class ServiceTests {
 	}
 
 	@Test
-	public void update() {
+	void update() {
 
 		BoardDTO dto = BoardDTO.builder()
 				.bno(25L)
@@ -65,12 +65,12 @@ public class ServiceTests {
 	}
 
 	@Test
-	public void delete() {
+	void delete() {
 		log.info(boardService.delete(560L));
 	}
 
 	@Test
-	public void insertWithImage() {
+	void insertWithImage() {
 		BoardDTO boardDTO = BoardDTO.builder()
 				.title("파일첨부 테스트")
 				.content("내용 테스트")
@@ -83,7 +83,7 @@ public class ServiceTests {
 	}
 
 	@Test
-	public void updateWithImage() {
+	void updateWithImage() {
 
 		BoardDTO dto = BoardDTO.builder()
 				.bno(561L)
@@ -94,7 +94,7 @@ public class ServiceTests {
 	}
 
 	@Test
-	public void getOneWithImage() {
+	void getOneWithImage() {
 
 		log.info(boardService.getOne(1144L));
 	}

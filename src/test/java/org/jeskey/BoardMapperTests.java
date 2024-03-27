@@ -11,7 +11,7 @@ import lombok.extern.log4j.Log4j2;
 
 @SpringBootTest
 @Log4j2
-public class MapperTests {
+public class BoardMapperTests {
 
 	@Autowired
 	private BoardMapper boardMapper;
@@ -56,7 +56,7 @@ public class MapperTests {
 	@Test
 	public void insert() {
 
-		for(int i = 0; i< 555; i++) {
+		for(int i = 0; i< 85; i++) {
 			Board board = Board.builder()
 					.title("제목" + i)
 					.content("내용" + i)
@@ -121,7 +121,5 @@ public class MapperTests {
 		log.info(boardMapper.getOneBoard(1144L));
 	}
 
-
-
-
+	
 }

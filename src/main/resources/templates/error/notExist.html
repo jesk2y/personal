@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 		xmlns:th="http://www.thymeleaf.org"
+		layout:decorate="~{basic.html}">
 <head>
   <meta charset="UTF-8">
   <title>Simple Blog</title>
 </head>
+<div layout:fragment="content">
   <div class="row mt-3">
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <b>404 Not Found</b>
+          <b>ERROR</b>
         </div>
         <div class="card-body">
-         	요청한 페이지를 찾을 수 없습니다.
+         	이 페이지는 존재하지 않습니다.
         </div>
       </div>
     </div>
   </div>
+</div>

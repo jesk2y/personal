@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionAdvisor {
 
-	 @ExceptionHandler(MethodArgumentNotValidException.class)
-	public String processValidationError(MethodArgumentNotValidException exception) {
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public void processValidationError(MethodArgumentNotValidException exception) {
 
 		BindingResult bindingResult = exception.getBindingResult();
 
@@ -26,6 +26,6 @@ public class ExceptionAdvisor {
 	            builder.append("]");
 	        }
 
-	    return "redirect:/board/register";
+
 	}
 }

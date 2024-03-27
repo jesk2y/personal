@@ -4,12 +4,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class PageDTO {
 
-	private static double length = 7.0; // 페이지네이션 길이
+	private double length = 7.0; // 페이지네이션 길이
 	private int display = 15; // 한 페이지의 글 수
 
 	private int start, end, page, count;
@@ -25,6 +27,11 @@ public class PageDTO {
 		this.page = 1;
 		this.prev = false;
 		this.next = false;
+	}
+
+	public void setReply() {
+		this.length = 10.0;
+		this.display = 30;
 	}
 
 	public void setTarget(String target) {
@@ -87,7 +94,11 @@ public class PageDTO {
 		}
 
 		this.link = uriComponentsBuilder.toUriString();
-
 		return this.link;
+	}
+
+	//댓글 마지막 페이지 가져오기
+	public int getEndPage() {
+		return  (int) Math.ceil(this.count / (double) display);
 	}
 }

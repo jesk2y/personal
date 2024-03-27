@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.jeskey.mapper.BoardMapper">
+<mapper namespace="org.jeskey.mapper.ReplyMapper">
 
 	<select id="getListReply" resultType="org.jeskey.domain.Reply">
-		select * from reply
-		where bno = #{bno}
-		order by rno desc
+		select a.rno, a.content, a.regdate, a.user_id, a.bno, a.del, a.pno 
+			from reply a, (select pno from reply
+			where pno is not null and del = "n") b
+			where a.rno = b.pno
+			or del = 'n'
+			and bno = #{bno}
+			group by a.rno
+			ORDER BY COALESCE(a.pno, a.rno) asc
+		limit #{skip}, #{display} 
 	</select>
 
 	<select id="getOneReply" resultType="org.jeskey.domain.Reply">
 		select * from reply where rno = #{rno}
 	</select>
-
+	
+	<!--대댓글 x-->
 	<insert id="insertReply">
-		insert into reply(content, user_id, bno)
-		values (#{content}, #{user_id}, #{bno})
+		insert into reply(content, user_id, bno, pno)
+		values (#{content}, #{user_id}, #{bno}, #{pno})
 
 		<selectKey resultType="long" keyProperty="rno">
 			SELECT LAST_INSERT_ID()
@@ -23,11 +30,18 @@
 
 	<update id="updateReply">
 		update reply set content = #{content}
-		where rno =
-		#{rno}
+		where rno =	#{rno}
 	</update>
 
-	<delete id="deleteReply">
-		delete from reply where rno = #{rno}
-	</delete>
+	<update id="deleteReply">
+		update reply set del = 'y'
+		where rno =	#{rno}
+	</update>
+	
+	
+	<select id="totalCount">
+		select count(*) from reply
+		where bno = #{bno} and del = 'n'
+	</select>
+	
 </mapper>

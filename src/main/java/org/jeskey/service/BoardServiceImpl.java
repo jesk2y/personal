@@ -75,6 +75,7 @@ public class BoardServiceImpl implements BoardService {
 		//null이면 예외 발생
 		Board board = Optional.ofNullable(boardMapper.getOneBoard(bno))
 					.orElseThrow(() -> new NullPointerException("존재하지 않는 글입니다"));
+
 		return EntityToDto(board);
 	}
 
