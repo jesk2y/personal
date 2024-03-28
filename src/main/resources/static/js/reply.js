@@ -5,8 +5,6 @@ async function getReplyList(bno, page){
 	return result
 }
 
-console.log("hi")
-
 async function removeFileToServer(date, fileName){
 	const response = await axios({
 		method : 'delete',

@@ -37,7 +37,7 @@
 							<a class="btn btn-danger delete">삭제</a>
 						</div>
 					</div>
-					<div class="row mt-3">
+					<div class="mt-3">
 						<div class="col-md-12">
 							<div class="my-4">
 								댓글 입력
@@ -46,7 +46,7 @@
 							</ul>
 						</div>
 					</div>
-					<div class="row mt-3">
+					<div class="mt-3">
 						<div class="col">
 							<ul class="pagination replyPaging">
 							</ul>
@@ -115,9 +115,66 @@
 		}
 		
 	 	//댓글 불러오기
-		getReplyList(contentDTO.bno).then(result => {
-			console.log(result)
-		})
-		 
+	 	const replyList = document.querySelector('.replyList')
+	 	const replyPaging = document.querySelector('.replyPaging')
+	 	
+	 
+	 	
+	 	//댓글 리스트 가져오기
+	 	function printList(dtoList){
+	 		let str = '';
+	 		
+	 		if(dtoList && dtoList.length > 0){
+	 			for(const dto of dtoList){
+	 				if(dto.del == 'y'){
+	 					str += `<li class="list-group-item d-flex replyItem">
+	 						삭제된 댓글입니다
+	 					</li>`
+	 					
+	 					continue
+	 				}
+	 				
+	 				str += `<li class="list-group-item d-flex replyItem">
+ 						<span class="col-8" data-rno="${dto.rno}">${dto.content}</span>
+ 						<span class="col-2">${dto.user_id}</span>
+ 						<span class="col-2">${dto.regDate}</span>
+ 					</li>`
+	 			}
+	 		}
+	 		replyList.innerHTML = str
+	 	}
+	 	
+	 	//댓글 페이지 가져오기
+	 	function printPages(data){
+	 		let pageStr = ''
+	 		
+	 		if(data.prev){
+	 			pageStr += `<li class="page-item"><a class="page-link" data-page="${data.start-1}">PREV</a></li>`
+	 		}
+	 		
+	 		for(let i = data.start; i<= data.end; i++){
+	 			pageStr += `<li class="page-item ${i == data.page?"active":""}">
+	 						<a class="page-link" data-page="${i}">${i}</a></li>`
+	 		}
+	 		
+	 		if(data.next){
+	 			pageStr += `<li class="page-item"><a class="page-link" data-page="${data.end+1}">Next</a></li>`
+	 		}
+
+	 		replyPaging.innerHTML = pageStr
+	 	}
+	 	
+	 	//전체 댓글 출력
+	 	function printReplies(page){
+	 		getReplyList(contentDTO.bno, page).then(result => {
+
+	 		 	printList(result.data.replyList)
+	 			printPages(result.data.replyPageObj)
+	 			console.log(result.data.replyPageObj)
+			})	
+	 	}
+	 	
+	 	printReplies()
+	 	
 	</script>
 </html>

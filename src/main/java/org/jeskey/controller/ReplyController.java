@@ -1,7 +1,6 @@
 package org.jeskey.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.jeskey.dto.PageDTO;
@@ -31,9 +30,15 @@ public class ReplyController {
 
 	@Operation(summary = "replyList GET", description = "Get 방식으로 댓글 리스트 가져오기")
 	@GetMapping(value="/list/{bno}")
-	public List<ReplyDTO> getReplyList(@PathVariable("bno") Long bno, PageDTO pageDTO) {
+	public Map<String, Object> getReplyList(@PathVariable("bno") Long bno, PageDTO pageDTO) {
 
-		return replyService.getListReply(pageDTO);
+		Map<String, Object> resultMap = new HashMap<>();
+
+		resultMap.put("replyList", replyService.getListReply(pageDTO));
+		resultMap.put("replyPageObj", pageDTO);
+
+
+		return resultMap;
 	}
 
 	@Operation(summary = "Reply GET", description = "Get 방식으로 댓글 가져오기")

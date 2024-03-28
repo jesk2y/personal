@@ -101,7 +101,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<BoardDTO> getList(PageDTO dto) {
 
-		dto.setCount(boardMapper.totalCount(dto));
+		dto.setPaging(boardMapper.totalCount(dto));
 		List<BoardDTO> dtoList = boardMapper.getListBoard(dto).stream().map(vo -> EntityToDto(vo)).toList();
 		return dtoList;
 	}

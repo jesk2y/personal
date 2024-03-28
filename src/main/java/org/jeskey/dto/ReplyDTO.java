@@ -2,6 +2,8 @@ package org.jeskey.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -31,6 +33,7 @@ public class ReplyDTO {
 
 	private char del;
 
+	@JsonFormat(pattern="MM-dd HH:mm")
 	private LocalDateTime regDate;
 
 	private long bno;

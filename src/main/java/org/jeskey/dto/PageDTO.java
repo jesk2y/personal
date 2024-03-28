@@ -45,7 +45,7 @@ public class PageDTO {
 		this.targets = this.target.split("");
 	}
 
-	public void setCount(int count) {
+	public void setPaging(int count) {
 
 		if(this.page < 1) {
 			this.page = 1;
@@ -58,7 +58,7 @@ public class PageDTO {
 
 		if (display * this.end >= this.count) {
 
-			this.end = (int) Math.ceil(this.count / (double) display) + 1;
+			this.end = (int) Math.ceil(this.count / (double) display);
 			this.start = (int) (end == 1? 1 : this.end - length);
 		}else{
 			this.next = true;
@@ -98,7 +98,7 @@ public class PageDTO {
 	}
 
 	//댓글 마지막 페이지 가져오기
-	public int getEndPage() {
+	public int getLastPage() {
 		return  (int) Math.ceil(this.count / (double) display);
 	}
 }

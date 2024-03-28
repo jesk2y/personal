@@ -24,13 +24,12 @@ public class ReplyServiceImpl implements ReplyService{
 
 		dto.setReply();	//댓글용 display, length 설정
 
-		dto.setCount(replyMapper.totalCount(dto.getBno()));
+		dto.setCount(replyMapper.totalCount(dto.getBno()));		//count 설정
 
-		System.out.println(dto);
+		dto.setPage(dto.getLastPage());	//현재 페이지를 마지막 페이지로 설정
 
-		dto.setPage(dto.getEndPage());
+		dto.setPaging(dto.getCount());	//페이지네이션 설정
 
-		System.out.println(dto);
 		List<ReplyDTO> replyList = replyMapper.getListReply(dto).stream()
 				.map(vo -> modelMapper.map(vo, ReplyDTO.class)).toList();
 

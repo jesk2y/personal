@@ -17,7 +17,7 @@ public class ReplyMapperTests {
 
 	@Test
 	void insertReply() {
-		for(int i = 0; i < 45; i++) {
+		for(int i = 0; i < 520; i++) {
 			Reply reply = Reply.builder()
 					.user_id("user1")
 					.content("댓글테스트")
