@@ -23,7 +23,7 @@ public class ReplyServiceTests {
 		page.setReply();
 
 		//page.setPage(1);
-		page.setBno(1153L);
+		page.setBno(1236L);
 
 		replyService.getListReply(page).stream().forEach(dto -> log.info(dto));
 	}

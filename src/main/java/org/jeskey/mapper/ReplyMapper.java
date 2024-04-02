@@ -15,8 +15,6 @@ public interface ReplyMapper {
 
 	int insertReply(Reply reply);
 
-	int updateReply(Reply reply);
-
 	int deleteReply(Long rno);
 
 	int totalCount(Long bno);

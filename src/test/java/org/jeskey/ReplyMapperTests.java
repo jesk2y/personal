@@ -1,6 +1,7 @@
 package org.jeskey;
 
 import org.jeskey.domain.Reply;
+import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.ReplyMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,22 @@ public class ReplyMapperTests {
 	private ReplyMapper replyMapper;
 
 	@Test
+	public void getListWithPage() {
+
+		PageDTO page = new PageDTO();
+		page.setReply();
+
+		//page.setPage(1);
+		page.setBno(1236L);
+		replyMapper.getListReply(page).stream().forEach(dto -> log.info(dto));
+	}
+
+	@Test
 	void insertReply() {
-		for(int i = 0; i < 520; i++) {
+		for(int i = 0; i < 291; i++) {
 			Reply reply = Reply.builder()
 					.user_id("user1")
-					.content("댓글테스트")
+					.content("댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트" + i)
 					.bno(1153L).build();
 
 			replyMapper.insertReply(reply);
@@ -30,17 +42,6 @@ public class ReplyMapperTests {
 
 	@Test
 	void getOneReply() {
-		log.info(replyMapper.getOneReply(45L));
-	}
-
-	@Test
-	void updateReply() {
-		Reply reply = Reply.builder()
-				.rno(45L)
-				.content("댓글 수정").build();
-
-
-		replyMapper.updateReply(reply);
 		log.info(replyMapper.getOneReply(45L));
 	}
 

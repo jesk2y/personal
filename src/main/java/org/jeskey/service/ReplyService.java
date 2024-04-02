@@ -13,7 +13,5 @@ public interface ReplyService {
 
 	public Long insertReply(ReplyDTO reply);
 
-	public Long updateReply(ReplyDTO reply);
-
 	public void deleteReply(Long bno);
 }

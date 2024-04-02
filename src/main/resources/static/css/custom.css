@@ -131,3 +131,57 @@ textarea {
 	margin-bottom:10px;
 	display:block;
 }
+
+.re-reply{
+	padding:0 10px;
+}
+
+.replyItem .user_id{
+	float: left;
+    min-width: 35px;
+    color : #666;
+    font-size:14px;
+}
+
+.replyItem .date{
+	height: 20px;
+    float: right;
+    color: #666;
+    font-size:14px;
+    font-weight:bold;
+    margin-right:5px;
+}
+
+.replyItem .content{
+	padding:5px 0;
+	clear:both;	/* 중요 */
+	width:100%;
+}
+
+.replyItem .opt{
+	height: 20px;
+    float: right;
+    color: #666;
+    font-size:13px;
+    padding-top:1px;
+}
+
+.RReplyBox{
+	margin-top:10px;
+} 
+
+.RReply-submit{
+	float:right;
+	margin-top:5px;
+	font-size:14px;
+	padding:4px 5px;
+}
+
+.RReplyItem{
+	padding-left:50px;	
+	background: #f0f0f0;
+}
+
+.RReplyItem .opt{
+	background: #f0f0f0;
+}

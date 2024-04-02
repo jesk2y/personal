@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +37,7 @@ public class ReplyController {
 		resultMap.put("replyPageObj", pageDTO);
 
 
+
 		return resultMap;
 	}
 
@@ -52,6 +52,8 @@ public class ReplyController {
 	@PostMapping(value="/", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public Map<String, Long> register(@Valid @RequestBody ReplyDTO replyDTO, BindingResult bindingResult) {
 
+		replyDTO.setUser_id("user1"); //임시
+
 		if(bindingResult.hasErrors()) {
 			//나중에 처리
 		}
@@ -61,23 +63,6 @@ public class ReplyController {
 		Map<String, Long> resultMap = new HashMap<>();
 
 		Long rno = replyService.insertReply(replyDTO);
-
-		resultMap.put("rno", rno);
-
-		return resultMap;
-	}
-
-	@Operation(summary = "update PUT", description = "Put 방식으로 댓글 수정하기")
-	@PutMapping(value="/", consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public Map<String, Long> update(@Valid @RequestBody ReplyDTO replyDTO, BindingResult bindingResult) {
-
-		if(bindingResult.hasErrors()) {
-			//나중에 처리
-		}
-
-		Map<String, Long> resultMap = new HashMap<>();
-
-		Long rno = replyService.updateReply(replyDTO);
 
 		resultMap.put("rno", rno);
 

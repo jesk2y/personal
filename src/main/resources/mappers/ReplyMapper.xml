@@ -6,9 +6,8 @@
 		select a.rno, a.content, a.regdate, a.user_id, a.bno, a.del, a.pno 
 			from reply a, (select pno from reply
 			where pno is not null and del = "n") b
-			where a.rno = b.pno
-			or del = 'n'
-			and bno = #{bno}
+			where bno = #{bno}
+            and (del = 'n' or a.rno = b.pno)
 			group by a.rno
 			ORDER BY COALESCE(a.pno, a.rno) asc
 		limit #{skip}, #{display} 
@@ -18,7 +17,6 @@
 		select * from reply where rno = #{rno}
 	</select>
 	
-	<!--대댓글 x-->
 	<insert id="insertReply">
 		insert into reply(content, user_id, bno, pno)
 		values (#{content}, #{user_id}, #{bno}, #{pno})
@@ -27,11 +25,6 @@
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
-
-	<update id="updateReply">
-		update reply set content = #{content}
-		where rno =	#{rno}
-	</update>
 
 	<update id="deleteReply">
 		update reply set del = 'y'
