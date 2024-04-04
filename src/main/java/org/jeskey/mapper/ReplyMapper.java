@@ -11,8 +11,6 @@ public interface ReplyMapper {
 
 	List<Reply> getListReply(PageDTO page);
 
-	Reply getOneReply(Long rno);
-
 	int insertReply(Reply reply);
 
 	int deleteReply(Long rno);

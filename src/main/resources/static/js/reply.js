@@ -18,5 +18,5 @@ async function insert(formObj){
 }
 
 async function remove(rno){
-	const result = await axios.delete(`/reply/${rno}`)
+	await axios.delete(`/reply/${rno}`)
 }

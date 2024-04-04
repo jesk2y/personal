@@ -7,25 +7,21 @@
 			from reply a, (select pno from reply
 			where pno is not null and del = "n") b
 			where bno = #{bno}
-            and (del = 'n' or a.rno = b.pno)
+		          and (del = 'n' or a.rno = b.pno)
 			group by a.rno
 			ORDER BY COALESCE(a.pno, a.rno) asc
 		limit #{skip}, #{display} 
 	</select>
 
-	<select id="getOneReply" resultType="org.jeskey.domain.Reply">
-		select * from reply where rno = #{rno}
-	</select>
-	
 	<insert id="insertReply">
 		insert into reply(content, user_id, bno, pno)
 		values (#{content}, #{user_id}, #{bno}, #{pno})
-
+	
 		<selectKey resultType="long" keyProperty="rno">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
 	</insert>
-
+	
 	<update id="deleteReply">
 		update reply set del = 'y'
 		where rno =	#{rno}

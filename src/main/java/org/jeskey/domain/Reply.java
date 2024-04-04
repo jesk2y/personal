@@ -15,15 +15,10 @@ import lombok.ToString;
 @ToString
 public class Reply {
 	private Long rno;
-
 	private String content;
-
 	private String user_id;
-
 	private LocalDateTime regDate;
-
 	private char del;
-
 	private Long pno;
 
 	private Long bno;

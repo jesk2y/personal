@@ -22,12 +22,9 @@ public class ReplyServiceImpl implements ReplyService{
 	@Override
 	public List<ReplyDTO> getListReply(PageDTO dto) {
 
-		int page = dto.getPage();	//-1 or 현재 페이지
+		dto.setReply(replyMapper.totalCount(dto.getBno()));	//댓글용 display, length, count 설정
 
-		dto.setReply();	//댓글용 display, length 설정
-		dto.setCount(replyMapper.totalCount(dto.getBno()));		//count 설정
-
-		page = (page == -1) ? dto.getLastPage() : page;
+		int page = (dto.getPage() == -1) ? dto.getLastPage() : dto.getPage();
 		dto.setPage(page);
 		//페이지가 -1이면 처음 페이지이므로 마지막 페이지로 이동
 
@@ -38,15 +35,6 @@ public class ReplyServiceImpl implements ReplyService{
 				.map(vo -> modelMapper.map(vo, ReplyDTO.class)).toList();
 
 		return replyList;
-	}
-
-	@Override
-	public ReplyDTO getOneReply(Long rno) {
-
-		ReplyDTO replyDTO =
-				modelMapper.map(replyMapper.getOneReply(rno), ReplyDTO.class);
-
-		return replyDTO;
 	}
 
 	@Override

@@ -36,16 +36,7 @@ public class ReplyController {
 		resultMap.put("replyList", replyService.getListReply(pageDTO));
 		resultMap.put("replyPageObj", pageDTO);
 
-
-
 		return resultMap;
-	}
-
-	@Operation(summary = "Reply GET", description = "Get 방식으로 댓글 가져오기")
-	@GetMapping(value="/{rno}", produces = {MediaType.APPLICATION_JSON_VALUE})
-	public ReplyDTO getReply(@PathVariable("rno") Long rno) {
-
-		return replyService.getOneReply(rno);
 	}
 
 	@Operation(summary = "register POST", description = "Post 방식으로 댓글 입력하기")
@@ -57,8 +48,6 @@ public class ReplyController {
 		if(bindingResult.hasErrors()) {
 			//나중에 처리
 		}
-
-		System.out.println(replyDTO);
 
 		Map<String, Long> resultMap = new HashMap<>();
 

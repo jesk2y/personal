@@ -20,10 +20,10 @@ public class ReplyMapperTests {
 	public void getListWithPage() {
 
 		PageDTO page = new PageDTO();
-		page.setReply();
+		page.setBno(1153L);
+		page.setReply(replyMapper.totalCount(1153L));
+		page.setPage(3);
 
-		//page.setPage(1);
-		page.setBno(1236L);
 		replyMapper.getListReply(page).stream().forEach(dto -> log.info(dto));
 	}
 
@@ -35,14 +35,10 @@ public class ReplyMapperTests {
 					.content("댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트댓글테스트" + i)
 					.bno(1153L).build();
 
+
 			replyMapper.insertReply(reply);
 			log.info(reply.getRno());
 		}
-	}
-
-	@Test
-	void getOneReply() {
-		log.info(replyMapper.getOneReply(45L));
 	}
 
 	@Test

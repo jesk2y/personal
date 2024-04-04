@@ -29,9 +29,10 @@ public class PageDTO {
 		this.next = false;
 	}
 
-	public void setReply() {
+	public void setReply(int replyCount) {
 		this.length = 10.0;
 		this.display = 30;
+		this.count = replyCount;
 	}
 
 	public void setTarget(String target) {

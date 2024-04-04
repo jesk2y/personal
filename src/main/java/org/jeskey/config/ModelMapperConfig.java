@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Bean;
 public class ModelMapperConfig {
 
 	@Bean
-	public ModelMapper modelMapper() {
-	    ModelMapper modelMapper = new ModelMapper();
-	    modelMapper.getConfiguration()
-	            .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-	            .setFieldMatchingEnabled(true);
+	ModelMapper modelMapper() {
+		ModelMapper modelMapper = new ModelMapper();
 
-	    return modelMapper;
+		modelMapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+				.setFieldMatchingEnabled(true);
+
+		return modelMapper;
 	}
 }

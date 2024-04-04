@@ -20,10 +20,8 @@ public class ReplyServiceTests {
 	public void getListWithPage() {
 
 		PageDTO page = new PageDTO();
-		page.setReply();
-
-		//page.setPage(1);
-		page.setBno(1236L);
+		page.setBno(1153L);
+		page.setPage(3);
 
 		replyService.getListReply(page).stream().forEach(dto -> log.info(dto));
 	}
@@ -33,7 +31,18 @@ public class ReplyServiceTests {
 		ReplyDTO dto = ReplyDTO.builder()
 				.bno(1153L)
 				.content("댓글 등록 테스트")
-				.user_id("user1").build();
+				.user_id("user1").build();;
+
+		replyService.insertReply(dto);
+	}
+
+	@Test
+	public void insertRR() {
+		ReplyDTO dto = ReplyDTO.builder()
+				.bno(1153L)
+				.content("댓글 등록 테스트")
+				.user_id("user1")
+				.pno(3L).build();
 
 		replyService.insertReply(dto);
 	}

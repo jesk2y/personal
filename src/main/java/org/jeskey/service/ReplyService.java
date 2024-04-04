@@ -9,8 +9,6 @@ public interface ReplyService {
 
 	public List<ReplyDTO> getListReply(PageDTO page);
 
-	public ReplyDTO getOneReply(Long rno);
-
 	public Long insertReply(ReplyDTO reply);
 
 	public void deleteReply(Long bno);
