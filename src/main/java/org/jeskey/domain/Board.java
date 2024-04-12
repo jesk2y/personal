@@ -25,4 +25,6 @@ public class Board {
 	private String user_id;
 
 	private List<BoardAttach> fileList;
+
+	private int count_reply;
 }

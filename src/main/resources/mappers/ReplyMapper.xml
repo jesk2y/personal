@@ -3,13 +3,15 @@
 <mapper namespace="org.jeskey.mapper.ReplyMapper">
 
 	<select id="getListReply" resultType="org.jeskey.domain.Reply">
-		select a.rno, a.content, a.regdate, a.user_id, a.bno, a.del, a.pno 
-			from reply a, (select pno from reply
-			where pno is not null and del = "n") b
-			where bno = #{bno}
-		          and (del = 'n' or a.rno = b.pno)
-			group by a.rno
-			ORDER BY COALESCE(a.pno, a.rno) asc
+		 select a.rno, a.content, a.regdate, a.user_id, a.bno, a.del, a.pno 
+			from reply a 
+	           	left join (select pno from reply 
+	           	where pno is not null and del = "n") b 
+	           	on a.rno = b.pno
+	           where bno = #{bno}
+	           	and (del = 'n' or a.rno = b.pno)
+	           group by rno
+	           ORDER BY COALESCE(a.pno, a.rno) asc, pno
 		limit #{skip}, #{display} 
 	</select>
 
@@ -27,6 +29,10 @@
 		where rno =	#{rno}
 	</update>
 	
+	<select id="getOneReply">
+		select * from reply
+		where rno = #{rno} and del = 'n'
+	</select>
 	
 	<select id="totalCount">
 		select count(*) from reply

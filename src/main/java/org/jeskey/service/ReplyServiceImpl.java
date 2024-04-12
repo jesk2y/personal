@@ -7,6 +7,7 @@ import org.jeskey.dto.PageDTO;
 import org.jeskey.dto.ReplyDTO;
 import org.jeskey.mapper.ReplyMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,11 @@ public class ReplyServiceImpl implements ReplyService{
 
 	@Override
 	public Long insertReply(ReplyDTO dto) {
+
+		if(dto.getPno() != null && replyMapper.getOneReply(dto.getPno()) == null) {
+			throw new DataIntegrityViolationException("댓글 삭제됨");
+		};
+
 
 		Reply reply = modelMapper.map(dto, Reply.class);
 		replyMapper.insertReply(reply);

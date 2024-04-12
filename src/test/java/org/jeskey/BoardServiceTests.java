@@ -21,8 +21,8 @@ public class BoardServiceTests {
 
 		PageDTO page = new PageDTO();
 
-		page.setTarget("tc");
-		page.setKeyword("9");
+		//page.setTarget("tc");
+		//page.setKeyword("9");
 
 		for(BoardDTO b : boardService.getList(page)) {
 			log.info(b);

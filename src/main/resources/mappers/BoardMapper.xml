@@ -18,11 +18,14 @@
 		</if>
 	</sql>
 	
-  	<select id="getListBoard" resultType="org.jeskey.domain.Board">
-	    select * from board 
-	    where bno > 0
+	 <select id="getListBoard" resultType="org.jeskey.domain.Board">
+	    select a.bno, title, content,count_visit, regdate, user_id, count_reply from board a
+			left join (select bno, count(*) count_reply from reply where del = 'n'
+			group by bno ) b
+			on a.bno = b.bno
+	    where a.bno > 0
 	    <include refid="search"></include>
-	    order by bno desc
+	    order by a.bno desc
 	    limit #{skip}, #{display} 
 	</select>
 	

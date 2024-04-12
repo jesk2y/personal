@@ -14,7 +14,7 @@ async function insert(formObj){
 		}
 	})
 	
-	return response
+	return response.data
 }
 
 async function remove(rno){

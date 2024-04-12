@@ -8,7 +8,6 @@ import org.jeskey.dto.BoardAttachDTO;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageDTO;
 import org.jeskey.mapper.BoardMapper;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,6 @@ public class BoardServiceImpl implements BoardService {
 	private final BoardMapper boardMapper;
 	private final FileService fileService;
 
-	private final ModelMapper modelMapper;
-
 	private BoardDTO EntityToDto(Board vo) {
 
 		BoardDTO dto = BoardDTO.builder()
@@ -33,6 +30,7 @@ public class BoardServiceImpl implements BoardService {
 				.content(vo.getContent())
 				.user_id(vo.getUser_id())
 				.regdate(vo.getRegdate())
+				.count_reply(vo.getCount_reply())
 				.count_visit(vo.getCount_visit()).build();
 
 		if (vo.getFileList() != null) {

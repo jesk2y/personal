@@ -42,4 +42,6 @@ public class BoardDTO {
 	public void setFileList(List<BoardAttachDTO> list){
 		this.fileList = list;
 	}
+
+	private int count_reply;
 }

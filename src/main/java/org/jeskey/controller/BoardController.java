@@ -80,6 +80,7 @@ public class BoardController {
 			@RequestParam("bno") Long bno, Model model) {
 
 		if(bindingResult.hasErrors()) {
+			dto = new PageDTO();
 		}
 
 		model.addAttribute("boardDTO", boardService.getOne(bno));
@@ -103,9 +104,6 @@ public class BoardController {
 
 	@PostMapping("/delete")
 	public String deletePOST(@RequestParam("bno")Long bno) {
-		//post는 requestParam 안붙이면 에러남?
-
-		System.out.println(bno);
 
 		boardService.delete(bno);
 

@@ -41,18 +41,18 @@ public class ReplyController {
 
 	@Operation(summary = "register POST", description = "Post 방식으로 댓글 입력하기")
 	@PostMapping(value="/", consumes = {MediaType.APPLICATION_JSON_VALUE})
-	public Map<String, Long> register(@Valid @RequestBody ReplyDTO replyDTO, BindingResult bindingResult) {
+	public Map<String, Object> register(@Valid @RequestBody ReplyDTO replyDTO, BindingResult bindingResult) {
 
 		replyDTO.setUser_id("user1"); //임시
 
+		Map<String, Object> resultMap = new HashMap<>();
+
 		if(bindingResult.hasErrors()) {
-			//나중에 처리
+			resultMap.put("errorMsg", bindingResult.getFieldError());
+			return resultMap;
 		}
 
-		Map<String, Long> resultMap = new HashMap<>();
-
 		Long rno = replyService.insertReply(replyDTO);
-
 		resultMap.put("rno", rno);
 
 		return resultMap;

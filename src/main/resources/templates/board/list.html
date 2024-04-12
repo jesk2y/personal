@@ -5,7 +5,7 @@
 	<div class="row mt-3" th:fragment="listFragment">
 		<div class="col list-box">
 			<div class="card">
-				<a class="card-header" th:href="@{/board/list}"><b>글 목록</b></a>
+				<b class="card-header">글 목록</b>
 				<div class="card-body list-body">
 					<ul class="list-ul">
 						<li class="list-body-wrap" th:each="dto:${listDTO}"
@@ -14,6 +14,7 @@
 								<a
 									th:href="@{/board/content} + ${pageObj.getLink(dto.bno)}"
 									th:text="${dto.title}"></a>
+									<b><span th:if="${dto.count_reply != 0}" th:text="|[${dto.count_reply}]|"</span></b>
 							</div>
 							<div class="list-info">
 								<span>[[${#temporals.format(dto.regdate, 'yyyy-MM-dd')}]]</span> |

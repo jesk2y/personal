@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Blog</title>
+</head>
+<body>
+<script th:inline="javascript">
+	
+	const errorMsg = /*[[${errorMsg}]]*/null;
+	alert(`[ERROR : ${errorMsg}]\n잠시 후에 다시 시도해주세요`)
+	
+	location.href="/board/list";
+</script>
+</body>

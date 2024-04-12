@@ -20,7 +20,7 @@ public class BoardMapperTests {
 	public void getList() {
 
 		PageDTO page = new PageDTO();
-		page.setPage(3);//3페이지로 설정
+		page.setPage(1);//3페이지로 설정
 
 		page.setCount(boardMapper.totalCount(page));	//카운트 먼저 설정
 
@@ -39,8 +39,8 @@ public class BoardMapperTests {
 
 		PageDTO page = new PageDTO();
 
-		page.setTarget("tc");
-		page.setKeyword("9");
+		//page.setTarget("tc");
+		//page.setKeyword("9");
 		page.setCount(boardMapper.totalCount(page));
 
 		for(Board b : boardMapper.getListBoard(page)) {
@@ -50,7 +50,7 @@ public class BoardMapperTests {
 
 	@Test
 	public void getOne() {
-		log.info(boardMapper.getOneBoard(561L));
+		log.info(boardMapper.getOneBoard(1237L));
 	}
 
 	@Test
@@ -121,5 +121,5 @@ public class BoardMapperTests {
 		log.info(boardMapper.getOneBoard(1144L));
 	}
 
-	
+
 }
