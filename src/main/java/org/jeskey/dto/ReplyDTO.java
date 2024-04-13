@@ -31,8 +31,6 @@ public class ReplyDTO {
 
 	private Long pno;
 
-	private char del;
-
 	@JsonFormat(pattern="MM-dd HH:mm")
 	private LocalDateTime regDate;
 

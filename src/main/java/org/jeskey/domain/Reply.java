@@ -18,7 +18,6 @@ public class Reply {
 	private String content;
 	private String user_id;
 	private LocalDateTime regDate;
-	private char del;
 	private Long pno;
 
 	private Long bno;
