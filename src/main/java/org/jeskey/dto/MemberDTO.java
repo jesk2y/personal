@@ -2,19 +2,21 @@ package org.jeskey.dto;
 
 import java.time.LocalDateTime;
 
-import groovy.transform.builder.Builder;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class MemberDTO {
 
 	@NotEmpty(message = "아이디를 입력해주세요")

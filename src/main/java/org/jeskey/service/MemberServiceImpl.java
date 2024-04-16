@@ -1,5 +1,7 @@
 package org.jeskey.service;
 
+import java.util.Optional;
+
 import org.jeskey.common.PasswordEncoder;
 import org.jeskey.domain.Member;
 import org.jeskey.dto.MemberDTO;
@@ -28,9 +30,19 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public Member getMember(String user_id) {
-		// TODO Auto-generated method stub
-		return null;
+	public MemberDTO getMember(String user_id) {
+
+		Optional<Member> result = Optional.ofNullable(memberMapper.getMember(user_id));
+
+		if(result.isEmpty()) {
+
+			//에러발생
+			return null;
+		}
+
+		MemberDTO dto = modelMapper.map(result.get(), MemberDTO.class);
+
+		return dto;
 	}
 
 	@Override
