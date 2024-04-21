@@ -23,7 +23,9 @@ public class MemberServiceImpl implements MemberService{
 	@Override
 	public int insertMember(MemberDTO memberDTO) {
 
-		memberDTO.encodePassword(passwordEncoder.encrypt(memberDTO.getPassword()));
+		String hashedPw = passwordEncoder.encrypt(memberDTO.getPassword());	//비밀번호 암호화
+		memberDTO.hashedPassword(hashedPw);	//암호화된 비밀번호 저장
+
 		Member member = modelMapper.map(memberDTO, Member.class);
 
 		return memberMapper.insertMember(member);
@@ -34,9 +36,8 @@ public class MemberServiceImpl implements MemberService{
 
 		Optional<Member> result = Optional.ofNullable(memberMapper.getMember(user_id));
 
-		if(result.isEmpty()) {
+		if(result.isEmpty()) {	//아이디가 존재하지 않으면
 
-			//에러발생
 			return null;
 		}
 
@@ -47,19 +48,25 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int delMember(String user_id) {
-		// TODO Auto-generated method stub
+			memberMapper.delMember(user_id);
 		return 0;
 	}
 
 	@Override
-	public int changeEmail(MemberDTO member) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int changeEmail(MemberDTO memberDTO) {
+
+		int i = memberMapper.changeEmail(modelMapper.map(memberDTO, Member.class));
+
+		return i;
 	}
 
 	@Override
-	public int changePassword(MemberDTO member) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int changePassword(MemberDTO memberDTO) {
+
+		memberDTO.hashedPassword(passwordEncoder.encrypt(memberDTO.getPassword()));//비밀번호 암호화
+
+		int i = memberMapper.changePassword(modelMapper.map(memberDTO, Member.class));
+
+		return i;
 	}
 }

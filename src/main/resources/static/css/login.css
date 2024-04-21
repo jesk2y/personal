@@ -45,15 +45,23 @@
 .form button:hover,.form button:active,.form button:focus {
   background: #43A047;
 }
+
 .form .message {
-  margin: 15px 0 0;
-  color: #b3b3b3;
+  text-align:right;
   font-size: 12px;
 }
+  
+.form .warning {
+  margin-top:-5px;
+  margin-bottom:20px;
+  color:red;
+}
+
 .form .message a {
   color: #4CAF50;
   text-decoration: none;
 }
+
 .form .register-form {
   display: none;
 }
@@ -90,6 +98,8 @@
 .container .info span .fa {
   color: #EF3B3A;
 }
+
+
 body {
   background: #76b852; /* fallback for old browsers */
   background: rgb(141,194,111);
@@ -97,4 +107,26 @@ body {
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;      
+}
+
+input.box, select.box {
+  width: 40%;
+  height: 50px;
+  box-sizing: border-box;
+  margin-left: 5px;
+  padding: 5px 0 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #d9d6d6;
+  color: #383838;
+  background-color: #ffffff;
+  font-family: 'Montserrat', 'Pretendard', sans-serif;
+}
+
+option {
+  font-size: 16px;
+}
+
+.info .box#domain-list option {
+  font-size: 14px;
+  background-color: #ffffff;
 }

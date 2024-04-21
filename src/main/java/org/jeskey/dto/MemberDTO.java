@@ -12,11 +12,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class MemberDTO {
 
 	@NotEmpty(message = "아이디를 입력해주세요")
@@ -38,7 +38,7 @@ public class MemberDTO {
 	private char is_del;
 	private LocalDateTime regdate;
 
-	public void encodePassword(String rawPassword) {
-		this.password = rawPassword;
+	public void hashedPassword(String hp) {
+		this.password = hp;
 	}
 }

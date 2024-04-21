@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
+<link th:href="@{/css/login.css}" rel="stylesheet" />
+<meta charset="UTF-8">
+<title>회원가입</title>
+</head>
+<body>
+	<div class="login-page">
+		<div class="form">
+			<form class="login-form" action="/signup" method="post" th:object="${memberDTO}">
+				<input type="text" id="user_id" th:field="*{user_id}" placeholder="아이디" autocomplete='off'/>
+				<p class="message warning id-message" style="display: none"></p>
+
+				<input id="email-local" placeholder="이메일 앞부분"  autocomplete='off'/>@
+				<input class="box" id="domain-txt" type="text" /> 
+				<select class="box" id="domain-list">
+					<option value="type">직접 입력</option>
+					<option value="naver.com">naver.com</option>
+					<option value="google.com">google.com</option>
+					<option value="hanmail.net">hanmail.net</option>
+					<option value="nate.com">nate.com</option>
+					<option value="kakao.com">kakao.com</option>
+				</select>
+				<input id="email-full" name="email" type="hidden"/>
+				
+				<input type="password" class="password" th:field="*{password}" 
+					id="password" placeholder="비밀번호" /> 
+				<input type="password"
+					class="password" id="password-second" placeholder="비밀번호 확인" />
+				<p class="message warning pw-message" style="display: none">비밀번호가
+					일치하지 않습니다</p>
+				<button id="signupBtn">가입하기</button>
+			</form>
+		</div>
+	</div>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
+	<script th:src="@{/js/member.js}"></script>
+	<script th:inline="javascript">
+	const userIdEl = document.querySelector("#user_id")
+	const pw1El = document.querySelector("#password")
+	const pw2El = document.querySelector("#password-second")
+	
+	let idStatus = false
+	let pwStatus = false
+	
+	//아이디 중복체크
+	userIdEl.addEventListener("blur", function(e){
+		
+		const message = document.querySelector(".id-message")
+		
+		//아이디 입력 안할시
+		if(userIdEl.value.length == 0){
+			return
+		}
+	
+		message.style.display = 'block'
+		
+		//아이디 입력 조건 만족 안할시
+		if(!isId(userIdEl.value)){
+			message.innerText = '영문자로 시작하는 영문자 또는 숫자 6~20자만 가능합니다'
+			return
+		}
+		
+		//아이디 중복확인
+		checkId(userIdEl.value).then(result => {
+			
+			if(result.checked == "new"){//중복 아이디 없을시
+				message.innerText = '사용 가능한 아이디입니다'
+				
+			}else if(result.checked == "existed"){
+				message.innerText = '이미 존재하는 아이디입니다'
+				return
+			}
+		})
+		
+		idStatus = true
+	})
+	
+	//비밀번호 확인
+	document.querySelectorAll(".password").forEach(i => i.addEventListener("blur", function(e){
+		
+		const message = document.querySelector(".pw-message")
+		
+		//비밀번호 입력 안할시
+		if(pw1El.value.length == 0 || pw2El.value.length == 0 ){
+			return
+		}
+	
+		message.style.display = 'block'
+		
+		//비밀번호 일치 검사
+		if(pw1El.value == pw2El.value){
+			message.innerText = '비밀번호가 일치합니다'
+			
+		}else{
+			message.innerText = '비밀번호가 일치하지 않습니다'
+			return
+		}
+	
+		//비밀번호 조건 검사
+		if(!isPassword(pw1El.value)){
+			message.innerText = '8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합해주세요'
+			return
+		}
+		
+		message.innerText = '사용 가능합니다'
+		pwStatus = true
+	}))
+	
+	//이메일
+	const domainListEl = document.querySelector('#domain-list')
+	const domainInputEl = document.querySelector('#domain-txt')
+	const localEl = document.querySelector("#email-local")
+	// select 옵션 변경 시
+	domainListEl.addEventListener('change', function(e){
+	
+		if(e.target.value !== "type") {//도메인 선택시
+		  
+			domainInputEl.value = event.target.value
+		    domainInputEl.disabled = true
+		} else{ // 직접 입력 시
+	    
+	   		domainInputEl.value = ""
+	    	domainInputEl.disabled = false
+	  	}
+	})
+	
+	//회원가입 버튼
+	document.querySelector("#signupBtn").addEventListener("click", function(e){
+		e.preventDefault()
+		e.stopPropagation()
+		
+		if(check()){
+			document.querySelector(".login-form").submit()
+		}
+	})
+	
+	function check(){
+		
+	 	//아이디 비밀번호 체크
+		if(!idStatus || !pwStatus){
+			alert("양식이 제대로 입력되지 않았습니다")
+			return false
+		} 
+		
+		//이메일 체크
+		if(localEl.value == null || domainInputEl.value == null){
+			alert('이메일을 입력해주세요')
+			return false
+		}
+		
+		const email = localEl.value + "@" + domainInputEl.value
+		
+		if(!isEmail(email)){
+			alert("이메일 양식이 올바르지 않습니다")
+			return false
+		}
+		
+		//완성된 이메일을 hidden input에 담기
+		document.querySelector("#email-full").value = email
+	
+		return true
+	}
+	
+	//정규식 검사
+	function isId(asValue) {
+		//영문자로 시작하는 영문자 또는 숫자 6~20자 
+		var regExp = /^[a-z]+[a-z0-9]{5,19}$/g;
+		return regExp.test(asValue);
+	}
+	
+	function isPassword(asValue) {
+		//8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합
+		var regExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+		return regExp.test(asValue);
+	}
+	
+	function isEmail(asValue) {
+		var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+		return regExp.test(asValue);
+	}
+	
+	//에러처리
+	const error = /*[[${error}]]*/null;
+	if(error != null){
+		alert(error.defaultMessage)
+	}
+	</script>
+</body>
+</html>

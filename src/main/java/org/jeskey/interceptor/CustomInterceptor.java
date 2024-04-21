@@ -28,7 +28,7 @@ public class CustomInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 
-		  String path = request.getServletPath();
+		  	String path = request.getServletPath();
 
 	        String query = request.getQueryString(); //파라미터가 있는지 없는지
 

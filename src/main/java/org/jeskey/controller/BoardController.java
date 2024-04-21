@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,12 +26,11 @@ public class BoardController {
 	private final BoardService boardService;
 	private final CookieUtils cookieUtils;
 
-	@Operation(summary = "Upload POST", description = "POST 방식으로 파일 등록")
 	@GetMapping("/list")
 	public void listGET(@ModelAttribute("pageObj") @Valid PageDTO dto, BindingResult bindingResult, Model model) {
 
 		if(bindingResult.hasErrors()) {
-			dto = new PageDTO(); //추가
+			dto = new PageDTO();
 		}
 
 		model.addAttribute("listDTO",boardService.getList(dto));

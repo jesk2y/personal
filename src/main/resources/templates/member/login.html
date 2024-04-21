@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:th="http://www.thymeleaf.org" >
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
 <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}" />
 <link th:href="@{/css/login.css}" rel="stylesheet" />
@@ -10,15 +9,44 @@
 <body>
 <div class="login-page">
   <div class="form">
-    <form class="login-form" action="/login" method="post">
-      <input type="text" name="user_id" placeholder="아이디"/>
-      <input type="password" name="password" placeholder="비밀번호"/>
-       <p class="message" th:if=${wrongIdOrPassword}>아이디 혹은 비밀번호가 잘못되었습니다</p>
-      <button type="submit">login</button>
-      <p class="message">아직 가입하지 않으셨나요? <a href="#">회원가입</a></p>
+    <form class="login-form" action="/login" method="post" >
+	    <input type="text" id="user_id" name="user_id" placeholder="아이디"/>
+	    <input type="password" id="pw" name="password" placeholder="비밀번호"/>
+	    <p class="message warning" style="display:none">아이디 혹은 비밀번호가 잘못되었습니다</p>
+	    <button id="loginBtn">login</button>
+	    <p class="message">아직 가입하지 않으셨나요? <a href="#">회원가입</a></p>
     </form>
   </div>
 </div>
+<script
+		th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
+<script th:src="@{/js/member.js}"></script>
+<script th:inline="javascript">
+	
+	const loginBtn = document.querySelector("#loginBtn")
+
+	loginBtn.addEventListener("click", function(e){
+		
+		e.preventDefault()
+		e.stopPropagation()
+		
+		const message = document.querySelector(".warning")
+		
+		const formObj = new FormData();
+		
+		formObj.append("user_id", document.querySelector("#user_id").value)
+		formObj.append("password", document.querySelector("#pw").value)
+		
+		checkLogin(formObj).then(result => {
+			if(result.checked == 'false'){//아이디 없을시
+				message.style.display = 'block'
+			}else{
+				document.querySelector(".login-form").submit()
+			}
+		})
+			
+	})
+</script>
 </body>
 </html>
 

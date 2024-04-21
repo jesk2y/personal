@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpSession;
 @Component
 public class LoginInterceptor implements HandlerInterceptor{
 
-	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -31,19 +30,20 @@ public class LoginInterceptor implements HandlerInterceptor{
 
 			if(id != null) {	//이미 로그인이 되어있을 때
 
+				//직전 uri
 				Optional<Object> result = Optional.ofNullable(request.getSession().getAttribute("prev_url"));
 
 				if(result.isPresent()) {
-					uri = result.toString(); //직전 url을 session에 기록한다.
+					uri = result.toString(); //직전 uri을 session에 기록한다.
 				}else {
-					uri = "/board/list";
+					uri = "/board/list";	//직전 uri가 없을 경우 홈으로
 				}
 
 				response.setContentType("text/html; charset=UTF-8");
 
 				PrintWriter out = response.getWriter();
 
-		        out.println("<script>alert('권한이 없습니다.'); history.go(-1);</script>");
+		        out.println("<script>alert('이미 로그인 되어있습니다'); history.go(-1);</script>");
 
 				return false;
 			}
