@@ -20,7 +20,10 @@
 							<input type="text" th:field="*{title}" class="form-control" >
 						</div>
 						<p class="valid-warning" th:errors=*{title}></p>
-						
+						<div class="input-group mb-3">
+							<span class="input-group-text">아이디</span>
+							<input type="text" name="user_id" th:value="${session.id}" class="form-control" readonly>
+						</div>
 						<div class="input-group mb-3">
 							<span class="input-group-text">내용</span>
 							<textarea th:field="*{content}" rows="10" 
@@ -29,7 +32,6 @@
 						</div>
 						<p class="valid-warning" th:errors=*{content}></p>
 						
-						<input type="hidden" name="user_id" value="user1"/><!--/* 임시값 */-->
 						<div class="my-4">
 							<div class="float-end">
 								<button type="submit" class="btn btn-primary submit">등록</button>

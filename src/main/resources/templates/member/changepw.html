@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
+<head>
+<title>비밀번호 변경</title>
+<style>
+	.warning{
+		margin-top: -5px;
+	    margin-bottom: 20px;
+	    color: red;
+	    font-size:13px;
+	 }
+</style>
+</head>
+<div layout:fragment="content">
+	<div class="row mt-3">
+		<div class="col" >
+			<div class="card write-box">
+				<div class="card-header">
+					<b>회원 정보</b>
+				</div>
+				<form action="/changepw" method="post">
+					<div class="card-body"  style="max-width: 500px">
+						<div class="input-group mb-3">
+							<span class="input-group-text">새 비밀번호</span> 
+							<input type="password" name="password" id="password"
+								class="form-control password">
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">새 비밀번호 확인</span> 
+							<input type="password" id="password-second"
+								class="form-control password">
+						</div>
+						<p class="message warning pw-message" style="display: none">비밀번호가
+						일치하지 않습니다</p>
+						<button class="btn btn-primary" id="submitBtn">변경하기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script th:src="@{/js/chkpw.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
+		
+		const submitForm = document.querySelector("form")
+		let pwStatus = false
+		
+		document.querySelector("#submitBtn").addEventListener("click", function(e){
+			e.defaultPrevented
+			
+			if(pwStatus){
+				submitForm.submit();
+			}else{
+				alert("올바른 비밀번호를 입력해주세요")
+			}
+		})
+		
+	</script>
+	</div>
+</html>

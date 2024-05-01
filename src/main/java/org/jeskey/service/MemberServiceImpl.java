@@ -48,8 +48,8 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int delMember(String user_id) {
-			memberMapper.delMember(user_id);
-		return 0;
+
+		return memberMapper.delMember(user_id);
 	}
 
 	@Override

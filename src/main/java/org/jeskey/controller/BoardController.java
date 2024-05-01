@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -101,10 +102,9 @@ public class BoardController {
 	}
 
 	@PostMapping("/delete")
-	public String deletePOST(@RequestParam("bno")Long bno) {
+	public String deletePOST(@RequestParam("bno")Long bno, Model model, HttpSession session) {
 
 		boardService.delete(bno);
-
 		return "redirect:/board/list";
 	}
 }

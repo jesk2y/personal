@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
+<head>
+<title>글 작성</title>
+</head>
+<div layout:fragment="content">
+	<div class="row mt-3">
+		<div class="col" >
+			<div class="card write-box">
+				<div class="card-header">
+					<b>회원 정보</b>
+				</div>
+				<div class="card-body" style="max-width: 400px">
+					<div class="input-group mb-3">
+						<span class="input-group-text">아이디</span> <input type="text"
+							class="form-control"
+							th:value="${memberDTO.user_id}" readonly="readonly">
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">이메일</span> <input type="text"
+							class="form-control"
+							th:value="${memberDTO.email}" readonly="readonly">
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">가입일</span> <input type="text"
+							class="form-control"
+							th:value="${#temporals.format(memberDTO.regdate, 'yyyy-MM-dd')}"
+							readonly="readonly">
+					</div>
+					<a class="btn btn-primary" th:href="@{/changepw}">비밀번호 변경</a>
+					<a class="btn btn-danger" style="float:right" id="removeUser">회원탈퇴</a>
+				</div>
+			</div>
+		</div>
+		<form action="/removeUser" method="post" id="removeUserForm">
+		</form>
+	</div>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
+		const message = /*[[${msg}]]*/null;
+		
+		if(message != null){
+			alert(message)
+		}
+		
+		let removeUserForm = document.querySelector("#removeUserForm")
+		
+		document.querySelector("#removeUser").addEventListener("click", function(e){
+			let result = confirm("정말 회원탈퇴를 하시겠습니까? 한번 탈퇴하면 취소할 수 없습니다.")
+			
+			if(result){
+				let password = prompt("회원탈퇴를 완료하시려면 비밀번호를 입력하세요")
+				
+				removeUserForm.innerHTML = `<input type="hidden" name="password" value="${password}">`
+				
+				removeUserForm.submit();
+			}
+		})
+	</script>
+</html>

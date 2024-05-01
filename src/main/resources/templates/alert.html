@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>ERROR</title>
+</head>
+<body>
+<script th:inline="javascript">
+	const msg = /*[[${msg}]]*/null;
+	
+	alert(msg)
+	history.go(-1)
+</script>
+</body>
+</html>

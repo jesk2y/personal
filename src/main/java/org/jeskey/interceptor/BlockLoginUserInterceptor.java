@@ -1,7 +1,6 @@
 package org.jeskey.interceptor;
 
 import java.io.PrintWriter;
-import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Component
-public class LoginInterceptor implements HandlerInterceptor{
+public class BlockLoginUserInterceptor implements HandlerInterceptor{
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -21,32 +20,17 @@ public class LoginInterceptor implements HandlerInterceptor{
 		final String method = request.getMethod();
 
 		HttpSession session = request.getSession();
-
 		String id = (String) session.getAttribute("id");
 
-		String uri = "";
+		if(method.equals("GET") && id != null){
+			//이미 로그인이 되어있을 때
+			response.setContentType("text/html; charset=UTF-8");
 
-		if(method.equals("GET")){
+			PrintWriter out = response.getWriter();
 
-			if(id != null) {	//이미 로그인이 되어있을 때
+	        out.println("<script>alert('이미 로그인 되어있습니다'); history.go(-1);</script>");
 
-				//직전 uri
-				Optional<Object> result = Optional.ofNullable(request.getSession().getAttribute("prev_url"));
-
-				if(result.isPresent()) {
-					uri = result.toString(); //직전 uri을 session에 기록한다.
-				}else {
-					uri = "/board/list";	//직전 uri가 없을 경우 홈으로
-				}
-
-				response.setContentType("text/html; charset=UTF-8");
-
-				PrintWriter out = response.getWriter();
-
-		        out.println("<script>alert('이미 로그인 되어있습니다'); history.go(-1);</script>");
-
-				return false;
-			}
+			return false;
         }
 		return true;
 	}
@@ -54,7 +38,6 @@ public class LoginInterceptor implements HandlerInterceptor{
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		// TODO Auto-generated method stub
 		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}
 
@@ -63,7 +46,4 @@ public class LoginInterceptor implements HandlerInterceptor{
 			throws Exception {
 		HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
 	}
-
-
-
 }

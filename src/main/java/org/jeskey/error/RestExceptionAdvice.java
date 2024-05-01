@@ -1,4 +1,4 @@
-package org.jeskey.common;
+package org.jeskey.error;
 
 import java.util.HashMap;
 import java.util.Map;

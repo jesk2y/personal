@@ -43,8 +43,6 @@ public class ReplyController {
 	@PostMapping(value="/", consumes = {MediaType.APPLICATION_JSON_VALUE})
 	public Map<String, Object> register(@Valid @RequestBody ReplyDTO replyDTO, BindingResult bindingResult) {
 
-		replyDTO.setUser_id("user1"); //임시
-
 		Map<String, Object> resultMap = new HashMap<>();
 
 		if(bindingResult.hasErrors()) {

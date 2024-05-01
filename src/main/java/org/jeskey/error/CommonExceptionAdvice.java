@@ -1,4 +1,4 @@
-package org.jeskey.common;
+package org.jeskey.error;
 
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.ui.Model;
@@ -14,15 +14,17 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CommonExceptionAdvice {
 
-	//기타 에러
-	@ExceptionHandler(Exception.class)
-	public String handleAlltException(Exception e, Model model) {
+	  //기타 에러
 
-		log.error("cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+	  @ExceptionHandler(Exception.class) public String
+	  handleAlltException(Exception e, Model model) {
 
-		model.addAttribute("errorMsg", e.getMessage());
-		return "/error/error.html";
-	}
+		  log.error("cause: {}, message: {}",
+		  NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+
+		  model.addAttribute("errorMsg", e.getMessage()); return "/error/error.html";
+	  }
+
 
 	//잘못된 주소
 	@ExceptionHandler(NoResourceFoundException.class)
