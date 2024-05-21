@@ -25,7 +25,6 @@ public class CommonExceptionAdvice {
 		  model.addAttribute("errorMsg", e.getMessage()); return "/error/error.html";
 	  }
 
-
 	//잘못된 주소
 	@ExceptionHandler(NoResourceFoundException.class)
 	public String handle404Exception(Exception e, Model model) {

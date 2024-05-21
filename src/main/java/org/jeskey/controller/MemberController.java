@@ -101,7 +101,6 @@ public class MemberController {
 	@GetMapping("/changepw")
 	public String changepwGET() {
 
-
 		return "/member/changepw";
 	}
 
@@ -162,8 +161,6 @@ public class MemberController {
 		Map<String, String> resultMap = new HashMap<>();
 
 		MemberDTO member = memberService.getMember(memberParam.getUser_id());
-
-		System.out.println(memberParam.getPassword());
 
 		if(member == null || !new PasswordEncoder().ismatch(memberParam.getPassword(), member.getPassword())) {
 			//아이디가 없거나 비밀번호가 일치하지 않으면

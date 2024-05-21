@@ -59,4 +59,12 @@ public class ReplyServiceImpl implements ReplyService{
 
 		replyMapper.deleteReply(rno);
 	}
+
+	@Override
+	public ReplyDTO getOneReply(Long rno) {
+
+		ReplyDTO replyDTO = modelMapper.map(replyMapper.getOneReply(rno), ReplyDTO.class);
+
+		return replyDTO;
+	}
 }

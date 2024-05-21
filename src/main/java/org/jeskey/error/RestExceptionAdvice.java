@@ -29,6 +29,20 @@ public class RestExceptionAdvice {
 
 		Map<String, String> errorMap = new HashMap<>();
 		errorMap.put("errorMsg", "constraint fails");
+		errorMap.put("type", "go list");	//삭제된 글이므로 리스트로 이동
+
+		return ResponseEntity.badRequest().body(errorMap);
+	}
+
+	//댓글 - 권한 없음
+	@ExceptionHandler(IllegalAccessException.class)
+	@ResponseStatus(HttpStatus.EXPECTATION_FAILED)
+	public ResponseEntity<Map<String, String>> NoAuthorityException(Exception e){
+
+		log.error("cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
+
+		Map<String, String> errorMap = new HashMap<>();
+		errorMap.put("errorMsg", e.getMessage());
 
 		return ResponseEntity.badRequest().body(errorMap);
 	}

@@ -1,4 +1,9 @@
+/*
+	비밀번호 input 태그의 클래스는 모두 password 포함되있어야함
+	메인 input 태그의 id는 #password, 일치 확인 input 태그의 id는 #password-second
+	비밀번호 검증 및 일치 여부를 알려우는 알림태그 p의 믈래스는 pw-message 포함
 
+ */
 	const pw1El = document.querySelector("#password")
 	const pw2El = document.querySelector("#password-second")
 	
@@ -33,7 +38,6 @@
 		message.innerText = '사용 가능합니다'
 		pwStatus = true
 	}))
-	
 	
 	//정규식 검사
 	function isId(asValue) {

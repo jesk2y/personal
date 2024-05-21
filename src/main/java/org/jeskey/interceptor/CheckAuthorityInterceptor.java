@@ -21,6 +21,7 @@ public class CheckAuthorityInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
+
 		HttpSession session = request.getSession();
 		String id = (String) session.getAttribute("id");
 

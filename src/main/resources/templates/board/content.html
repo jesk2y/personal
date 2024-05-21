@@ -223,6 +223,7 @@
 			
 			formObj.append("content", text)
 			formObj.append("bno", contentDTO.bno)
+			formObj.append("user_id", /*[[${session.id}]]*/null)
 			
 			insert(formObj).then(result => {
 				if(result.errorMsg != null){
@@ -233,7 +234,9 @@
 				}
 			}).catch(e => {
 				alert(e.response.data.errorMsg)
-				window.location.href = '/board/list'	//글이 삭제됐으므로 메인화면으로 이동
+				if(e.response.data.type == "go list"){
+					window.location.href = '/board/list'	//글이 삭제됐으므로 메인화면으로 이동
+				}
 			})
 		})
 		
@@ -268,10 +271,13 @@
 		//댓글삭제
 		function deleteReply(rno){
 			if(confirm("댓글을 삭제하시겠습니까?")){
-			remove(rno).then(result => {
-				const currentPage = replyPaging.getElementsByClassName("active")[0].firstElementChild.dataset.page
-					printReplies(currentPage)
-				})	
+				
+				remove(rno).then(result => {
+					const currentPage = replyPaging.getElementsByClassName("active")[0].firstElementChild.dataset.page
+						printReplies(currentPage)
+					}).catch(e => {
+						alert(e.response.data.errorMsg)				
+					})
 			}	 		
 		}
 	</script>
