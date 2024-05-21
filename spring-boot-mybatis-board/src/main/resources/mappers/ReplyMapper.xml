@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeskey.mapper.ReplyMapper">
+
+	<select id="getListReply" resultType="org.jeskey.domain.Reply">
+		 select a.rno, a.content, a.regdate, a.user_id, a.bno, a.pno 
+			from reply a 
+	           	left join (select pno from reply 
+	           	where pno is not null) b 
+	           	on a.rno = b.pno
+	           where bno = #{bno}
+	           group by rno
+	           ORDER BY COALESCE(a.pno, a.rno) asc, pno
+		limit #{skip}, #{display} 
+	</select>
+
+	<insert id="insertReply">
+		insert into reply(content, user_id, bno, pno)
+		values (#{content}, #{user_id}, #{bno}, #{pno})
+	
+		<selectKey resultType="long" keyProperty="rno">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+	
+	<delete id="deleteReply">
+		delete from reply
+		where rno =	#{rno}
+	</delete>
+	
+	<select id="getOneReply">
+		select * from reply
+		where rno = #{rno}
+	</select>
+	
+	<select id="totalCount">
+		select count(*) from reply
+		where bno = #{bno}
+	</select>
+	
+</mapper>
