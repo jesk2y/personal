@@ -48,6 +48,7 @@
 |설명|페이지|설명|페이지|
 |:---|:---|:---|:---|
 |리스트|![image](https://github.com/jesk2y/personal/assets/41985737/9c5350a4-f40f-40ae-8db0-7757af5cb14d)|내용|![image](https://github.com/jesk2y/personal/assets/41985737/eb68fc69-8faa-4a58-84e7-d5b2fc3e399d)|
-|글 등록/글 수정|![image](https://github.com/jesk2y/personal/assets/41985737/e757c48a-ebd1-45c2-8f5a-391eaa6ac11b)|파일 업로드|![image](https://github.com/jesk2y/personal/assets/41985737/af9ef8d8-7431-4bce-9aa8-f03ad7d06258)
-|댓글|![image](https://github.com/jesk2y/personal/assets/41985737/187f333a-ec0c-45f3-8e53-4f4faff1f63c)|로그인|![image](https://github.com/jesk2y/personal/assets/41985737/68dc4422-c2b2-431c-bec4-7bd10462af9b)
-|
+|글 등록/글 수정|![image](https://github.com/jesk2y/personal/assets/41985737/e757c48a-ebd1-45c2-8f5a-391eaa6ac11b)|파일 업로드|![image](https://github.com/jesk2y/personal/assets/41985737/af9ef8d8-7431-4bce-9aa8-f03ad7d06258)|
+|파일 업로드 2|![image](https://github.com/jesk2y/personal/assets/41985737/49ba04fb-6994-4f84-b59e-9d036869bea5)|댓글|![image](https://github.com/jesk2y/personal/assets/41985737/187f333a-ec0c-45f3-8e53-4f4faff1f63c)|
+|로그인|![image](https://github.com/jesk2y/personal/assets/41985737/68dc4422-c2b2-431c-bec4-7bd10462af9b)|회원가입|![image](https://github.com/jesk2y/personal/assets/41985737/39d64120-be4b-412e-be17-7f2240f3f469)|
+|회원정보|![image](https://github.com/jesk2y/personal/assets/41985737/9ceaaf8d-f4aa-41f2-ae81-ef0c339944bd)|비밀번호 변경|![image](https://github.com/jesk2y/personal/assets/41985737/927c2064-a2ce-46e6-a561-360432f38357)|
