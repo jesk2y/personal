@@ -256,6 +256,7 @@
 			formObj.append("content", rrText)
 			formObj.append("pno", pno)
 			formObj.append("bno", contentDTO.bno)
+			formObj.append("user_id", /*[[${session.id}]]*/null)
 			
 			insert(formObj).then(result => {
 				
