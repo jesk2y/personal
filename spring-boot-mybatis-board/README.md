@@ -36,8 +36,10 @@
 <br>
 
 ## 프로젝트의 목적
-> 단순히 Spring Legacy에서 Sping Boot로 업데이트함과 동시에 자연스레 보편적인 라이브러리를 사용하는 것 대신, Spring Legacy에서 사용한 기능들을 Spring Boot에서도 사용해 보며 Spring Legacy와 Spring Boot의 차이를 알아본다.
+> 단순히 Spring Legacy에서 Sping Boot로 넘어가며 자연스레 보편적인 라이브러리를 사용하는 것 대신, Spring Legacy에서 사용한 기능들을 Spring Boot에서도 사용해 보며 Spring Legacy와 Spring Boot의 차이를 알아본다.
+> 
 > 또한 아직까지 Spring Legacy에서 사용되고 있는 MyBatis로 게시판의 기본적인 CRUD 및 검색, 페이징, 파일 업로드, 회원가입을 처리하고 프로젝트에서 발생하는 예외를 사용자 맞춤으로 처리하는 방식을 실습한다.
+> 
 > 또한 Spring Boot와 주로 같이 사용되는 Spring Security를 사용하기 전 Interceptor로 로그인 및 보안 처리를 하는 방법을 실습한다.
 
 <br>
