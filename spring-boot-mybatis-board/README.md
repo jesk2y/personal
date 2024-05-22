@@ -36,13 +36,19 @@
 <br>
 
 ## 프로젝트의 목적
-> 단순히 Spring Legacy에서 Sping Boot로 업데이트함과 동시에 자연스레 보편적인 라이브러리를 사용하는 것 대신, Spring Legacy에서 사용한 기능들을 Spring Boot에서도 사용해 보며 Spring Legacy와 Spring Boot의 차이를 알아본다.
+> 단순히 Spring Legacy에서 Sping Boot로 넘어가며 자연스레 보편적인 라이브러리를 사용하는 것 대신, Spring Legacy에서 사용한 기능들을 Spring Boot에서도 사용해 보며 Spring Legacy와 Spring Boot의 차이를 알아본다.
+> 
 > 또한 아직까지 Spring Legacy에서 사용되고 있는 MyBatis로 게시판의 기본적인 CRUD 및 검색, 페이징, 파일 업로드, 회원가입을 처리하고 프로젝트에서 발생하는 예외를 사용자 맞춤으로 처리하는 방식을 실습한다.
+> 
 > 또한 Spring Boot와 주로 같이 사용되는 Spring Security를 사용하기 전 Interceptor로 로그인 및 보안 처리를 하는 방법을 실습한다.
 
 <br>
 
-## 기능
-|테스트1|테스트2|테스트3|
-|테스트1|테스트2|테스트3|
-|테스트1|테스트2|테스트3|
+## 페이지
+|설명|페이지|설명|페이지|
+|:---|:---|:---|:---|
+|리스트|![image](https://github.com/jesk2y/personal/assets/41985737/9c5350a4-f40f-40ae-8db0-7757af5cb14d)|내용|![image](https://github.com/jesk2y/personal/assets/41985737/eb68fc69-8faa-4a58-84e7-d5b2fc3e399d)|
+|글 등록/글 수정|![image](https://github.com/jesk2y/personal/assets/41985737/e757c48a-ebd1-45c2-8f5a-391eaa6ac11b)|파일 업로드|![image](https://github.com/jesk2y/personal/assets/41985737/af9ef8d8-7431-4bce-9aa8-f03ad7d06258)|
+|파일 업로드 2|![image](https://github.com/jesk2y/personal/assets/41985737/49ba04fb-6994-4f84-b59e-9d036869bea5)|댓글|![image](https://github.com/jesk2y/personal/assets/41985737/187f333a-ec0c-45f3-8e53-4f4faff1f63c)|
+|로그인|![image](https://github.com/jesk2y/personal/assets/41985737/68dc4422-c2b2-431c-bec4-7bd10462af9b)|회원가입|![image](https://github.com/jesk2y/personal/assets/41985737/39d64120-be4b-412e-be17-7f2240f3f469)|
+|회원정보|![image](https://github.com/jesk2y/personal/assets/41985737/9ceaaf8d-f4aa-41f2-ae81-ef0c339944bd)|비밀번호 변경|![image](https://github.com/jesk2y/personal/assets/41985737/927c2064-a2ce-46e6-a561-360432f38357)|
