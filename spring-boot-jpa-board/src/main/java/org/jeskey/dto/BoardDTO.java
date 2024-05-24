@@ -31,7 +31,7 @@ public class BoardDTO {
 
 	private LocalDateTime regdate;
 	private LocalDateTime updatedate;
-	//테스트
+
 	/*
 	 * private String user_id;
 	 * private Long count_visit;

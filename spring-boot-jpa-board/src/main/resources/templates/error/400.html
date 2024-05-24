@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		xmlns:th="http://www.thymeleaf.org"
+		layout:decorate="~{basic.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Blog</title>
+  <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<div class="container-fluid" layout:fragment="content">
+	<div class="row mt-3">
+	  <div class="col">
+	    <div class="card">
+	      <div class="card-header">
+	        <b>400 ERROR</b>
+	      </div>
+	      <div class="card-body">
+	       	잘못된 입력값입니다.
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>

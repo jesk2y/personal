@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
+<head>
+<title>글 작성</title>
+</head>
+<div layout:fragment="content">
+	<div class="row mt-3">
+		<div class="col" >
+			<div class="card write-box">
+				<div class="card-header">
+					<b>[[${contentDTO.title}]]</b>
+				</div>
+				<div class="card-body">
+					<div class="input-group mb-3 user-input">
+						<span class="input-group-text">작성자</span> <input type="text"
+							class="form-control" style="max-width: 200px"
+							th:value="${contentDTO.user_id}" readonly="readonly">
+					</div>
+					<div class="input-group mb-3 date-input">
+						<span class="input-group-text">작성일</span> <input type="text"
+							class="form-control" style="max-width: 200px"
+							th:value="${#temporals.format(contentDTO.regdate, 'yyyy-MM-dd')}"
+							readonly="readonly">
+					</div>
+					<div class="input-group mb-3">
+						<span class="input-group-text">내용</span>
+						<div class="form-control col-sm-5 contentBox"
+							contentEditable="false"></div>
+					</div>
+					<div style="text-align:right">
+						<a class="btn btn-secondary" th:href="@{/board/list}">목록</a> <a
+							class="btn btn-success"
+							th:href="@{/board/update}+${pageObj.getLink(contentDTO.bno)}">수정</a>
+						<a class="btn btn-danger delete">삭제</a>
+					</div>
+					<div class="mt-3">
+						<ul class="list-group replyList">
+						</ul>
+					</div>
+					<div class="mt-3">
+						<ul class="pagination replyPaging">
+						</ul>
+					</div>
+					<div class="mt-3">
+						<div class="input-group mb-3" style="margin-top:10px">
+							<span class="input-group-text">댓글</span>
+							<textarea rows="3" class="form-control col-sm-5 replyTextArea"></textarea>
+						</div>
+					</div>
+					<button class="btn btn-primary replySubmit">댓글 입력</button>
+				</div>
+			</div>
+			<form id="deleteForm" action="/board/delete" method="post"></form>
+		</div>
+	</div>
+	<div th:insert="~{/board/list.html :: listFragment}"></div>
+	<script
+		th:src="@{https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js}"></script>
+	<script th:src="@{/js/reply.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
+	
+		const contentDTO = /*[[${contentDTO}]]*/null;
+	
+		// 글 삭제
+		const deleteForm = document.querySelector("#deleteForm")
+		document.querySelector(".delete").addEventListener("click", function(e){
+			
+			if(confirm("글을 삭제하시겠습니까? 삭제된 글은 복구되지 않습니다.")){
+				const deleteInput = document.createElement("input")
+				
+				deleteInput.setAttribute("type", "hidden")
+				deleteInput.setAttribute("name", "bno")
+				deleteInput.setAttribute("value",  contentDTO.bno)
+				
+				deleteForm.appendChild(deleteInput)
+				
+				deleteForm.submit()
+			}
+		})
+		
+		//내용 출력
+		setContent()
+		
+		//컨텐츠 추가
+		function setContent(){
+			
+			//이미지 추가
+			if(contentDTO.fileList != null){
+				let imgStr = ''
+					
+				for(var dto of contentDTO.fileList){
+					imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.fileName}">`
+				}
+				
+				document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);	//이미지 출력
+			}
+			
+			const beforeText = /*[[${contentDTO.content}]]*/null;
+			const contentText = beforeText.replace(/(?:\r\n|\r|\n)/g, '<br>'); //엔터 변환
+			document.querySelector(".contentBox").insertAdjacentHTML("beforeend", contentText);	//텍스트 출력
+		}
+
+		//댓글 출력
+		printReplies(-1)	//첫 첩속시 마지막 페이지를 보여주기 위해 -1로 설정
+		
+		//댓글 불러오기
+		const replyList = document.querySelector('.replyList')
+		const replyPaging = document.querySelector('.replyPaging')
+				
+		//댓글 리스트 가져오기
+		function printList(dtoList){
+			
+		replyList.innerHTML = ''
+		
+			if(dtoList && dtoList.length > 0){
+				
+				for(const dto of dtoList){
+					
+					let replyItem = document.createElement("div")
+					replyItem.className = "list-group-item replyItem"
+						
+					if(dto.del == 'y'){
+						replyItem.innerHTML="[삭제된 댓글입니다]"
+						replyList.append(replyItem)
+						continue
+					}
+					
+					if(dto.pno != null){
+						replyItem.classList.add("RReplyItem")
+					}
+					
+					replyList.append(replyItem)
+					
+					let str = `<div class="user_id">${dto.user_id}</div>
+						<div class="opt">
+							<a href="javascript:void(0);" onclick="showRReply(this, ${dto.rno})"
+								style="display: ${dto.pno == null? '':'none'}" >댓글</a>
+							<a href="javascript:void(0);" onclick="deleteReply(${dto.rno})">삭제</a></div>
+						<div class="date">${dto.regDate}</div>
+						<div class="content" data-rno="${dto.rno}">${dto.content}</div>
+					</div>`
+					
+					replyItem.insertAdjacentHTML("beforeend", str);
+				}
+			}
+		}
+		
+		//댓글 페이지 가져오기
+		function printPages(data){
+			let pageStr = ''
+			
+			if(data.prev){
+				pageStr += `<li class="page-item"><a class="page-link" data-page="${data.start-1}">PREV</a></li>`
+			}
+			
+			for(let i = data.start; i<= data.end; i++){
+				pageStr += `<li class="page-item ${i == data.page?"active":""}">
+							<a class="page-link" data-page="${i}">${i}</a></li>`
+			}
+			
+			if(data.next){
+				pageStr += `<li class="page-item"><a class="page-link" data-page="${data.end+1}">Next</a></li>`
+			}
+		
+			replyPaging.innerHTML = pageStr
+		}
+		
+		//댓글 페이지 클릭
+		replyPaging.addEventListener("click",function(e){
+			e.preventDefault()
+			e.stopPropagation()
+			
+			const target = e.target
+			
+			if(!target || target.tagName != 'A'){
+				return
+			}
+			
+			const pageNum = target.getAttribute("data-page")
+			
+			printReplies(pageNum)
+		})
+		
+		//전체 댓글 출력
+		function printReplies(page){
+			getReplyList(contentDTO.bno, page).then(result => {
+			 	printList(result.data.replyList)
+				printPages(result.data.replyPageObj)
+		
+			})	
+		}
+	 	
+		//대댓글 작성창 보이기
+		function showRReply(e, rno){
+			
+			document.querySelectorAll(".RReplyBox").forEach(data => {
+				if(data.style.display = 'block'){
+					data.style.display = 'none'
+				}
+			})	//대댓글 작성창은 한 개만 열려있도록 하기
+		
+			const str = `<div class="RReplyBox" style="display:block" data-pno="${rno}" >
+							<textarea rows="3" class="form-control"></textarea>
+					<button class="btn btn-primary RReply-submit" onclick="RRSubmit(this)">댓글 입력</button></div>`
+		
+			e.parentNode.parentNode.insertAdjacentHTML("beforeend", str)
+		}
+		
+		//댓글 입력
+		document.querySelector(".replySubmit").addEventListener("click", function(e){
+			e.preventDefault()
+			e.stopPropagation()
+			
+			const text = document.querySelector(".replyTextArea").value
+			
+			if(text == ''){
+				alert("댓글을 입력해주세요")
+				return
+			}
+			
+			const formObj = new FormData();
+			
+			formObj.append("content", text)
+			formObj.append("bno", contentDTO.bno)
+			formObj.append("user_id", /*[[${session.id}]]*/null)
+			
+			insert(formObj).then(result => {
+				if(result.errorMsg != null){
+					alert(result.errorMsg.defaultMessage)
+				}else{
+					document.querySelector(".replyTextArea").value = ''
+					printReplies(-1)//최신페이지 
+				}
+			}).catch(e => {
+				alert(e.response.data.errorMsg)
+				if(e.response.data.type == "go list"){
+					window.location.href = '/board/list'	//글이 삭제됐으므로 메인화면으로 이동
+				}
+			})
+		})
+		
+		//대댓글 입력
+		function RRSubmit(e){
+			
+			const rrText = e.previousElementSibling.value
+			const pno = e.parentNode.dataset.pno
+			
+			if(rrText == ''){
+			alert("내용은 비워들 수 없습니다")
+				return
+			}
+			
+			const formObj = new FormData();
+			
+			formObj.append("content", rrText)
+			formObj.append("pno", pno)
+			formObj.append("bno", contentDTO.bno)
+			formObj.append("user_id", /*[[${session.id}]]*/null)
+			
+			insert(formObj).then(result => {
+				
+			}).catch(e => {
+				alert(e.response.data.errorMsg)				
+			}).finally(result => {
+				//대댓글 입력 시 유지한 페이지 번호 가져오기
+				const currentPage = replyPaging.getElementsByClassName("active")[0].firstElementChild.dataset.page
+				printReplies(currentPage)
+			})
+		}
+	 	
+		//댓글삭제
+		function deleteReply(rno){
+			if(confirm("댓글을 삭제하시겠습니까?")){
+				
+				remove(rno).then(result => {
+					const currentPage = replyPaging.getElementsByClassName("active")[0].firstElementChild.dataset.page
+						printReplies(currentPage)
+					}).catch(e => {
+						alert(e.response.data.errorMsg)				
+					})
+			}	 		
+		}
+	</script>
+</html>

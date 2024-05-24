@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
+<div layout:fragment="content">
+	<div class="row mt-3" th:fragment="listFragment">
+		<div class="col list-box">
+			<div class="card">
+				<b class="card-header">글 목록</b>
+				<div class="card-body list-body">
+					<ul class="list-ul">
+						<li class="list-body-wrap" th:each="dto:${listDTO}"
+						th:classappend="${pageObj.bno == dto.bno} ? 'active' : ''">
+							<div class="list-title">
+								<a
+									th:href="@{/board/content} + ${pageObj.getLink(dto.bno)}"
+									th:text="${dto.title}"></a>
+									<b><span th:if="${dto.count_reply != 0}" th:text="|[${dto.count_reply}]|"</span></b>
+							</div>
+							<div class="list-info">
+								<span>[[${#temporals.format(dto.regdate, 'yyyy-MM-dd')}]]</span> |
+								<span>[[${dto.user_id}]]</span>
+								<span style="float:right">조회수: [[${dto.count_visit}]]</span>
+							</div>
+						</li>
+					</ul>
+					<div class="float-end">
+						<a class="btn btn-primary" style="float:left; margin-left:10px;"
+							th:href="@{/board/register}">글쓰기</a>
+						<!-- search -->
+						<div class="col search-box">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<select class="form-select">
+										<option value="tc" th:selected="${pageObj.target =='tc'}">제목+내용</option>
+										<option value="t" th:selected="${pageObj.target =='t'}">제목</option>
+										<option value="c" th:selected="${pageObj.target =='c'}">내용</option>
+										<option value="w" th:selected="${pageObj.target =='w'}">작성자</option>
+									</select>
+								</div>
+								<input type="text" class="form-control keyword" name="keyword"
+									th:value="${pageObj.keyword}">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary searchBtn"
+										type="submit">검색</button>
+								</div>
+							</div>
+						</div>
+						<!-- pagination -->
+						<th:block name="uriSetting"
+					th:with="search='__(${#strings.isEmpty(pageObj.keyword)} 
+								? '' : ('&keyword=' + ${pageObj.keyword} + '&target='+ ${pageObj.target}))__'">
+						<!--/* url 검색 파라미터 추가 */-->
+							<ul class="pagination">
+								<li class="page-item" th:if="${pageObj.prev}"><a
+									class="page-link"
+									th:href="@{/board/list(page=${pageObj.start-1})} + ${search}">Previous</a></li>
+
+								<li class="page-item"
+									th:each="num: ${#numbers.sequence(pageObj.start, pageObj.end)}">
+									<a class="page-link"
+									th:classappend="${pageObj.page == num} ? 'active' : ''"
+									th:text="${num}"
+									th:href="@{/board/list(page=${num})} + ${search}"></a>
+								</li>
+
+								<li class="page-item" th:if="${pageObj.next}"><a
+									class="page-link"
+									th:href="@{/board/list(page=${pageObj.end+1})} + ${search}">Next</a></li>
+							</ul>
+							<!-- pagination end -->
+						</th:block>
+					</div>
+				</div>
+				<form id="actionForm" action="/board/list"></form>
+			</div>
+		</div>
+		<script>
+		const actionForm = document.querySelector("#actionForm")
+		
+		document.querySelector(".searchBtn").addEventListener("click",function(e){
+			
+			const keyword = document.querySelector(".keyword")
+			const select = document.querySelector("select")
+			
+			if(keyword.value.length == 0 || keyword.value == null){
+				
+				alert("키워드를 입력해주세요")
+				return
+			}
+			
+			const keywordInput = document.createElement("input")
+			const targetInput = document.createElement("input")
+			
+			keywordInput.setAttribute("type", "hidden")
+			keywordInput.setAttribute("name", "keyword")
+			keywordInput.setAttribute("value", keyword.value)
+			
+			targetInput.setAttribute("type", "hidden")
+			targetInput.setAttribute("name", "target")
+			targetInput.setAttribute("value", select.options[select.selectedIndex].value)
+			
+			actionForm.appendChild(keywordInput)
+			actionForm.appendChild(targetInput)
+			
+			actionForm.submit()
+		})
+		</script>
+	</div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+	
+
+</script>
+</html>

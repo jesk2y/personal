@@ -1,5 +1,7 @@
 package org.jeskey.domain;
 
+import org.jeskey.dto.BoardDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,11 @@ public class Board extends BaseEntity{
 
 	@Column(length = 5000, nullable = false)
 	private String content;
+
+	public void update(BoardDTO boardDTO){
+        this.title = boardDTO.getTitle();
+        this.content = boardDTO.getContent();
+    }
 
 	/* private Long count_visit;
 	 * private String user_id;

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		xmlns:th="http://www.thymeleaf.org"
+		layout:decorate="~{basic.html}">
+    <head>
+    	<title>글 작성</title>
+    </head>
+    <div layout:fragment="content">
+    	<div class="row mt-3">
+    		<div class="col">
+    			<div class="card write-box">
+    				<div class="card-header" th:text="${boardDTO.bno == null} ? '글 작성':'글 수정'">
+    				</div>
+    				<div class="card-body">
+					<form method="POST" id="submitForm" th:object="${boardDTO}"
+						th:action="${boardDTO.bno == null} ? '/board/register' : '/board/update'">
+						<input type="hidden" th:field="*{bno}" >
+						<div class="input-group mb-3">
+							<span class="input-group-text">제목</span>
+							<input type="text" th:field="*{title}" class="form-control" >
+						</div>
+						<p class="valid-warning" th:errors=*{title}></p>
+						<div class="input-group mb-3">
+							<span class="input-group-text">아이디</span>
+							<input type="text" name="user_id" th:value="${session.id}" class="form-control" readonly>
+						</div>
+						<div class="input-group mb-3">
+							<span class="input-group-text">내용</span>
+							<textarea th:field="*{content}" rows="10" 
+								class="form-control col-sm-5"
+							></textarea>
+						</div>
+						<p class="valid-warning" th:errors=*{content}></p>
+						
+						<div class="my-4">
+							<div class="float-end">
+								<button type="submit" class="btn btn-primary submit">등록</button>
+								<a class="btn btn-secondary" onclick="history.back()">취소</a>
+							</div>
+						</div>
+						<th:block th:if="${pageObj != null}">
+							<input type="hidden" name="page" th:value="${pageObj.page}">
+							<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
+							<input type="hidden" name="target" th:value="${pageObj.target}"> 			
+						</th:block>
+						
+					</form>
+					<div class="filebox">
+						<input type="file" accept="image/*" onchange="addFiles(event);" multiple />
+						<ul id="preview"></ul>
+					</div>
+    			</div>
+    		</div>
+    	</div>
+    </div>
+	<script th:src="@{/js/file.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
+	
+		const boardDTO = /*[[${boardDTO}]]*/null;
+		const form = document.querySelector("#submitForm");
+		
+		if(boardDTO.bno != null){	//수정 페이지일시 섬네일 보여주기
+			addThumbnail(boardDTO.fileList)
+		}
+		
+		//글 작성
+		document.querySelector(".submit").addEventListener("click", function(e){
+			
+			e.preventDefault()
+			
+			const uploadFiles = document.querySelector("#preview").querySelectorAll("img");
+			let str = ''
+		
+			for(let i = 0; i < uploadFiles.length; i++){
+				
+				const fileInfo = getFileInfo(uploadFiles[i].src)
+				str += `<input type="hidden" name="fileNames" 
+								value="${fileInfo.date}/${fileInfo.uuid}/${fileInfo.fileName}">`
+	
+			}
+		
+			form.insertAdjacentHTML("beforeend", str)
+			form.submit()
+		})
+		
+		//서버 에러 처리
+		const errors = /*[[${errors}]]*/null;
+		let errorMsg = ''
+		
+		if(errors){
+			for(let i = 0; i < errors.length; i++){
+				errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+			}
+			alert(errorMsg)
+		}
+		
+		//파일 업로드
+		function addFiles(event){
+			
+			const fileList = event.target.files
+					
+			//파일 선택 창에서 취소를 누른 경우
+			if(fileList == null || fileList.length == 0){
+				return false
+			}
+
+			const formObj = new FormData();
+			
+			for(let i=0; i<fileList.length; i++){
+
+				//파일 사이즈가 5MB를 초과하는 경우
+				const fileSize = Math.floor(fileList[i].size / 1024 / 1024);
+				if(fileSize > 5){
+					alert(`파일명 : "${fileList[i].name}"\n5MB 이하의 파일만 업로드 가능합니다`)
+					event.target.value = ""
+					return false;
+					
+				//파일이 이미지가 아닌 경우
+				}else if(checkImg(fileList[i].type)){
+					alert(`파일명 : "${fileList[i].name}"\n이미지 파일만 업로드 가능합니다`)
+					event.target.value = ""
+					return false;
+				}
+				
+		   		formObj.append("file", fileList[i])
+			}
+			
+			uploadToServer(formObj).then(result => {
+				addThumbnail(result)
+				event.target.value = ""
+			}).catch(error => {
+				console.log(error)
+			})
+		}
+		
+		//파일 확장자 검사
+		function checkImg(fileType){
+			const fileVal = fileType.slice(fileType.indexOf("/")+1).toLowerCase();
+			
+			return fileVal != "jpg" && fileVal != "png" && fileVal != "jpeg" && fileVal != "gif" && fileVal != "bmp";
+		}
+		
+		//이미지 주소에서 파일 정보 추출
+		function getFileInfo(src){
+			
+			const fileArr = src.split("/")
+			const date = fileArr[fileArr.length-2]
+			
+			const nameArr = fileArr[fileArr.length-1].substr(2).split("_") //앞의 's_' 제거후 uuid와 fileName 분리
+			const uuid = nameArr[0]
+			const fileName = nameArr[1]
+			
+			return {date, uuid, fileName}
+		}
+
+		//섬네일 출력 
+		function addThumbnail(images){
+			for (let image of images) {
+				const str = `<li class="img-item">
+								<img src="/view/${image.date}/s_${image.uuid}_${image.fileName}" 
+									title="${image.fileName}" width=100 height=100>
+		           				<span class="delBtn" onclick="delThumbnail(this)">x</span>
+		           			</li>`;
+		           
+		        document.querySelector("ul#preview").insertAdjacentHTML("beforeend", str)
+		        //document.querySelector("ul#preview").innerHTML += str
+		   }
+		}
+		
+		//섬네일 삭제
+		 function delThumbnail(item){
+			item.parentNode.remove();
+		 }
+	</script>
+</html>

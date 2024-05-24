@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.jeskey.mapper.BoardMapper">
+
+	<sql id="search">
+		<if test="targets != null">
+			<foreach collection="targets" item="item" open="and (" close=")" separator="or">
+			<if test="item == 't'.toString()">
+			title LIKE CONCAT("%", #{keyword},"%")
+			</if>
+			<if test="item == 'c'.toString()">
+			content LIKE CONCAT("%", #{keyword},"%")
+			</if>
+			<if test="item == 'w'.toString()">
+			user_id LIKE CONCAT("%", #{keyword},"%")
+			</if>
+			</foreach>
+		</if>
+	</sql>
+	
+	<select id="getListBoard" resultType="org.jeskey.domain.Board">
+	    select a.bno, title, content, count_visit, regdate, user_id, count_reply from board a
+			left join (select bno, count(*) count_reply from reply
+			group by bno ) b
+			on a.bno = b.bno
+	    where a.bno > 0
+	    <include refid="search"></include>
+	    order by a.bno desc
+	    limit #{skip}, #{display} 
+	</select>
+	
+	<update id="addCount">
+		update board set count_visit = count_visit + 1
+		where bno = #{bno}   
+	</update>
+	
+	<insert id="insertBoard">
+       insert into board(title, content, user_id) 
+       		values (#{title}, #{content}, #{user_id}) 
+       
+       	<selectKey resultType="long" keyProperty="bno">
+       		SELECT LAST_INSERT_ID()
+  		</selectKey>		
+	</insert>
+	
+	<update id="updateBoard">
+		update board set title = #{title}, content = #{content}
+		where bno = #{bno}   
+	</update>
+	       
+	<delete id="deleteBoard">
+		delete from board where bno = #{bno}
+	</delete>
+	
+	<select id="totalCount">
+		select count(*) from board
+		where bno > 0
+	    <include refid="search"></include>
+	</select>
+	
+	<select id="getOneBoard" resultMap="boardResult">
+		select * from board where board.bno = #{bno}
+	</select>
+	
+	<resultMap id="boardResult" type="org.jeskey.domain.Board">
+		<id property="bno" column="bno"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="count_visit" column="count_visit"/>
+		<result property="regdate" column="regdate"/>
+		<collection property="fileList" column="bno = bno"
+				javaType="java.util.List" select="getFileList"></collection>
+	</resultMap>
+	
+	<!-- 파일 관련 -->
+	<select id="getFileList" resultType="org.jeskey.domain.BoardAttach">
+		select * from file where bno = #{bno}
+		order by ord asc
+	</select>
+	
+	<insert id="saveFiles">
+	   	insert into file(uuid, file_name, date, ord, bno) 
+	      	values
+	      	<foreach item="file" collection="list" separator=",">
+	       (
+	             #{file.uuid}
+	           , #{file.file_name}
+	           , #{file.date}
+	           , #{file.ord}
+	           , #{file.bno}
+	       )
+	       </foreach>
+	</insert>
+	
+	<delete id="clearFiles">
+		delete from file where bno = #{bno}
+	</delete> 
+	
+	<select id="getOldFiles" resultType = "org.jeskey.domain.BoardAttach">
+		select * from file where date = date_format(now()-1, '%y%m%d')
+	</select>
+</mapper>

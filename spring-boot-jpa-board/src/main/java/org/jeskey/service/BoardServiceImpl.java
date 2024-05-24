@@ -56,7 +56,6 @@ public class BoardServiceImpl implements BoardService {
     public Long insert(BoardDTO boardDTO) {
 
         Board board = dtoToEntity(boardDTO);
-
         Long bno = boardRepository.save(board).getBno();
 
         return bno;
@@ -64,8 +63,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardDTO getOne(Long bno) {
-        Optional<Board> result = boardRepository.findById(bno);
 
+        Optional<Board> result = boardRepository.findById(bno);
         Board board = result.orElseThrow();
 
         BoardDTO boardDTO = entityToDto(board);
@@ -83,9 +82,11 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	public Long update(BoardDTO dto) {
 
-		boardRepository.save(dtoToEntity(dto));
+		Optional<Board> result = boardRepository.findById(dto.getBno());
+	    Board board = result.orElseThrow();
+
+		board.update(dto);
 
 		return dto.getBno();
 	}
-
 }
