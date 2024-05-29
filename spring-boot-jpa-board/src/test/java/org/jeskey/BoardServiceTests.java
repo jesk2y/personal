@@ -1,6 +1,7 @@
 package org.jeskey;
 
 import org.jeskey.dto.BoardDTO;
+import org.jeskey.dto.PageRequestDTO;
 import org.jeskey.service.BoardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,16 @@ public class BoardServiceTests {
     public void testDelete(){
         boardService.delete(2L);
     }
+
+		@Test
+		public void testGetList() {
+
+			PageRequestDTO pageDTO = PageRequestDTO.builder()
+					.page(2).build();
+
+			log.info(boardService.getList(pageDTO));
+
+		}
 
     @Test
     public void testUpdate(){

@@ -1,12 +1,12 @@
 package org.jeskey.service;
 
-import java.util.List;
-
 import org.jeskey.dto.BoardDTO;
+import org.jeskey.dto.PageRequestDTO;
+import org.jeskey.dto.PageResponseDTO;
 
 public interface BoardService {
 
-	public List<BoardDTO> getList();
+	public PageResponseDTO<BoardDTO> getList(PageRequestDTO dto);
 
 	public Long insert(BoardDTO dto);
 

@@ -2,11 +2,15 @@ package org.jeskey.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.jeskey.domain.Board;
 import org.jeskey.dto.BoardDTO;
+import org.jeskey.dto.PageRequestDTO;
+import org.jeskey.dto.PageResponseDTO;
 import org.jeskey.repository.BoardRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,14 +47,19 @@ public class BoardServiceImpl implements BoardService {
     }
 
 	@Override
-    public List<BoardDTO> getList() {
+	public PageResponseDTO<BoardDTO> getList(PageRequestDTO dto) {
 
-        List<BoardDTO> list = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "bno"))
-                .stream().map(board -> entityToDto(board))
-                .collect(Collectors.toList());
+		Pageable pageable = PageRequest.of(dto.getPage()-1, dto.getDisplay(), Sort.by("bno").descending());
+		Page<Board> result = boardRepository.findAll(pageable);
 
-        return list;
-    }
+		List<BoardDTO> list = result.getContent().stream().map(vo -> entityToDto(vo)).toList();
+
+		return PageResponseDTO.<BoardDTO>builder()
+	            .pageRequestDTO(dto)
+	            .dtoList(list)
+	            .total((int) result.getTotalElements())
+	            .build();
+	}
 
     @Override
     public Long insert(BoardDTO boardDTO) {
