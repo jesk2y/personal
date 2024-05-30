@@ -56,3 +56,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// QueryDsl 디렉토리 경로
+def querydslSrcDir = 'src/main/generated/querydsl'
+
+clean {
+	delete file(querydslSrcDir)
+}
+
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}

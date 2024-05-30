@@ -41,15 +41,18 @@ public class BoardServiceTests {
         boardService.delete(2L);
     }
 
-		@Test
-		public void testGetList() {
+	@Test
+	public void testGetList() {
 
-			PageRequestDTO pageDTO = PageRequestDTO.builder()
-					.page(2).build();
+		String[] targets = {"t","c"};
 
-			log.info(boardService.getList(pageDTO));
+		PageRequestDTO pageDTO = PageRequestDTO.builder()
+				.page(1)
+				.keyword("3")
+				.targets(targets).build();
 
-		}
+		log.info(boardService.getList(pageDTO));
+	}
 
     @Test
     public void testUpdate(){

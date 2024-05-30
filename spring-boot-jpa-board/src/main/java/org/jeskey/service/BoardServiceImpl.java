@@ -9,9 +9,6 @@ import org.jeskey.dto.PageRequestDTO;
 import org.jeskey.dto.PageResponseDTO;
 import org.jeskey.repository.BoardRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +46,7 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public PageResponseDTO<BoardDTO> getList(PageRequestDTO dto) {
 
-		Pageable pageable = PageRequest.of(dto.getPage()-1, dto.getDisplay(), Sort.by("bno").descending());
-		Page<Board> result = boardRepository.findAll(pageable);
+		Page<Board> result = boardRepository.getListWithPageAndSearch(dto);
 
 		List<BoardDTO> list = result.getContent().stream().map(vo -> entityToDto(vo)).toList();
 

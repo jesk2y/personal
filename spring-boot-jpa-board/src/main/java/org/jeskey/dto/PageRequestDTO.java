@@ -1,5 +1,8 @@
 package org.jeskey.dto;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.AllArgsConstructor;
@@ -21,9 +24,12 @@ public class PageRequestDTO {
     @Builder.Default
     private int display = 15;
 
-
 	private String keyword, target;
 	private String[] targets;
+
+	public Pageable getPageable() {
+		return PageRequest.of(this.page-1, this.display, Sort.by("bno").descending());
+	}
 
 	public void setTarget(String target) {
 		this.target = target;
