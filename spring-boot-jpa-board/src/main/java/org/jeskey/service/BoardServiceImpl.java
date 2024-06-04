@@ -27,8 +27,8 @@ public class BoardServiceImpl implements BoardService {
                 .bno(board.getBno())
                 .title(board.getTitle())
                 .content(board.getContent())
-                .regdate(board.getRegDate())
-                .updatedate(board.getUpdateDate())
+                .regdate(board.getRegdate())
+                .updatedate(board.getUpdatedate())
                 .build();
 
         return boardDTO;

@@ -24,6 +24,8 @@ public class PageRequestDTO {
     @Builder.Default
     private int display = 15;
 
+    private int bno;
+    
 	private String keyword, target;
 	private String[] targets;
 

@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		xmlns:th="http://www.thymeleaf.org"
-		layout:decorate="~{basic.html}">
-    <head>
-    	<title>글 작성</title>
-    </head>
-    <div layout:fragment="content">
-    	<div class="row mt-3">
-    		<div class="col">
-    			<div class="card write-box">
-    				<div class="card-header" th:text="${boardDTO.bno == null} ? '글 작성':'글 수정'">
-    				</div>
-    				<div class="card-body">
+	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
+<head>
+<title>글 작성</title>
+</head>
+<div layout:fragment="content">
+	<div class="row mt-3">
+		<div class="col">
+			<div class="card write-box">
+				<div class="card-header"
+					th:text="${boardDTO.bno == null} ? '글 작성':'글 수정'"></div>
+				<div class="card-body">
 					<form method="POST" id="submitForm" th:object="${boardDTO}"
 						th:action="${boardDTO.bno == null} ? '/board/register' : '/board/update'">
-						<input type="hidden" th:field="*{bno}" >
+						<input type="hidden" th:field="*{bno}">
 						<div class="input-group mb-3">
-							<span class="input-group-text">제목</span>
-							<input type="text" th:field="*{title}" class="form-control" >
+							<span class="input-group-text">제목</span> <input type="text"
+								th:field="*{title}" class="form-control">
 						</div>
 						<p class="valid-warning" th:errors=*{title}></p>
-						<div class="input-group mb-3">
+						<!-- <div class="input-group mb-3">
 							<span class="input-group-text">아이디</span>
 							<input type="text" name="user_id" th:value="${session.id}" class="form-control" readonly>
-						</div>
+						</div> -->
 						<div class="input-group mb-3">
 							<span class="input-group-text">내용</span>
-							<textarea th:field="*{content}" rows="10" 
-								class="form-control col-sm-5"
-							></textarea>
+							<textarea th:field="*{content}" rows="10"
+								class="form-control col-sm-5"></textarea>
 						</div>
 						<p class="valid-warning" th:errors=*{content}></p>
-						
+
 						<div class="my-4">
 							<div class="float-end">
 								<button type="submit" class="btn btn-primary submit">등록</button>
@@ -41,20 +39,22 @@
 						<th:block th:if="${pageObj != null}">
 							<input type="hidden" name="page" th:value="${pageObj.page}">
 							<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
-							<input type="hidden" name="target" th:value="${pageObj.target}"> 			
+							<input type="hidden" name="target" th:value="${pageObj.target}">
 						</th:block>
-						
+
 					</form>
 					<div class="filebox">
-						<input type="file" accept="image/*" onchange="addFiles(event);" multiple />
+						<input type="file" accept="image/*" onchange="addFiles(event);"
+							multiple />
 						<ul id="preview"></ul>
 					</div>
-    			</div>
-    		</div>
-    	</div>
-    </div>
-	<script th:src="@{/js/file.js}"></script>
-	<script layout:fragment="script" th:inline="javascript">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script th:src="@{/js/file.js}"></script>
+<script layout:fragment="script" th:inline="javascript">
 	
 		const boardDTO = /*[[${boardDTO}]]*/null;
 		const form = document.querySelector("#submitForm");

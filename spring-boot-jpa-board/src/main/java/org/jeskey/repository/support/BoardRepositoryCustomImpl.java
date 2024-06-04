@@ -22,11 +22,12 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 	@Override
 	public Page<Board> getListWithPageAndSearch(PageRequestDTO pageRequestDTO) {
 
+		QBoard qboard = QBoard.board;
+
 		Pageable pageable = pageRequestDTO.getPageable();
 		String[] targets = pageRequestDTO.getTargets();
 		String keyword = pageRequestDTO.getKeyword();
 
-		QBoard qboard = QBoard.board;
 		JPQLQuery<Board> query = from(qboard);
 
 		if((targets != null && targets.length > 0) && keyword != null){
@@ -45,12 +46,11 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 	    }
 
 		long count = query.fetch().size(); // 페이징을 적용하기 전의 전체 count를 구해야 한다
+		//long count = query.fetchCount(); fetchCount() 함수는 현재 권장되지 않는다. fetch().size()로 대체하는 것이 좋다
 
 		this.getQuerydsl().applyPagination(pageable, query);
 
 		List<Board> list = query.fetch();
-
-		//long count = query.fetchCount(); fetchCount() 함수는 현재 권장되지 않는다. fetch().size()로 대체하는 것이 좋다
 
 		return new PageImpl<>(list, pageable, count);
 	}

@@ -18,10 +18,10 @@ abstract class BaseEntity {
 
 
 	 @CreatedDate
-	 @Column(name="regDate", updatable = false)
-	 private LocalDateTime regDate;
+	 @Column(name="regdate", updatable = false)
+	 private LocalDateTime regdate;
 
 	 @LastModifiedDate
-	 @Column(name="updateDate")
-	 private LocalDateTime updateDate;
+	 @Column(name="updatedate")
+	 private LocalDateTime updatedate;
 }

@@ -15,7 +15,6 @@ public class PageResponseDTO<E> {
 
 	private int start, end;
 	private boolean prev, next;
-	private Long bno;
 
 	private List<E> dtoList;
 

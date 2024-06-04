@@ -8,18 +8,15 @@
 				<b class="card-header">글 목록</b>
 				<div class="card-body list-body">
 					<ul class="list-ul">
-						<li class="list-body-wrap" th:each="dto:${listDTO}"
+						<li class="list-body-wrap" th:each="dto:${pagination.dtoList}"
 						th:classappend="${pageObj.bno == dto.bno} ? 'active' : ''">
 							<div class="list-title">
 								<a
 									th:href="@{/board/content} + ${pageObj.getLink(dto.bno)}"
 									th:text="${dto.title}"></a>
-									<b><span th:if="${dto.count_reply != 0}" th:text="|[${dto.count_reply}]|"</span></b>
 							</div>
 							<div class="list-info">
-								<span>[[${#temporals.format(dto.regdate, 'yyyy-MM-dd')}]]</span> |
-								<span>[[${dto.user_id}]]</span>
-								<span style="float:right">조회수: [[${dto.count_visit}]]</span>
+								<span>[[${#temporals.format(dto.regdate, 'yyyy-MM-dd')}]]</span> 
 							</div>
 						</li>
 					</ul>
@@ -51,21 +48,21 @@
 								? '' : ('&keyword=' + ${pageObj.keyword} + '&target='+ ${pageObj.target}))__'">
 						<!--/* url 검색 파라미터 추가 */-->
 							<ul class="pagination">
-								<li class="page-item" th:if="${pageObj.prev}"><a
+								<li class="page-item" th:if="${pagination.prev}"><a
 									class="page-link"
-									th:href="@{/board/list(page=${pageObj.start-1})} + ${search}">Previous</a></li>
+									th:href="@{/board/list(page=${pagination.start-1})} + ${search}">Previous</a></li>
 
 								<li class="page-item"
-									th:each="num: ${#numbers.sequence(pageObj.start, pageObj.end)}">
+									th:each="num: ${#numbers.sequence(pagination.start, pagination.end)}">
 									<a class="page-link"
 									th:classappend="${pageObj.page == num} ? 'active' : ''"
 									th:text="${num}"
 									th:href="@{/board/list(page=${num})} + ${search}"></a>
 								</li>
 
-								<li class="page-item" th:if="${pageObj.next}"><a
+								<li class="page-item" th:if="${pagination.next}"><a
 									class="page-link"
-									th:href="@{/board/list(page=${pageObj.end+1})} + ${search}">Next</a></li>
+									th:href="@{/board/list(page=${pagination.end+1})} + ${search}">Next</a></li>
 							</ul>
 							<!-- pagination end -->
 						</th:block>
