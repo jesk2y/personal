@@ -40,6 +40,13 @@ public class BoardServiceImpl implements BoardService {
                 .content(boardDTO.getContent())
                 .build();
 
+       if(boardDTO.getFileNames() != null) {
+    	   boardDTO.getFileNames().forEach(fileName -> {
+    		   String[] arr = fileName.split("_");
+    		   board.addFile(arr[0], arr[1]);
+    	   });
+       }
+
         return board;
     }
 
@@ -90,7 +97,7 @@ public class BoardServiceImpl implements BoardService {
 		Optional<Board> result = boardRepository.findById(dto.getBno());
 	    Board board = result.orElseThrow();
 
-		board.update(dto);
+		board.update(dto.getTitle(), dto.getContent());
 
 		return dto.getBno();
 	}

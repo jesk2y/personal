@@ -1,6 +1,7 @@
 package org.jeskey.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -31,6 +32,8 @@ public class BoardDTO {
 
 	private LocalDateTime regdate;
 	private LocalDateTime updatedate;
+
+	private List<String> fileNames;
 
 	/*
 	 * private String user_id;

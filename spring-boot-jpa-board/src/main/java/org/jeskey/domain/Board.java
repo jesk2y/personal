@@ -3,8 +3,6 @@ package org.jeskey.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jeskey.dto.BoardDTO;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,9 +32,9 @@ public class Board extends BaseEntity {
 	@Column(length = 5000, nullable = false)
 	private String content;
 
-	public void update(BoardDTO boardDTO) {
-		this.title = boardDTO.getTitle();
-		this.content = boardDTO.getContent();
+	public void update(String title, String content) {
+		this.title = title;
+		this.content = content;
 	}
 
 	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL})
@@ -53,10 +51,6 @@ public class Board extends BaseEntity {
 				.build();
 
 		fileList.add(boardFile);
-	}
-
-	public void clearImages() {
-		this.fileList.clear();
 	}
 
 	/*
