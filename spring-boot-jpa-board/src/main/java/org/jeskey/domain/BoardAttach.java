@@ -24,4 +24,8 @@ public class BoardAttach{
 
 	@ManyToOne
 	private Board board;
+
+	public void changeBoard(Board board){
+	    this.board = board;
+	}
 }

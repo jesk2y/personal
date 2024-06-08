@@ -14,12 +14,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Board extends BaseEntity {
 
 	@Id
@@ -53,6 +55,12 @@ public class Board extends BaseEntity {
 		fileList.add(boardFile);
 	}
 
+	public void clearFiles() {
+
+		fileList.forEach(boardImage -> boardImage.changeBoard(null));
+
+		this.fileList.clear();
+	}
 	/*
 	 * private Long count_visit; private String user_id; private List<BoardAttach>
 	 * fileList; private int count_reply;
