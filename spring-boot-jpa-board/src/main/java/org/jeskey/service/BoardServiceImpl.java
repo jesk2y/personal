@@ -2,6 +2,7 @@ package org.jeskey.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.jeskey.domain.Board;
 import org.jeskey.dto.BoardDTO;
@@ -22,33 +23,38 @@ public class BoardServiceImpl implements BoardService {
 
 	private final BoardRepository boardRepository;
 
-    public BoardDTO entityToDto(Board board){
-       BoardDTO boardDTO = BoardDTO.builder()
-                .bno(board.getBno())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .regdate(board.getRegdate())
-                .updatedate(board.getUpdatedate())
-                .build();
+	public BoardDTO entityToDto(Board board){
+	   BoardDTO boardDTO = BoardDTO.builder()
+	            .bno(board.getBno())
+	            .title(board.getTitle())
+	            .content(board.getContent())
+	            .regdate(board.getRegdate())
+	            .updatedate(board.getUpdatedate())
+	            .build();
 
-        return boardDTO;
-    }
+	   List<String> fileNameList = board.getFileList().stream().map(file
+			   -> file.getUuid()+"_"+file.getFile_name()).toList();
 
-    public Board dtoToEntity(BoardDTO boardDTO){
-       Board board = Board.builder()
-                .title(boardDTO.getTitle())
-                .content(boardDTO.getContent())
-                .build();
+	    boardDTO.setFileNames(fileNameList);
 
-       if(boardDTO.getFileNames() != null) {
-    	   boardDTO.getFileNames().forEach(fileName -> {
-    		   String[] arr = fileName.split("_");
-    		   board.addFile(arr[0], arr[1]);
-    	   });
-       }
+	    return boardDTO;
+	}
 
-        return board;
-    }
+	public Board dtoToEntity(BoardDTO boardDTO){
+	   Board board = Board.builder()
+	            .title(boardDTO.getTitle())
+	            .content(boardDTO.getContent())
+	            .build();
+
+	   if(boardDTO.getFileNames() != null) {
+		   boardDTO.getFileNames().forEach(fileName -> {
+			   String[] arr = fileName.split("_");
+			   board.addFile(arr[0], arr[1]);
+		   });
+	   }
+
+	    return board;
+	}
 
 	@Override
 	public PageResponseDTO<BoardDTO> getList(PageRequestDTO dto) {
@@ -64,31 +70,31 @@ public class BoardServiceImpl implements BoardService {
 	            .build();
 	}
 
-    @Override
-    public Long insert(BoardDTO boardDTO) {
+	@Override
+	public Long insert(BoardDTO boardDTO) {
 
-        Board board = dtoToEntity(boardDTO);
-        Long bno = boardRepository.save(board).getBno();
+	    Board board = dtoToEntity(boardDTO);
+	    Long bno = boardRepository.save(board).getBno();
 
-        return bno;
-    }
+	    return bno;
+	}
 
-    @Override
-    public BoardDTO getOne(Long bno) {
+	@Override
+	public BoardDTO getOne(Long bno) {
 
-        Optional<Board> result = boardRepository.findById(bno);
-        Board board = result.orElseThrow();
+	    Optional<Board> result = boardRepository.findByIdWithImages(bno);
+	    Board board = result.orElseThrow();
 
-        BoardDTO boardDTO = entityToDto(board);
+	    BoardDTO boardDTO = entityToDto(board);
 
-        return boardDTO;
-    }
+	    return boardDTO;
+	}
 
-    @Override
-    public void delete(Long bno) {
+	@Override
+	public void delete(Long bno) {
 
-    	boardRepository.deleteById(bno);
-    }
+		boardRepository.deleteImagesById(bno);
+	}
 
 	@Override
 	@Transactional
@@ -96,6 +102,13 @@ public class BoardServiceImpl implements BoardService {
 
 		Optional<Board> result = boardRepository.findById(dto.getBno());
 	    Board board = result.orElseThrow();
+
+	    board.clearFiles();
+
+		for(int i = 0; i<2; i++) {
+				board.addFile(UUID.randomUUID().toString(),
+		  				"updatefile"+i+".jpg");
+		}
 
 		board.update(dto.getTitle(), dto.getContent());
 

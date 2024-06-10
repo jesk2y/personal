@@ -39,7 +39,7 @@ public class Board extends BaseEntity {
 		this.content = content;
 	}
 
-	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL})
+	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@Builder.Default
 	private List<BoardAttach> fileList = new ArrayList<>();
 

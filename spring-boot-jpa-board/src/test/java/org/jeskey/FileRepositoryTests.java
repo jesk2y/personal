@@ -44,9 +44,12 @@ public class FileRepositoryTests {
 	}
 
 	@Test
+	@Transactional
+	@Commit
 	public void testDeleteWithImages() {
 
-		boardRepository.deleteById(679L);
+		boardRepository.deleteImagesById(683L);
+		boardRepository.deleteById(683L);
 	}
 
 	@Test
@@ -54,16 +57,16 @@ public class FileRepositoryTests {
 	@Commit
 	public void testUpdateWithImage() {
 
-		Optional<Board> result = boardRepository.findById(680L);
+		Optional<Board> result = boardRepository.findByIdWithImages(682L);
 		Board board = result.orElseThrow();
-
-		board.clearFiles();
+		log.info("====================");
+		boardRepository.deleteImagesById(682L);
 
 		for(int i = 0; i<2; i++) {
 				board.addFile(UUID.randomUUID().toString(),
 		  				"updatefile"+i+".jpg");
 		  }
 
-		boardRepository.save(board);
+		board.update(board.getTitle(), board.getContent());
 	}
 }
