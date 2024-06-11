@@ -86,11 +86,18 @@
 		function setContent(){
 			
 			//이미지 추가
-			if(contentDTO.fileList != null){
+			if(contentDTO.fileNames != null){
 				let imgStr = ''
 					
-				for(var dto of contentDTO.fileList){
-					imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.fileName}">`
+				for(var dto of contentDTO.fileNames){
+					
+					const fileArr = dto.split("/")	//"date/uuid/fileName" 형식의 string 분리
+					const date = fileArr[0]	
+					const uuid = fileArr[1]	
+					const fileName = fileArr[2]	
+					
+					
+					imgStr += `<img src="/view/${date}/${uuid}_${fileName}">`
 				}
 				
 				document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);	//이미지 출력

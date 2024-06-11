@@ -1,5 +1,8 @@
 package org.jeskey.domain;
 
+import org.hibernate.annotations.ColumnDefault;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
@@ -19,8 +22,15 @@ public class BoardAttach{
 
 	@Id
 	private String uuid;
+
+	@Column(length = 255, nullable = false)
 	private String file_name;
+
+	@ColumnDefault("0")
 	private int ord;
+
+	@Column(length = 10, nullable = false)
+	private String date;
 
 	@ManyToOne
 	private Board board;

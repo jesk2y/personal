@@ -38,8 +38,7 @@ public class BoardDTO {
 	/*
 	 * private String user_id;
 	 * private Long count_visit;
-	 * private List<String> fileNames;
-	 * fileList; //컨트롤러로 보낼 때
+
 	 * public void setFileList(List<BoardAttachDTO> list){ this.fileList = list; }
 	 * private int count_reply;
 	 */

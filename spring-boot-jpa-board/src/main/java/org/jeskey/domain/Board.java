@@ -43,11 +43,12 @@ public class Board extends BaseEntity {
 	@Builder.Default
 	private List<BoardAttach> fileList = new ArrayList<>();
 
-	public void addFile(String uuid, String fileName) {
+	public void addFile(String date, String uuid, String fileName) {
 
 		BoardAttach boardFile = BoardAttach.builder()
 				.uuid(uuid)
 				.file_name(fileName)
+				.date(date)
 				.board(this)
 				.ord(fileList.size())
 				.build();

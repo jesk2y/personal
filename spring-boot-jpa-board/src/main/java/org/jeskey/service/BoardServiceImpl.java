@@ -2,9 +2,9 @@ package org.jeskey.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.jeskey.domain.Board;
+import org.jeskey.domain.BoardAttach;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageRequestDTO;
 import org.jeskey.dto.PageResponseDTO;
@@ -33,7 +33,7 @@ public class BoardServiceImpl implements BoardService {
 	            .build();
 
 	   List<String> fileNameList = board.getFileList().stream().map(file
-			   -> file.getUuid()+"_"+file.getFile_name()).toList();
+			   -> file.getDate()+"/"+file.getUuid()+"/"+file.getFile_name()).toList();
 
 	    boardDTO.setFileNames(fileNameList);
 
@@ -48,8 +48,8 @@ public class BoardServiceImpl implements BoardService {
 
 	   if(boardDTO.getFileNames() != null) {
 		   boardDTO.getFileNames().forEach(fileName -> {
-			   String[] arr = fileName.split("_");
-			   board.addFile(arr[0], arr[1]);
+			   String[] arr = fileName.split("/");
+			   board.addFile(arr[0], arr[1], arr[2]);
 		   });
 	   }
 
@@ -100,16 +100,18 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	public Long update(BoardDTO dto) {
 
+		//기존 파일 삭제
 		Optional<Board> result = boardRepository.findById(dto.getBno());
-	    Board board = result.orElseThrow();
-
+		Board board = result.orElseThrow();
 	    board.clearFiles();
 
-		for(int i = 0; i<2; i++) {
-				board.addFile(UUID.randomUUID().toString(),
-		  				"updatefile"+i+".jpg");
-		}
+	    //새 파일 등록
+	    List<BoardAttach> fileList = dtoToEntity(dto).getFileList();
 
+	    fileList.forEach(file
+	    		-> board.addFile(file.getDate(), file.getUuid(), file.getFile_name()));
+
+	    //글 수정
 		board.update(dto.getTitle(), dto.getContent());
 
 		return dto.getBno();

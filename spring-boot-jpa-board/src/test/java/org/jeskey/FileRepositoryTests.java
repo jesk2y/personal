@@ -25,7 +25,7 @@ public class FileRepositoryTests {
 		Board board = Board.builder().title("파일첨부테스트").content("테스트").build();
 
 		for (int i = 0; i < 3; i++) {
-			board.addFile(UUID.randomUUID().toString(), "file" + i + ".jpg");
+			board.addFile("240611",UUID.randomUUID().toString(), "file" + i + ".jpg");
 		}
 
 		boardRepository.save(board);
@@ -39,7 +39,6 @@ public class FileRepositoryTests {
 		Board board = result.orElseThrow();
 
 		log.info(board);
-		log.info("==========");
 		log.info(board.getFileList());
 	}
 
@@ -59,13 +58,12 @@ public class FileRepositoryTests {
 
 		Optional<Board> result = boardRepository.findByIdWithImages(682L);
 		Board board = result.orElseThrow();
-		log.info("====================");
 		boardRepository.deleteImagesById(682L);
 
 		for(int i = 0; i<2; i++) {
-				board.addFile(UUID.randomUUID().toString(),
+			board.addFile("240611",UUID.randomUUID().toString(),
 		  				"updatefile"+i+".jpg");
-		  }
+		}
 
 		board.update(board.getTitle(), board.getContent());
 	}

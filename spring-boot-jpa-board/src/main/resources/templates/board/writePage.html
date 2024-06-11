@@ -1,67 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	xmlns:th="http://www.thymeleaf.org" layout:decorate="~{basic.html}">
-<head>
-<title>글 작성</title>
-</head>
-<div layout:fragment="content">
-	<div class="row mt-3">
-		<div class="col">
-			<div class="card write-box">
-				<div class="card-header"
-					th:text="${boardDTO.bno == null} ? '글 작성':'글 수정'"></div>
-				<div class="card-body">
-					<form method="POST" id="submitForm" th:object="${boardDTO}"
-						th:action="${boardDTO.bno == null} ? '/board/register' : '/board/update'">
-						<input type="hidden" th:field="*{bno}">
-						<div class="input-group mb-3">
-							<span class="input-group-text">제목</span> <input type="text"
-								th:field="*{title}" class="form-control">
-						</div>
-						<p class="valid-warning" th:errors=*{title}></p>
-						<!-- <div class="input-group mb-3">
-							<span class="input-group-text">아이디</span>
-							<input type="text" name="user_id" th:value="${session.id}" class="form-control" readonly>
-						</div> -->
-						<div class="input-group mb-3">
-							<span class="input-group-text">내용</span>
-							<textarea th:field="*{content}" rows="10"
-								class="form-control col-sm-5"></textarea>
-						</div>
-						<p class="valid-warning" th:errors=*{content}></p>
-
-						<div class="my-4">
-							<div class="float-end">
-								<button type="submit" class="btn btn-primary submit">등록</button>
-								<a class="btn btn-secondary" onclick="history.back()">취소</a>
+		xmlns:th="http://www.thymeleaf.org" 
+		layout:decorate="~{basic.html}">
+	<head>
+	<title>글 작성</title>
+	</head>
+	<div layout:fragment="content">
+		<div class="row mt-3">
+			<div class="col">
+				<div class="card write-box">
+					<div class="card-header"
+						th:text="${boardDTO.bno == null} ? '글 작성':'글 수정'"></div>
+					<div class="card-body">
+						<form method="POST" id="submitForm" th:object="${boardDTO}"
+							th:action="${boardDTO.bno == null} ? '/board/register' : '/board/update'">
+							<input type="hidden" th:field="*{bno}">
+							<div class="input-group mb-3">
+								<span class="input-group-text">제목</span> <input type="text"
+									th:field="*{title}" class="form-control">
 							</div>
+							<p class="valid-warning" th:errors=*{title}></p>
+							<!-- <div class="input-group mb-3">
+								<span class="input-group-text">아이디</span>
+								<input type="text" name="user_id" th:value="${session.id}" class="form-control" readonly>
+							</div> -->
+							<div class="input-group mb-3">
+								<span class="input-group-text">내용</span>
+								<textarea th:field="*{content}" rows="10"
+									class="form-control col-sm-5"></textarea>
+							</div>
+							<p class="valid-warning" th:errors=*{content}></p>
+	
+							<div class="my-4">
+								<div class="float-end">
+									<button type="submit" class="btn btn-primary submit">등록</button>
+									<a class="btn btn-secondary" onclick="history.back()">취소</a>
+								</div>
+							</div>
+							<th:block th:if="${pageObj != null}">
+								<input type="hidden" name="page" th:value="${pageObj.page}">
+								<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
+								<input type="hidden" name="target" th:value="${pageObj.target}">
+							</th:block>
+	
+						</form>
+						<div class="filebox">
+							<input type="file" accept="image/*" onchange="addFiles(event);"
+								multiple />
+							<ul id="preview"></ul>
 						</div>
-						<th:block th:if="${pageObj != null}">
-							<input type="hidden" name="page" th:value="${pageObj.page}">
-							<input type="hidden" name="keyword" th:value="${pageObj.keyword}">
-							<input type="hidden" name="target" th:value="${pageObj.target}">
-						</th:block>
-
-					</form>
-					<div class="filebox">
-						<input type="file" accept="image/*" onchange="addFiles(event);"
-							multiple />
-						<ul id="preview"></ul>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
-<script th:src="@{/js/file.js}"></script>
-<script layout:fragment="script" th:inline="javascript">
+	<script th:src="@{/js/file.js}"></script>
+	<script layout:fragment="script" th:inline="javascript">
 	
 		const boardDTO = /*[[${boardDTO}]]*/null;
 		const form = document.querySelector("#submitForm");
 		
 		if(boardDTO.bno != null){	//수정 페이지일시 섬네일 보여주기
-			addThumbnail(boardDTO.fileList)
+			
+			addThumbnail(boardDTO.fileNames)
 		}
+		
 		
 		//글 작성
 		document.querySelector(".submit").addEventListener("click", function(e){
@@ -152,13 +154,20 @@
 			
 			return {date, uuid, fileName}
 		}
-
+		
 		//섬네일 출력 
-		function addThumbnail(images){
-			for (let image of images) {
+		function addThumbnail(imageNames){
+			
+			for (let image of imageNames) {
+				
+				const fileArr = image.split("/")	//"date_uuid_fileName" 형식의 string 분리
+				const date = fileArr[0]	
+				const uuid = fileArr[1]	
+				const fileName = fileArr[2]	
+				
 				const str = `<li class="img-item">
-								<img src="/view/${image.date}/s_${image.uuid}_${image.fileName}" 
-									title="${image.fileName}" width=100 height=100>
+								<img src="/view/${date}/s_${uuid}_${fileName}" 
+									title="${fileName}" width=100 height=100>
 		           				<span class="delBtn" onclick="delThumbnail(this)">x</span>
 		           			</li>`;
 		           

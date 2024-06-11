@@ -1,5 +1,9 @@
 package org.jeskey;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageRequestDTO;
 import org.jeskey.service.BoardService;
@@ -24,9 +28,27 @@ public class BoardServiceTests {
 	                    .title("타이틀 테스트 "+i)
 	                    .content("내용 테스트 "+i)
 	                    .build();
-
 	          boardService.insert(boardDTO);
 	     }
+	}
+
+	@Test
+	public void insertOneTest() {
+
+	      BoardDTO boardDTO = BoardDTO.builder()
+	                .title("타이틀 테스트 ")
+	                .content("내용 테스트 ")
+	                .build();
+
+	      List<String> fileNameList = new ArrayList<>();
+
+	      for (int i = 0; i < 3; i++) {
+	    	  fileNameList.add("20240101_"+UUID.randomUUID()+"_파일이름"+i+".jpg");
+	  		}
+
+	      boardDTO.setFileNames(fileNameList);
+
+	      boardService.insert(boardDTO);
 	}
 
 	@Test
@@ -58,10 +80,18 @@ public class BoardServiceTests {
     public void testUpdate(){
 
         BoardDTO boardDTO = BoardDTO.builder()
-                .bno(680L)
+                .bno(687L)
                 .title("제목 수정.......")
                 .content("내용 수정........")
                 .build();
+
+	    List<String> fileNameList = new ArrayList<>();
+
+	    for (int i = 0; i < 2; i++) {
+	    	  fileNameList.add("20240101_"+UUID.randomUUID()+"_파일이름"+i+".jpg");
+	    }
+
+	    boardDTO.setFileNames(fileNameList);
 
         boardService.update(boardDTO);
     }
