@@ -61,9 +61,8 @@
 		
 		if(boardDTO.bno != null){	//수정 페이지일시 섬네일 보여주기
 			
-			addThumbnail(boardDTO.fileNames)
+			addThumbnail(boardDTO.fileList)
 		}
-		
 		
 		//글 작성
 		document.querySelector(".submit").addEventListener("click", function(e){
@@ -143,31 +142,30 @@
 		}
 		
 		//이미지 주소에서 파일 정보 추출
-		function getFileInfo(src){
+ 		function getFileInfo(src){
+			
+			//src 형식 : http://~~~/view/${date}/s_${uuid}_${fildName)
 			
 			const fileArr = src.split("/")
 			const date = fileArr[fileArr.length-2]
 			
-			const nameArr = fileArr[fileArr.length-1].substr(2).split("_") //앞의 's_' 제거후 uuid와 fileName 분리
-			const uuid = nameArr[0]
-			const fileName = nameArr[1]
+			const fullName = fileArr[fileArr.length-1].substr(2) //앞의 's_' 제거
+			const pointIndex = fullName.indexOf("_")	//첫 번째로 언더바가 나오는 위치 찾기
+			
+			const uuid = fullName.substring(0, pointIndex)	//언더바 기준으로 앞
+			const fileName = fullName.substring(pointIndex+1)	//언더바 기준으로 뒤
 			
 			return {date, uuid, fileName}
-		}
+		} 
 		
 		//섬네일 출력 
-		function addThumbnail(imageNames){
+		function addThumbnail(imageList){
 			
-			for (let image of imageNames) {
-				
-				const fileArr = image.split("/")	//"date_uuid_fileName" 형식의 string 분리
-				const date = fileArr[0]	
-				const uuid = fileArr[1]	
-				const fileName = fileArr[2]	
+			for (let image of imageList) {
 				
 				const str = `<li class="img-item">
-								<img src="/view/${date}/s_${uuid}_${fileName}" 
-									title="${fileName}" width=100 height=100>
+								<img src="/view/${image.date}/s_${image.uuid}_${image.fileName}" 
+									title="${image.fileName}" width=100 height=100>
 		           				<span class="delBtn" onclick="delThumbnail(this)">x</span>
 		           			</li>`;
 		           

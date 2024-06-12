@@ -32,10 +32,9 @@ public class BoardServiceImpl implements BoardService {
 	            .updatedate(board.getUpdatedate())
 	            .build();
 
-	   List<String> fileNameList = board.getFileList().stream().map(file
-			   -> file.getDate()+"/"+file.getUuid()+"/"+file.getFile_name()).toList();
-
-	    boardDTO.setFileNames(fileNameList);
+	   if(board.getFileList() != null) {
+		   boardDTO.setFileList(board.getFileList());
+	   }
 
 	    return boardDTO;
 	}
@@ -46,11 +45,9 @@ public class BoardServiceImpl implements BoardService {
 	            .content(boardDTO.getContent())
 	            .build();
 
-	   if(boardDTO.getFileNames() != null) {
-		   boardDTO.getFileNames().forEach(fileName -> {
-			   String[] arr = fileName.split("/");
-			   board.addFile(arr[0], arr[1], arr[2]);
-		   });
+	   if(boardDTO.getFileList() != null){
+		   boardDTO.getFileList().forEach(file
+				   -> board.addFile(file.getDate(), file.getUuid(), file.getFileName()));
 	   }
 
 	    return board;

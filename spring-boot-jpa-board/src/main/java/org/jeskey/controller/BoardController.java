@@ -65,6 +65,7 @@ public class BoardController {
 			return "/board/writePage";
 		}
 
+		System.out.println(dto.getFileList()+"==============");
 		long bno = boardService.insert(dto);
 
 		return "redirect:/board/content?bno="+ bno;
@@ -87,8 +88,8 @@ public class BoardController {
 	public String updatePOST(@ModelAttribute("pageObj") PageRequestDTO pageDTO,
 			@Valid BoardDTO dto, BindingResult bindingResult) {
 
+		System.out.println(dto);
 		if(bindingResult.hasErrors()) {
-
 			return "/board/writePage";
 		}
 

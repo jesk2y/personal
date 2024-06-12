@@ -128,7 +128,6 @@ public class FileUtils {
 
 	//이미지 화면 출력용 Path 리턴
 	public String getPath(String date, String fileName) {
-
 		return Paths.get(uploadPath, date, fileName).toString();
 	}
 }

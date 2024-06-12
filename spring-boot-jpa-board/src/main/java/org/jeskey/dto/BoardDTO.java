@@ -1,6 +1,7 @@
 package org.jeskey.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -33,7 +34,28 @@ public class BoardDTO {
 	private LocalDateTime regdate;
 	private LocalDateTime updatedate;
 
-	private List<String> fileNames;
+	private List<BoardAttachDTO> fileList;
+
+	/*
+	 * 컨트롤러에서 파라미터로 들어온 List<String> 타입의 파일 이름들을 BoardAttach 타입으로 변환해서 집어넣는다.
+	 * 이 과정은 자동으로 이루어진다
+	 * 형식 : [date]/[uuid]/[파일이름]
+	 */
+	public void setFileNames(List<String> fileNames) {
+
+		fileList = new ArrayList<>();
+
+		fileNames.forEach(fileName -> {
+			String[] arr = fileName.split("/");
+
+			BoardAttachDTO fileDto = BoardAttachDTO.builder()
+			.date(arr[0])
+			.uuid(arr[1])
+			.fileName(arr[2]).build();
+
+			fileList.add(fileDto);
+		});
+	}
 
 	/*
 	 * private String user_id;
