@@ -65,7 +65,6 @@ public class BoardController {
 			return "/board/writePage";
 		}
 
-		System.out.println(dto.getFileList()+"==============");
 		long bno = boardService.insert(dto);
 
 		return "redirect:/board/content?bno="+ bno;

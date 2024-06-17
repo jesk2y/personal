@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -24,6 +25,8 @@ public class QBoard extends EntityPathBase<Board> {
     public final NumberPath<Long> bno = createNumber("bno", Long.class);
 
     public final StringPath content = createString("content");
+
+    public final ListPath<BoardAttach, QBoardAttach> fileList = this.<BoardAttach, QBoardAttach>createList("fileList", BoardAttach.class, QBoardAttach.class, PathInits.DIRECT2);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> regdate = _super.regdate;

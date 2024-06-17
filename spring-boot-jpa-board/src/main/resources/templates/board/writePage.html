@@ -59,7 +59,7 @@
 		const boardDTO = /*[[${boardDTO}]]*/null;
 		const form = document.querySelector("#submitForm");
 		
-		if(boardDTO.bno != null){	//수정 페이지일시 섬네일 보여주기
+		if(boardDTO.bno != null && boardDTO.fileList != null){	//수정 페이지일시 섬네일 보여주기
 			
 			addThumbnail(boardDTO.fileList)
 		}
@@ -77,7 +77,7 @@
 				const fileInfo = getFileInfo(uploadFiles[i].src)
 				str += `<input type="hidden" name="fileNames" 
 								value="${fileInfo.date}/${fileInfo.uuid}/${fileInfo.fileName}">`
-	
+		
 			}
 		
 			form.insertAdjacentHTML("beforeend", str)
@@ -127,6 +127,7 @@
 			}
 			
 			uploadToServer(formObj).then(result => {
+				console.log(result)
 				addThumbnail(result)
 				event.target.value = ""
 			}).catch(error => {
@@ -160,7 +161,7 @@
 		
 		//섬네일 출력 
 		function addThumbnail(imageList){
-			
+
 			for (let image of imageList) {
 				
 				const str = `<li class="img-item">

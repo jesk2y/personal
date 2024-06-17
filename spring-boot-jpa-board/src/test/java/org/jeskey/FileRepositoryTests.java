@@ -28,6 +28,7 @@ public class FileRepositoryTests {
 			board.addFile("240611",UUID.randomUUID().toString(), "file" + i + ".jpg");
 		}
 
+	    System.out.println(board);
 		boardRepository.save(board);
 	}
 
@@ -56,15 +57,18 @@ public class FileRepositoryTests {
 	@Commit
 	public void testUpdateWithImage() {
 
-		Optional<Board> result = boardRepository.findByIdWithImages(682L);
-		Board board = result.orElseThrow();
-		boardRepository.deleteImagesById(682L);
+
+		Board board = Board.builder()
+				.bno(682L)//기존에 존재하는 bno
+				.title("제목 수정.....")
+				.content("내용 수정......")
+				.build();
 
 		for(int i = 0; i<2; i++) {
 			board.addFile("240611",UUID.randomUUID().toString(),
 		  				"updatefile"+i+".jpg");
 		}
 
-		board.update(board.getTitle(), board.getContent());
+		boardRepository.save(board);
 	}
 }

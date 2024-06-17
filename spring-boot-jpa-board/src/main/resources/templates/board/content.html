@@ -90,8 +90,7 @@
 				let imgStr = ''
 					
 				for(var dto of contentDTO.fileList){
-					console.log(dto)
-					imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.file_name}">`
+					imgStr += `<img src="/view/${dto.date}/${dto.uuid}_${dto.fileName}">`
 				}
 				
 				document.querySelector(".contentBox").insertAdjacentHTML("afterbegin", imgStr);	//이미지 출력

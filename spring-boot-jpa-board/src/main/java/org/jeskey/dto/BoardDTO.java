@@ -37,7 +37,7 @@ public class BoardDTO {
 	private List<BoardAttachDTO> fileList;
 
 	/*
-	 * 컨트롤러에서 파라미터로 들어온 List<String> 타입의 파일 이름들을 BoardAttach 타입으로 변환해서 집어넣는다.
+	 * 컨트롤러에서 파라미터로 들어온 List<String> 타입의 파일 이름들을 BoardAttachDTO 타입으로 변환해서 집어넣는다.
 	 * 이 과정은 자동으로 이루어진다
 	 * 형식 : [date]/[uuid]/[파일이름]
 	 */
@@ -48,12 +48,12 @@ public class BoardDTO {
 		fileNames.forEach(fileName -> {
 			String[] arr = fileName.split("/");
 
-			BoardAttachDTO fileDto = BoardAttachDTO.builder()
+			BoardAttachDTO file = BoardAttachDTO.builder()
 			.date(arr[0])
 			.uuid(arr[1])
 			.fileName(arr[2]).build();
 
-			fileList.add(fileDto);
+			fileList.add(file);
 		});
 	}
 

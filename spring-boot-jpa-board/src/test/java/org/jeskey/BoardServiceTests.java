@@ -41,9 +41,8 @@ public class BoardServiceTests {
 	                .build();
 
 	      List<String> fileNameList = new ArrayList<>();
-
 	      for (int i = 0; i < 3; i++) {
-	    	  fileNameList.add("20240101_"+UUID.randomUUID()+"_파일이름"+i+".jpg");
+	    	  fileNameList.add("20240101/"+UUID.randomUUID()+"/파일이름"+i+".jpg");
 	  		}
 
 	      boardDTO.setFileNames(fileNameList);
@@ -75,6 +74,7 @@ public class BoardServiceTests {
 
 		log.info(boardService.getList(pageDTO));
 	}
+
 
     @Test
     public void testUpdate(){

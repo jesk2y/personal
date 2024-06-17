@@ -24,7 +24,7 @@ public class BoardAttach{
 	private String uuid;
 
 	@Column(length = 255, nullable = false)
-	private String file_name;
+	private String fileName;
 
 	@ColumnDefault("0")
 	private int ord;

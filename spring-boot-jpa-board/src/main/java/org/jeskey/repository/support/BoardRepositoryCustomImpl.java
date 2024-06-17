@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 
 public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport implements BoardRepositoryCustom{
@@ -29,6 +30,9 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 		String keyword = pageRequestDTO.getKeyword();
 
 		JPQLQuery<Board> query = from(qboard);
+
+		//BoardAttach를 제외하고 리스트에 필요한 bno, title, regdate 컬럼만 가져온다.
+		query.select(Projections.fields(Board.class, qboard.bno, qboard.title, qboard.regdate));
 
 		if((targets != null && targets.length > 0) && keyword != null){
 	        BooleanBuilder booleanBuilder = new BooleanBuilder();

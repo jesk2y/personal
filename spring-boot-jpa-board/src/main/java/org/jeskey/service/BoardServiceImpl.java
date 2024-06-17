@@ -4,15 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.jeskey.domain.Board;
-import org.jeskey.domain.BoardAttach;
+import org.jeskey.dto.BoardAttachDTO;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageRequestDTO;
 import org.jeskey.dto.PageResponseDTO;
 import org.jeskey.repository.BoardRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -23,32 +24,43 @@ public class BoardServiceImpl implements BoardService {
 
 	private final BoardRepository boardRepository;
 
+	private final ModelMapper modelMapper;
+
+
 	public BoardDTO entityToDto(Board board){
-	   BoardDTO boardDTO = BoardDTO.builder()
-	            .bno(board.getBno())
-	            .title(board.getTitle())
-	            .content(board.getContent())
-	            .regdate(board.getRegdate())
-	            .updatedate(board.getUpdatedate())
-	            .build();
+		/*
+		 * BoardDTO boardDTO = BoardDTO.builder() .bno(board.getBno())
+		 * .title(board.getTitle()) .content(board.getContent())
+		 * .regdate(board.getRegdate()) .updatedate(board.getUpdatedate()) .build();
+		 */
+
+		BoardDTO boardDTO = modelMapper.map(board, BoardDTO.class);
 
 	   if(board.getFileList() != null) {
-		   boardDTO.setFileList(board.getFileList());
-	   }
+
+		   List<BoardAttachDTO> fileDtoList = board.getFileList().stream().map(file
+				   -> modelMapper.map(file, BoardAttachDTO.class)).toList();
+
+		   boardDTO.setFileList(fileDtoList);
+	   	}
 
 	    return boardDTO;
 	}
 
 	public Board dtoToEntity(BoardDTO boardDTO){
-	   Board board = Board.builder()
-	            .title(boardDTO.getTitle())
-	            .content(boardDTO.getContent())
-	            .build();
+		/*
+		 * Board board = Board.builder() .bno(boardDTO.getBno())
+		 * .title(boardDTO.getTitle()) .content(boardDTO.getContent()) .build();
+		 */
+		Board board = modelMapper.map(boardDTO, Board.class);
 
-	   if(boardDTO.getFileList() != null){
-		   boardDTO.getFileList().forEach(file
-				   -> board.addFile(file.getDate(), file.getUuid(), file.getFileName()));
-	   }
+		if(boardDTO.getFileList() != null){
+			board.clearFiles();
+
+			boardDTO.getFileList().forEach(file ->
+			board.addFile(file.getDate(), file.getUuid(), file.getFileName()));
+		}
+
 
 	    return board;
 	}
@@ -71,6 +83,8 @@ public class BoardServiceImpl implements BoardService {
 	public Long insert(BoardDTO boardDTO) {
 
 	    Board board = dtoToEntity(boardDTO);
+
+	    System.out.println(board);
 	    Long bno = boardRepository.save(board).getBno();
 
 	    return bno;
@@ -81,9 +95,7 @@ public class BoardServiceImpl implements BoardService {
 
 	    Optional<Board> result = boardRepository.findByIdWithImages(bno);
 	    Board board = result.orElseThrow();
-
 	    BoardDTO boardDTO = entityToDto(board);
-
 	    return boardDTO;
 	}
 
@@ -98,18 +110,13 @@ public class BoardServiceImpl implements BoardService {
 	public Long update(BoardDTO dto) {
 
 		//기존 파일 삭제
-		Optional<Board> result = boardRepository.findById(dto.getBno());
-		Board board = result.orElseThrow();
-	    board.clearFiles();
+	    boardRepository.deleteImagesById(dto.getBno());
 
 	    //새 파일 등록
-	    List<BoardAttach> fileList = dtoToEntity(dto).getFileList();
-
-	    fileList.forEach(file
-	    		-> board.addFile(file.getDate(), file.getUuid(), file.getFile_name()));
+	    Board board = dtoToEntity(dto);
 
 	    //글 수정
-		board.update(dto.getTitle(), dto.getContent());
+		boardRepository.save(board);
 
 		return dto.getBno();
 	}

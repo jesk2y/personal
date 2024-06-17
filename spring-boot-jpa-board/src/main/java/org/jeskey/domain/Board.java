@@ -39,15 +39,16 @@ public class Board extends BaseEntity {
 		this.content = content;
 	}
 
+	//@BatchSize(size=20)
 	@OneToMany(mappedBy = "board", cascade = {CascadeType.ALL}, orphanRemoval = true)
 	@Builder.Default
 	private List<BoardAttach> fileList = new ArrayList<>();
 
 	public void addFile(String date, String uuid, String fileName) {
-
+		System.out.println(fileList.size());
 		BoardAttach boardFile = BoardAttach.builder()
 				.uuid(uuid)
-				.file_name(fileName)
+				.fileName(fileName)
 				.date(date)
 				.board(this)
 				.ord(fileList.size())
