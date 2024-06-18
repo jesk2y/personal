@@ -57,7 +57,6 @@ public class FileRepositoryTests {
 	@Commit
 	public void testUpdateWithImage() {
 
-
 		Board board = Board.builder()
 				.bno(682L)//기존에 존재하는 bno
 				.title("제목 수정.....")
