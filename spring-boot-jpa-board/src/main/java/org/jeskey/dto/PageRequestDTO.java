@@ -24,8 +24,8 @@ public class PageRequestDTO {
     @Builder.Default
     private int display = 15;
 
-    private int bno;
-    
+    private Long bno;
+
 	private String keyword, target;
 	private String[] targets;
 
@@ -66,6 +66,12 @@ public class PageRequestDTO {
 
 		this.link = uriComponentsBuilder.toUriString();
 		return this.link;
+	}
+
+
+	//댓글 마지막 페이지 가져오기
+	public int getLastPage(int count) {
+		return  (int) Math.ceil(count / (double) display);
 	}
 
 }

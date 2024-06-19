@@ -3,6 +3,7 @@ package org.jeskey.controller;
 import org.jeskey.dto.BoardDTO;
 import org.jeskey.dto.PageRequestDTO;
 import org.jeskey.service.BoardService;
+import org.jeskey.service.ReplyService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class BoardController {
 
 	private final BoardService boardService;
+
+	private final ReplyService replyService;
 
 	@GetMapping("/list")
 	public void listGET(@ModelAttribute("pageObj") @Valid PageRequestDTO dto, BindingResult bindingResult, Model model) {
@@ -98,9 +102,12 @@ public class BoardController {
 	}
 
 	@PostMapping("/delete")
+	@Transactional
 	public String deletePOST(@RequestParam("bno")Long bno, Model model, HttpSession session) {
 
+		replyService.deleteAll(bno);
 		boardService.delete(bno);
+
 		return "redirect:/board/list";
 	}
 }

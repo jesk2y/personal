@@ -100,9 +100,11 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
+    @Transactional
 	public void delete(Long bno) {
 
 		boardRepository.deleteImagesById(bno);
+		boardRepository.deleteById(bno);
 	}
 
 	@Override

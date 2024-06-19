@@ -12,11 +12,6 @@
 					<b>[[${contentDTO.title}]]</b>
 				</div>
 				<div class="card-body">
-					<!-- <div class="input-group mb-3 user-input">
-						<span class="input-group-text">작성자</span> <input type="text"
-							class="form-control" style="max-width: 200px"
-							th:value="${contentDTO.user_id}" readonly="readonly">
-					</div> -->
 					<div class="input-group mb-3 date-input">
 						<span class="input-group-text">작성일</span> <input type="text"
 							class="form-control" style="max-width: 200px"
@@ -110,35 +105,21 @@
 				
 		//댓글 리스트 가져오기
 		function printList(dtoList){
-			
 		replyList.innerHTML = ''
 		
 			if(dtoList && dtoList.length > 0){
 				
-				for(const dto of dtoList){
-					
+				for(const dto of dtoList){					
 					let replyItem = document.createElement("div")
 					replyItem.className = "list-group-item replyItem"
-						
-					if(dto.del == 'y'){
-						replyItem.innerHTML="[삭제된 댓글입니다]"
-						replyList.append(replyItem)
-						continue
-					}
-					
-					if(dto.pno != null){
-						replyItem.classList.add("RReplyItem")
-					}
 					
 					replyList.append(replyItem)
 					
-					let str = `<div class="user_id">${dto.user_id}</div>
+					let str = `<div class="user_id">${dto.rno} 번째 댓글</div>
 						<div class="opt">
-							<a href="javascript:void(0);" onclick="showRReply(this, ${dto.rno})"
-								style="display: ${dto.pno == null? '':'none'}" >댓글</a>
 							<a href="javascript:void(0);" onclick="deleteReply(${dto.rno})">삭제</a></div>
-						<div class="date">${dto.regDate}</div>
-						<div class="content" data-rno="${dto.rno}">${dto.content}</div>
+						<div class="date">${dto.regdate}</div>
+						<div class="content" data-rno="${dto.rno}">${dto.replyText}</div>
 					</div>`
 					
 					replyItem.insertAdjacentHTML("beforeend", str);
@@ -185,26 +166,10 @@
 		//전체 댓글 출력
 		function printReplies(page){
 			getReplyList(contentDTO.bno, page).then(result => {
-			 	printList(result.data.replyList)
-				printPages(result.data.replyPageObj)
+			 	printList(result.data.replyList.dtoList)
+				printPages(result.data.replyList)
 		
 			})	
-		}
-	 	
-		//대댓글 작성창 보이기
-		function showRReply(e, rno){
-			
-			document.querySelectorAll(".RReplyBox").forEach(data => {
-				if(data.style.display = 'block'){
-					data.style.display = 'none'
-				}
-			})	//대댓글 작성창은 한 개만 열려있도록 하기
-		
-			const str = `<div class="RReplyBox" style="display:block" data-pno="${rno}" >
-							<textarea rows="3" class="form-control"></textarea>
-					<button class="btn btn-primary RReply-submit" onclick="RRSubmit(this)">댓글 입력</button></div>`
-		
-			e.parentNode.parentNode.insertAdjacentHTML("beforeend", str)
 		}
 		
 		//댓글 입력
@@ -221,9 +186,8 @@
 			
 			const formObj = new FormData();
 			
-			formObj.append("content", text)
+			formObj.append("replyText", text)
 			formObj.append("bno", contentDTO.bno)
-			formObj.append("user_id", /*[[${session.id}]]*/null)
 			
 			insert(formObj).then(result => {
 				if(result.errorMsg != null){
@@ -239,36 +203,7 @@
 				}
 			})
 		})
-		
-		//대댓글 입력
-		function RRSubmit(e){
-			
-			const rrText = e.previousElementSibling.value
-			const pno = e.parentNode.dataset.pno
-			
-			if(rrText == ''){
-			alert("내용은 비워들 수 없습니다")
-				return
-			}
-			
-			const formObj = new FormData();
-			
-			formObj.append("content", rrText)
-			formObj.append("pno", pno)
-			formObj.append("bno", contentDTO.bno)
-			formObj.append("user_id", /*[[${session.id}]]*/null)
-			
-			insert(formObj).then(result => {
-				
-			}).catch(e => {
-				alert(e.response.data.errorMsg)				
-			}).finally(result => {
-				//대댓글 입력 시 유지한 페이지 번호 가져오기
-				const currentPage = replyPaging.getElementsByClassName("active")[0].firstElementChild.dataset.page
-				printReplies(currentPage)
-			})
-		}
-	 	
+
 		//댓글삭제
 		function deleteReply(rno){
 			if(confirm("댓글을 삭제하시겠습니까?")){

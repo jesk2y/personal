@@ -59,7 +59,7 @@ public class BoardServiceTests {
 
     @Test
     public void testDelete(){
-        boardService.delete(2L);
+        boardService.delete(714L);
     }
 
 	@Test
