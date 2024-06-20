@@ -35,6 +35,14 @@
 
 <br>
 
+## 개발 환경
+
+![Generic badge](https://img.shields.io/badge/eclipse-2023.12-purple.svg)
+![Generic badge](https://img.shields.io/badge/jdk-17-orange.svg)
+![Generic badge](https://img.shields.io/badge/spring--boot-3.2.2-brightgreen.svg)
+![Generic badge](https://img.shields.io/badge/springdoc-2.0.2-brightgreen.svg)
+<br>
+
 ## 프로젝트의 목적
 > 단순히 Spring Legacy에서 Sping Boot로 넘어가며 자연스레 보편적인 라이브러리를 사용하는 것 대신, Spring Legacy에서 사용한 기능들을 Spring Boot에서도 사용해 보며 Spring Legacy와 Spring Boot의 차이를 알아본다.
 > 
