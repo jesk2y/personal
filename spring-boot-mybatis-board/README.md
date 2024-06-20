@@ -75,3 +75,8 @@
 |파일 업로드 2|![image](https://github.com/jesk2y/personal/assets/41985737/49ba04fb-6994-4f84-b59e-9d036869bea5)|댓글|![image](https://github.com/jesk2y/personal/assets/41985737/187f333a-ec0c-45f3-8e53-4f4faff1f63c)|
 |로그인|![image](https://github.com/jesk2y/personal/assets/41985737/68dc4422-c2b2-431c-bec4-7bd10462af9b)|회원가입|![image](https://github.com/jesk2y/personal/assets/41985737/39d64120-be4b-412e-be17-7f2240f3f469)|
 |회원정보|![image](https://github.com/jesk2y/personal/assets/41985737/9ceaaf8d-f4aa-41f2-ae81-ef0c339944bd)|비밀번호 변경|![image](https://github.com/jesk2y/personal/assets/41985737/927c2064-a2ce-46e6-a561-360432f38357)|
+
+<br>
+
+## 프로젝트 요약/정리
+https://velog.io/@jeskey/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%A0%95%EB%A6%AC
