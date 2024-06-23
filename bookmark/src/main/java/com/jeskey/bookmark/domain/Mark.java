@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Builder
@@ -16,8 +17,7 @@ public class Mark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mno;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Book book;
+    private String isbn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -28,7 +28,8 @@ public class Mark {
     @Column(length = 20)
     private String location;
 
-
+    @ColumnDefault("n")
+    private String eBook;
 
     public void change(String library, String location){
         this.library = library;

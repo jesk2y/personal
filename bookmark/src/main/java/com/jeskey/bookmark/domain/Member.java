@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -25,9 +26,12 @@ public class Member {
     private String name;
 
     @Column(nullable = false)
-    private String pw;
+    private String password;
 
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ColumnDefault("n")
+    private String leave;
+
+    @ElementCollection
     @Builder.Default
     private Set<MemberRole> roleSet = new HashSet<>();  //추가
 
@@ -39,12 +43,11 @@ public class Member {
         this.roleSet.add(memberRole);
     }
 
-    public void changePassword(String mpw){
-        this.pw = pw;
+    public void changePassword(String password){
+        this.password = password;
     }
 
     public void changeEmail(String email){
         this.email = email;
     }
-
 }
