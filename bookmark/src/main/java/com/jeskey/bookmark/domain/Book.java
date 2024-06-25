@@ -22,4 +22,8 @@ public class Book {
     private String title;
 
     private String imgLink;
+
+    public Book(String isbn){
+        this.isbn = isbn;
+    }
 }

@@ -17,22 +17,16 @@ public class Mark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mno;
 
-    private String isbn;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Book book;
+
+    @ColumnDefault("'N'")
+    @Column(name="is_read",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private FlagYN isRead;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private Member member;
-
-    @Column(length = 30, nullable = false)
-    private String library;
-
-    @Column(length = 20)
-    private String location;
-
-    @ColumnDefault("n")
-    private String eBook;
-
-    public void change(String library, String location){
-        this.library = library;
-        this.location = location;
-    }
 }

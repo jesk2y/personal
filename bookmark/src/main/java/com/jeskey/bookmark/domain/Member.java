@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLRestriction;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -17,21 +18,24 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLRestriction("deleted_at is NULL")
 public class Member {
 
     @Id
     private String email;
 
     @Column(length = 8, nullable = false)
-    private String name;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
 
-    @ColumnDefault("n")
-    private String leave;
+    @ColumnDefault("'Y'")
+    @Enumerated(EnumType.STRING)
+    private FlagYN activated;
 
     @ElementCollection
+    @CollectionTable(name="member_role")
     @Builder.Default
     private Set<MemberRole> roleSet = new HashSet<>();  //추가
 
@@ -47,7 +51,7 @@ public class Member {
         this.password = password;
     }
 
-    public void changeEmail(String email){
-        this.email = email;
+    public void changeNickname(String nickname){
+        this.nickname = nickname;
     }
 }
