@@ -24,6 +24,8 @@ public class QMark extends EntityPathBase<Mark> {
 
     public final QBook book;
 
+    public final ListPath<MarkInfo, QMarkInfo> infoList = this.<MarkInfo, QMarkInfo>createList("infoList", MarkInfo.class, QMarkInfo.class, PathInits.DIRECT2);
+
     public final EnumPath<FlagYN> isRead = createEnum("isRead", FlagYN.class);
 
     public final QMember member;
