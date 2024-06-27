@@ -2,7 +2,6 @@ package com.jeskey.bookmark.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -38,7 +37,7 @@ public class Mark {
     @Builder.Default
     private List<MarkInfo> infoList = new ArrayList<>();
 
-    public Mark(Long mno){
-        this.mno = mno;
+    public void changeStatus(FlagYN status){
+        this.isRead = status;
     }
 }

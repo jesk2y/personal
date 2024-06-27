@@ -3,18 +3,12 @@ package com.jeskey.bookmark.repository;
 
 import com.jeskey.bookmark.domain.Mark;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 public interface MarkRepository extends JpaRepository<Mark, Long> /* 확장 추가 */ {
 
- @Modifying
-    @Query(value = "delete from Mark m where m.member.email=:email")
-    void deleteAllByEmail(String email);	//회원탈퇴시 모든 데이터 삭제
+    void deleteAllByMemberEmail(String email);	//회원탈퇴시 모든 데이터 삭제
 
-    @Modifying
-    @Query(value = "delete from MarkInfo m where m.mark.mno = :mno")
-    void deleteMarkInfos(Long mno);    //북마크 해제시 모든 도서관 정보 삭제
+    boolean existsByMemberEmailAndBookIsbn(String email, String isbn);
 
 
 /*

@@ -72,14 +72,16 @@ public class MarkRepositoryTests {
 
     @Test
     public void insertMarkInfo(){
-        MarkInfo markInfo = MarkInfo.builder()
-                .mark(new Mark(1L))
-                .location("강남도서관")
-                .library("222-456-789")
-                .type("online")
-                .build();
+        for(int i=0; i<8; i++){
+            MarkInfo markInfo = MarkInfo.builder()
+                    //.mark(new Mark(3L))
+                    .location("도서관"+i)
+                    .library("222-456-789")
+                    .type("online")
+                    .build();
 
-        markInfoRepository.save(markInfo);
+            markInfoRepository.save(markInfo);
+        }
     }
 
     @Test
@@ -93,22 +95,39 @@ public class MarkRepositoryTests {
         markInfo.update("강남도서관","333-333-333-333", "online");
     }
 
-/*    @Test
-    @Transactional
-    public void getMarkList(){
+    @Test
+    public void getMarkInfoList(){
 
-        markRepository.getMarkListByEmail("user1@naver.com").forEach(vo -> log.info(vo.getBook()));
-    }*/
+        log.info(markInfoRepository.findAllByMarkMno(3L));
+    }
 
     @Test
     public void getMarkInfo(){
 
         log.info(markInfoRepository.findById(1L));
     }
+    @Test
+    @Transactional
+    @Commit
+    public void deleteAllMarkInfo(){
+
+        markInfoRepository.deleteAllByMarkMno(3L);
+    }
+
+    @Test
+    public void deleteMarkInfo(){
+
+        markInfoRepository.deleteById(4L);
+    }
 
     @Test
     public void deleteMark(){
 
         markRepository.deleteById(1L);
+    }
+
+    @Test
+    public void isRead(){
+        log.info(markRepository.existsByMemberEmailAndBookIsbn("user1@naver.com","9788937460449"));
     }
 }
