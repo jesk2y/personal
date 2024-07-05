@@ -1,12 +1,21 @@
 package com.jeskey.bookmark.service;
 
+import com.jeskey.bookmark.dto.ListDTO;
+import com.jeskey.bookmark.dto.MarkDTO;
+
+import java.util.List;
+
 public interface MarkService {
 
-    void insertMark();
+    void insertMark(MarkDTO dto);
 
-    boolean isRead();
+    //MarkDTO getMark(String isbn, String email);
 
-    boolean isCheck();
+    void deleteMark(Long mno);
 
-    void deleteMark();
+    void changeRead(Long mno);
+
+    MarkDTO getOne(String email, String isbn);
+
+    List<MarkDTO> getList(ListDTO listDTO);
 }

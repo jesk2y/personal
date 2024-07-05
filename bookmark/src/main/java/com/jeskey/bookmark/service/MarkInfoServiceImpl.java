@@ -1,6 +1,6 @@
 package com.jeskey.bookmark.service;
 
-import com.jeskey.bookmark.config.GenericMapper;
+import com.jeskey.bookmark.mapper.MarkInfoMapper;
 import com.jeskey.bookmark.domain.MarkInfo;
 import com.jeskey.bookmark.dto.MarkInfoDTO;
 import com.jeskey.bookmark.repository.MarkInfoRepository;
@@ -17,12 +17,12 @@ public class MarkInfoServiceImpl implements MarkInfoService {
 
     private MarkInfoDTO entityToDTO(MarkInfo entity){
 
-        return GenericMapper.MARK_INFO_INSTANCE.toDto(entity);
+        return MarkInfoMapper.instance.toDTO(entity);
     }
 
     private MarkInfo dtoToEntity(MarkInfoDTO dto){
 
-        return GenericMapper.MARK_INFO_INSTANCE.toEntity(dto);
+        return MarkInfoMapper.instance.toEntity(dto);
     }
 
     private final MarkInfoRepository markInfoRepository;

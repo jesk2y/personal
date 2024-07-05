@@ -4,7 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Builder
@@ -12,7 +11,7 @@ import org.hibernate.annotations.BatchSize;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@BatchSize(size=20)
+//@BatchSize(size=20)
 public class Book {
 
     @Id
@@ -22,8 +21,4 @@ public class Book {
     private String title;
 
     private String imgLink;
-
-    public Book(String isbn){
-        this.isbn = isbn;
-    }
 }

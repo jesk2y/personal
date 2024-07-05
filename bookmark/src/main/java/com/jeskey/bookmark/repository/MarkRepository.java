@@ -2,14 +2,25 @@ package com.jeskey.bookmark.repository;
 
 
 import com.jeskey.bookmark.domain.Mark;
+import com.jeskey.bookmark.service.MarkRepositoryCustom;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-public interface MarkRepository extends JpaRepository<Mark, Long> /* 확장 추가 */ {
 
-    void deleteAllByMemberEmail(String email);	//회원탈퇴시 모든 데이터 삭제
+public interface MarkRepository extends JpaRepository<Mark, Long>, MarkRepositoryCustom /* 확장 추가 */ {
 
-    boolean existsByMemberEmailAndBookIsbn(String email, String isbn);
+    //회원탈퇴시 모든 데이터 삭제
+    void deleteAllByMemberEmail(String email);
 
+    //Book 컨텐츠 페이지에서 마크 정보 가져오기
+    Mark findByMemberEmailAndBookIsbn(String email, String isbn);
+
+    @Query("delete from MarkInfo m where m.mark.mno = :mno")
+    void deleteMarkInfosByMno(Long mno);
+
+    Page<Mark> findByMemberEmail(String email, Pageable pageable);
 
 /*
     @Query(value="SELECT m FROM Mark m WHERE m.email = :email and CHAR_LENGTH(m.library) > 0 "

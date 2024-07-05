@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @Log4j2
-public class MarkRepositoryTests {
+public class MarkInfoRepositoryTests {
 
     @Autowired
     BookRepository bookRepository;
@@ -120,14 +120,5 @@ public class MarkRepositoryTests {
         markInfoRepository.deleteById(4L);
     }
 
-    @Test
-    public void deleteMark(){
 
-        markRepository.deleteById(1L);
-    }
-
-    @Test
-    public void isRead(){
-        log.info(markRepository.existsByMemberEmailAndBookIsbn("user1@naver.com","9788937460449"));
-    }
 }

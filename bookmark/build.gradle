@@ -63,10 +63,11 @@ dependencies {
     implementation 'org.json:json:20230227'
 
     // mapstruct
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
-    testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
-    implementation("org.mapstruct:mapstruct:1.5.3.Final")
-    implementation("org.projectlombok:lombok-mapstruct-binding:0.2.0")
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+
+    // lombok-mapstruct-binding 의존성을 추가해주면 mapstruct-processor와 lombok 순서를 바꿔줘도 된다
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 }
 
 tasks.named('test') {
@@ -80,7 +81,7 @@ sourceSets {
     main.java.srcDirs += [ generated ]
 }
 
-tasks.withType(JavaCompile) { // compile시
+tasks.withType(JavaCompile).configureEach { // compile시
     options.generatedSourceOutputDirectory = file(generated)
 }
 
@@ -88,3 +89,9 @@ clean.doLast { // clean시 폴더 삭제
     file(generated).deleteDir()
 }
 //Querydsl 끝
+
+/*
+// 테스트 코드를 제외한 빌드 수행
+tasks.withType(Test) {
+    enabled = false
+}*/
