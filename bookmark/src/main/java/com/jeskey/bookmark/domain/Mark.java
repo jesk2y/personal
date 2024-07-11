@@ -19,10 +19,12 @@ public class Mark {
 
     @ManyToOne
     @JoinColumn(nullable = false)
+    //@BatchSize(size = 12)
     private Book book;
 
     @Column(name="is_read",nullable = false)
-    private char isRead;
+    @Builder.Default
+    private char isRead = 'N';
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
@@ -31,6 +33,10 @@ public class Mark {
     @OneToMany(mappedBy = "mark", cascade = {CascadeType.REMOVE}, orphanRemoval = true)
     @Builder.Default
     private List<MarkInfo> infoList = new ArrayList<>();
+
+    public Mark(long l) {
+        this.mno = l;
+    }
 
     public void changeRead(){
         if(this.isRead == 'N'){

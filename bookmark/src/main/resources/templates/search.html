@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      layout:decorate="~{/basic.html}">
+<div layout:fragment="content">
+    <div class="row">
+        <h5 class="card-title fw-semibold mb-4">검색</h5>
+        <div class="col-md-4 card-list" th:each="dto:${searchList}">
+            <div class="card">
+                <a th:href="|@{/content(isbn=${dto.isbn})}|">
+                    <div class="list-img-div">
+                        <img th:src="${dto.image}" class="list-img" alt="..."/>
+                    </div>
+                    <div class="list-title">[[${dto.title}]]</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="listEnd"></div>
+    <script src="/js/infiniteScroll.js" defer></script>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+
+    let title = [[${param.title}]]
+
+    function getList(page) {
+
+        if (title != null) {
+
+            var url = "/searchGet?title="+ title +"&page=" + page;
+
+            searchList(url).then(data => {
+                var str = ""
+
+                data.forEach(function (dto) {
+                    str += setList(dto)
+                })
+
+                document.querySelector(".row").innerHTML += str
+            })
+        }
+    }
+
+    function setList(dto){
+        return ` <div class="col-md-4 card-list">
+                                <div class="card">
+                                    <a href="/content?isbn=${dto.isbn}">
+                                    <div class="list-img-div">
+                                        <img src="${dto.image}" class="list-img" alt="...">
+                                    </div>
+                                    <div class="list-title">${dto.title}</div>
+                                    </a>
+                                </div>
+                            </div>`
+    }
+</script>
+</html>

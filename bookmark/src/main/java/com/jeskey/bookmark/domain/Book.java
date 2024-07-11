@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 @Entity
 @Builder
@@ -11,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-//@BatchSize(size=20)
+@BatchSize(size=20)
 public class Book {
 
     @Id

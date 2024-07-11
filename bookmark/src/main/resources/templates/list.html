@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{/basic.html}">
+<div layout:fragment="content">
+    <h5 class="card-title fw-semibold mb-4">저장한 책들</h5>
+    <div style="height:48px; display:flex;margin-bottom: 10px;">
+        <button class="form-select" data-bs-toggle="dropdown" style="width:200px">전체</button>
+        <div class="dropdown-menu dropdown-library" style="width: 200px">
+            <div class="message-body">
+                <button class="dropdown-item"
+                        th:onclick="setLibrary('all')" >
+                    <p class="mb-0 fs-3 reset">전체</p>
+                </button>
+           <!--     <button class="dropdown-item" th:each="library:${libraryList}"
+                        th:onclick="setLibrary([[${library}]])">
+                    <p class="mb-0 fs-3">[[${library}]]</p>
+                </button>-->
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4 card-list" th:each="dto:${responseDTO}">
+            <div class="card" >
+                <a th:href="|@{/content(isbn=${dto.book.isbn})}|">
+                    <div class="list-img-div" >
+                        <img class="list-img" th:src="${dto.book.imgLink}"alt="...">
+                    </div>
+                    <div class="list-title">[[${dto.book.title}]]
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div id="listEnd"></div>
+    <!--<script src="/js/infiniteScroll.js" defer></script>-->
+</div>
+<script th:block layout:fragment="script" th:inline="javascript" >
+    let keyword = null
+    let library = null
+
+    /*function getList(page) {
+
+        var url = "/listGet?page=" + page;
+
+        if (keyword != null) {
+            url += "&keyword=" + keyword
+        }
+
+        if (library != null) {
+            url += "&library=" + library
+        }
+
+        getAllList(url).then(data => {
+            var str = ""
+
+            data.forEach(function (dto) {
+                str += setList(dto)
+            })
+
+            document.querySelector(".row").innerHTML += str
+        })
+    }
+
+    function setList(dto){
+        var str = ` <div class="col-md-4 card-list">
+                                <div class="card">
+                                    <a href="/content?isbn=${dto.book.isbn}">
+                                    <div class="list-img-div">
+                                        <img src="${dto.book.imgLink}" class="list-img" alt="...">
+                                    </div>
+                                    <div class="list-title">${dto.book.title}</div>
+                                    </a>
+                                </div>
+                            </div>`
+
+        return str
+    }
+
+    function setLibrary(param){
+
+        document.querySelector(".form-select").textContent = param
+
+        if(param === 'all'){
+            library = null
+        }else{
+            library = param
+        }
+        document.querySelector(".row").innerHTML = ''
+
+        page = 2;	//도서관 바꿀 때마다 페이지 변수 2에서부터 시작하도록 함
+
+        getList(1)
+    }*/
+
+</script>
+</html>

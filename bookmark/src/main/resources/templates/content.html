@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{/basic.html}">
+<div layout:fragment="content">
+    <h5 class="card-title fw-semibold mb-4">Card</h5>
+    <div class="row">
+        <div class="col-md-5 content-imgBox">
+            <img th:src="${book.image}" class="card-img-top rounded-0" alt="...">
+        </div>
+        <div class="col-md-8">
+            <div class="card content-box">
+                <div class="card-body" style="padding-top:0px">
+                    <div class="content-title">[[${book.title}]]</div>
+                    <ul>
+                        <li class="item">
+                            저자 <b>[[${book.author}]]</b>
+                        </li>
+                        <li class="item">
+                            출판사 <b>[[${book.publisher}]]</b>
+                        </li>
+                        <li class="item">
+                            발행일 <b>[[${book.pubdate}]]</b>
+                        </li>
+                        <hr>
+                        <li class="item">
+                            <div><b>책 소개</b></div>
+                            <div class="book-text">[[${book.description}]]</div>
+                        </li>
+                    </ul>
+                    <button type="button" id="bookMark" class="btn btn-outline-info">책 추가
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8 content-list" id="table">
+            <div class="content-list-head">
+                <b style="font-size:15px">도서관 등록</b>
+                <button type="button" class="btn btn-outline-dark" id="register"
+                        style="float: right; margin-top:-8px">등록하기
+                </button>
+            </div>
+            <div class="card-body" id="registerDiv" style="display:none">
+                <div class="mb-3">
+                    <label class="form-label">도서관</label>
+                    <input type="text" class="form-control library">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">위치</label>
+                    <input type="text" class="form-control location">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label chbox">유형</label><br>
+                    <label class="chbox"><input type="radio" name="normal" checked>&nbsp;일반도서관</label>
+                    <label class="chbox"><input type="radio" name="mobile">&nbsp;전자도서관</label>
+                </div>
+                <button type="submit" style="width:100%"
+                        id="submit" class="btn btn-primary">추가</button>
+            </div>
+            <div class="table-responsive" id="markList">
+                <!--<table class="table text-nowrap mb-0 align-middle list-info">
+                    <th:block th:if="${markList != null}">
+                        <thead class="text-dark fs-4">
+                        <tr>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">도서관</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">청구기호</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0">유형</h6>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody th:each="dto:${markList}" style="border-top:1px solid rgb(210, 210, 210);">
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal" th:text="${dto.library}"></p>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal" th:text="${dto.location}"/>
+                        </td>
+                        <td class="border-bottom-0">
+                            <p class="mb-0 fw-normal" th:text="${dto.location}"/>
+                        </td>
+                        <td class="border-bottom-0">
+                            <img th:src="@{/css/icons/edit.svg}" style="cursor: pointer"
+                                 th:onclick="editMark([[${dto}]])">
+                            <img th:src="@{/css/icons/trash.svg}" style="cursor: pointer"
+                                 th:onclick="delMark([[${dto}]])">
+                        </td>
+                        </tbody>
+                    </th:block>
+                </table>-->
+            </div>
+        </div>
+    </div>
+</div>
+<script layout:fragment="script" th:inline="javascript">
+    
+   const bookMark = document.querySelector("#bookMark")
+   const bookDTO = {isbn: [[${book.isbn}]], imgLink: [[${book.image}]], title: [[${book.title}]]}
+   const markDTO = {book: bookDTO}
+
+   const register = document.querySelector("#register")
+   const submit = document.querySelector("#submit")
+   const registerDiv = document.querySelector("#registerDiv")
+
+   showList()
+   function showList() {
+       getList(bookDTO.isbn).then(data => {
+           $('#markList').replaceWith(data)
+       })
+   }
+
+     /* checkMark(bookDTO.isbn).then(
+          data => {
+              if (data == false) {
+                  notExistedMark()
+                  bookMark.style.visibility = 'visible'
+              } else {
+                  existMark()
+                  bookMark.style.visibility = 'visible'
+              }
+          }
+      )*/
+
+
+
+
+
+      bookMark.addEventListener("click", function (e) {
+
+          checkMark(bookDTO.isbn).then(
+              data => {
+                  if (data == true) {	//북마크가 등록되어있는 경우
+                      if (confirm("북마크를 해제하면 모든 기록이 사라집니다. 정말 해제하시겠습니까?") === true) {
+                          delAllMark(bookDTO.isbn).then(
+                              data => {
+                                  showList()
+                                  notExistedMark()
+                              }
+                          )
+                      }
+
+                  } else if (data == false) {	//북마크가 등록되어있지 않은 경우
+
+                      addMark(markDTO, 'post').then( //post 타입 지정해줌
+                          data => {
+                              existMark()
+                          }
+                      )
+                  }
+              }
+          )
+      })
+
+
+      register.addEventListener("click", function (e) {
+
+          if (registerDiv.style.display === 'none') {
+              registerDiv.style.display = 'block'
+              register.textContent = '취소'
+          } else {
+              registerDiv.style.display = 'none'
+              register.textContent = '등록하기'
+              clear()
+          }
+      })
+
+      function clear() {
+          document.querySelector(".library").value = ''
+          document.querySelector(".location").value = ''
+
+          markDTO.library = ''
+          markDTO.location = ''
+
+          register.textContent = '등록하기'
+      }
+
+      //비동기 함수 실행
+
+
+      submit.addEventListener("click", function (e) {
+
+          markDTO.library = document.querySelector(".library").value
+          markDTO.location = document.querySelector(".location").value
+
+          if(markDTO.library.length === 0){
+              alert("도서관 이름을 입력해주세요");
+              return;
+          }
+
+          var type = ''
+
+          if (submit.textContent == '추가') {	//도서관 추가의 경우 post타입으로 보냄
+              type = 'post'
+          } else if (submit.textContent == '수정') { //도서관 수정의 경우 put타입으로 보냄
+              type = 'put'
+          }
+
+          addMark(markDTO, type).then(data => {
+              showList()
+              clear()
+              registerDiv.style.display = 'none'
+          })
+      })
+
+   //===마크 수정/삭제
+   function editMark(dto) {
+      submit.textContent = '수정'
+      registerDiv.style.display = 'block'
+      register.textContent = '취소'
+
+      document.querySelector(".library").value = dto.library
+      document.querySelector(".location").value = dto.location
+
+      markDTO.mno = dto.mno
+   }
+
+   function delMark(dto) {
+      if (confirm("정말 삭제하시겠습니까?")) {
+          deleteMark(dto.mno).then(data => {
+              showList()
+          })
+      }
+   }
+
+   //===마크 추가 버튼 모양 변경
+   function existMark() {
+       bookMark.className = "btn btn-info"
+       bookMark.innerText = "추가됨"
+       document.querySelector("#table").style.visibility = 'visible'
+   }
+
+   function notExistedMark() {
+       bookMark.className = "btn btn-outline-info"
+       bookMark.innerText = "책 추가"
+       document.querySelector("#table").style.visibility = 'hidden'
+   }
+</script>
+</html>

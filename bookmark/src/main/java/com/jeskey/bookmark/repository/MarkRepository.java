@@ -2,7 +2,7 @@ package com.jeskey.bookmark.repository;
 
 
 import com.jeskey.bookmark.domain.Mark;
-import com.jeskey.bookmark.service.MarkRepositoryCustom;
+import com.jeskey.bookmark.repository.list.MarkRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

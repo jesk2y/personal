@@ -72,11 +72,11 @@ public class MarkInfoRepositoryTests {
 
     @Test
     public void insertMarkInfo(){
-        for(int i=0; i<8; i++){
+        for(int i=0; i<5; i++){
             MarkInfo markInfo = MarkInfo.builder()
-                    //.mark(new Mark(3L))
-                    .location("도서관"+i)
-                    .library("222-456-789")
+                    .mark(new Mark(12L))
+                    .location("222-456-789")
+                    .library("도서관"+i)
                     .type("online")
                     .build();
 

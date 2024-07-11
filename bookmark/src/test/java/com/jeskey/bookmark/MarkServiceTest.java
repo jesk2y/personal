@@ -3,6 +3,7 @@ package com.jeskey.bookmark;
 
 import com.jeskey.bookmark.domain.Book;
 import com.jeskey.bookmark.domain.Member;
+import com.jeskey.bookmark.dto.ListDTO;
 import com.jeskey.bookmark.dto.MarkDTO;
 import com.jeskey.bookmark.repository.BookRepository;
 import com.jeskey.bookmark.service.MarkService;
@@ -61,6 +62,14 @@ public class MarkServiceTest {
     @Test
     public void getList(){
 
-        
+        ListDTO listDTO = new ListDTO();
+
+        //listDTO.setEmail("user1@naver.com");
+        //listDTO.setPage(3L);
+        //listDTO.setLibrary("도서관5");
+        //listDTO.setKeyword("데미안");
+        //listDTO.setExceptRead(true);
+
+        log.info(markService.getList(listDTO));
     }
 }

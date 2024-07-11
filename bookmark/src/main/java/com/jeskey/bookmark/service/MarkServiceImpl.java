@@ -9,7 +9,6 @@ import com.jeskey.bookmark.repository.MarkInfoRepository;
 import com.jeskey.bookmark.repository.MarkRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +28,7 @@ public class MarkServiceImpl implements MarkService{
     public void insertMark(MarkDTO dto) {
 
         Mark getOne = markRepository.findByMemberEmailAndBookIsbn(dto.getEmail(), dto.getBook().getIsbn());
+
         if(getOne == null){
             //책이 Book DB에 존재하지 않을 시 책을 저장한다.
             if(!bookRepository.existsById(dto.getBook().getIsbn())){
@@ -68,10 +68,8 @@ public class MarkServiceImpl implements MarkService{
     @Override
     public List<MarkDTO> getList(ListDTO listDTO) {
 
-        Page<Mark> result = markRepository.getList(listDTO);
-
-        List<MarkDTO> list = result.stream().map(MarkMapper.INSTANCE::toDTO).toList();
-
+        List<MarkDTO> list = markRepository.getList(listDTO)
+                        .stream().map(MarkMapper.INSTANCE::toDTO).toList();
         return list;
     }
 }
