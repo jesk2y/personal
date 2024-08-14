@@ -20,10 +20,8 @@ public class MarkDTO {
     @Builder.Default
     private FlagYN isRead = FlagYN.N;
 
+    @Setter
     @NotEmpty
     private String email;
 
-    public void setEmail(String email){
-        this.email = email;
-    }
 }

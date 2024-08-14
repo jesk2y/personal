@@ -2,6 +2,7 @@ package com.jeskey.bookmark.controller;
 
 import com.jeskey.bookmark.dto.ListDTO;
 import com.jeskey.bookmark.dto.MarkDTO;
+import com.jeskey.bookmark.service.MarkInfoService;
 import com.jeskey.bookmark.service.MarkService;
 import com.jeskey.bookmark.service.NaverApiService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +22,7 @@ import java.util.Map;
 public class MarkController {
 
     private final MarkService markService;
+    private final MarkInfoService markInfoService;
     private final NaverApiService naverApiService;
 
     @GetMapping("/list")
@@ -32,9 +36,24 @@ public class MarkController {
     }
 
     @GetMapping({"/content"})
-    public void getOne(String isbn, Model model) {
-        Map resultMap = naverApiService.bookSearch(isbn, 1).get(0);
-        model.addAttribute("book", resultMap);
+    public void getOne(@RequestParam("isbn") String isbn, Model model) {
+
+        String email = "user1@naver.com";
+
+        Map<String, String> bookDetailsMap = naverApiService.bookSearch(isbn, 1).get(0);
+
+        model.addAttribute("book", bookDetailsMap);
+
+        //로그인 한 사용자가 아닐 때
+        if(email == null) {
+            return;
+        }
+
+        MarkDTO mark = markService.getOne(email, isbn);
+
+        if(mark != null){
+            model.addAttribute("mark", mark);
+        }
     }
 
   /*  //비동기 메소드
@@ -59,4 +78,13 @@ public class MarkController {
 
         return list;
     }*/
+
+
+    @GetMapping("/info/list/{mno}")
+    public String getMarkInfoList(@PathVariable("mno") Long mno, Model model){
+
+        model.addAttribute("infoList", markInfoService.getMarkInfoList(mno));
+
+        return "content :: #infoListDiv";
+    }
 }

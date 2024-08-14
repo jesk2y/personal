@@ -22,6 +22,8 @@ public interface MarkRepository extends JpaRepository<Mark, Long>, MarkRepositor
 
     Page<Mark> findByMemberEmail(String email, Pageable pageable);
 
+    boolean existsByMemberEmailAndBookIsbn(String email, String isbn);    //북마크되어있는지 여부 확인
+
 /*
     @Query(value="SELECT m FROM Mark m WHERE m.email = :email and CHAR_LENGTH(m.library) > 0 "
             + "GROUP BY m.library ORDER BY m.mno desc")

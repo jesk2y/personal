@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MarkService {
 
-    void insertMark(MarkDTO dto);
+    Long insertMark(MarkDTO dto);
 
     //MarkDTO getMark(String isbn, String email);
 
@@ -18,4 +18,6 @@ public interface MarkService {
     MarkDTO getOne(String email, String isbn);
 
     List<MarkDTO> getList(ListDTO listDTO);
+
+    boolean checkMark(String email, String isgn);
 }

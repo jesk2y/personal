@@ -1,5 +1,7 @@
+/*
 let _csrf = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 let _csrf_header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+*/
 
 async function checkMark(isbn){
     const result = await axios.get(`/mark/check/${isbn}`)
@@ -7,38 +9,45 @@ async function checkMark(isbn){
     return result.data
 }
 
-async function getList(isbn){
-    const result = await axios.get(`/mark/list?isbn=${isbn}`)
+async function getInfoList(mno){
+    const result = await axios.get(`/info/list/${mno}`)
 
     return result.data
 }
 
 async function addMark(markObj, type){
+//북마크 등록
+const result = await axios.post('/mark/', markObj/*, {
+        headers: {  [_csrf_header]: _csrf }
+}*/)
+    return result.data //등록만 마크 번호(mno)
+}
 
-    if(type == 'post'){	//북마크 등록, 도서관 등록
-         await axios.post('/mark/', markObj, {
+async function modifyMarkInfo(markInfoObj){
+    await axios.put('/markInfo/', markObj/*, {
             headers: {  [_csrf_header]: _csrf }
-        })
-    }else if(type == 'put'){	//도서관 수정
-        await axios.put('/mark/', markObj, {
-            headers: {  [_csrf_header]: _csrf }
-        })
-    }
+    }*/)
 }
 
 async function delAllMark(isbn){
-    const result = await axios.delete(`/mark/deleteAll/${isbn}`, {
+    const result = await axios.delete(`/mark/deleteAll/${isbn}`/*, {
         headers: {  [_csrf_header]: _csrf }
-    })
+    }*/)
 
     return result.data
 }
 
 
 async function deleteMark(mno){
-    await axios.delete(`/mark/${mno}`, {
+    await axios.delete(`/mark/${mno}`/*, {
         headers: {  [_csrf_header]: _csrf }
-    })
+    }*/)
+}
+
+async function getOne(isbn){
+    const result = await axios.get(`/content?isbn=${isbn}`)
+
+    return result.data
 }
 
 //-------리스트

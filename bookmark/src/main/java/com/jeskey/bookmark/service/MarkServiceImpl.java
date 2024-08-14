@@ -25,19 +25,16 @@ public class MarkServiceImpl implements MarkService{
 
     @Override
     @Transactional
-    public void insertMark(MarkDTO dto) {
+    public Long insertMark(MarkDTO dto) {
 
-        Mark getOne = markRepository.findByMemberEmailAndBookIsbn(dto.getEmail(), dto.getBook().getIsbn());
-
-        if(getOne == null){
-            //책이 Book DB에 존재하지 않을 시 책을 저장한다.
-            if(!bookRepository.existsById(dto.getBook().getIsbn())){
-                bookRepository.save(dto.getBook());
-            }
-
-            Mark mark = MarkMapper.INSTANCE.toEntity(dto);
-            markRepository.save(mark);
+        if(bookRepository.existsById(dto.getBook().getIsbn())){
+           return null;
         }
+
+        bookRepository.save(dto.getBook());
+        Mark mark = MarkMapper.INSTANCE.toEntity(dto);
+        return markRepository.save(mark).getMno();
+
     }
 
 
@@ -71,5 +68,11 @@ public class MarkServiceImpl implements MarkService{
         List<MarkDTO> list = markRepository.getList(listDTO)
                         .stream().map(MarkMapper.INSTANCE::toDTO).toList();
         return list;
+    }
+
+    //책이 북마크되어있는지 여부 확인
+    @Override
+    public boolean checkMark(String email, String isbn) {
+        return markRepository.existsByMemberEmailAndBookIsbn(email, isbn);
     }
 }

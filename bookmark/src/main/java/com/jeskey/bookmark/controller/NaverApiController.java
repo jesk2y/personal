@@ -31,7 +31,7 @@ public class NaverApiController {
                 throw new RuntimeException("검색어 인코딩 실패", var5);
             }
 
-            List<Map> resultList = this.naverApiService.bookSearch(title, page);
+            List<Map<String, String>> resultList = this.naverApiService.bookSearch(title, page);
             model.addAttribute("searchList", resultList);
         }
     }

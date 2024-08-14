@@ -23,7 +23,7 @@ public class NaverApiService {
 
     int display = 10;
 
-    public List<Map> bookSearch(String title, int page){
+    public List<Map<String, String>> bookSearch(String title, int page){
 
         int start = 1;
 
@@ -39,16 +39,15 @@ public class NaverApiService {
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
 
-        List<Map> searchList = getList(responseBody);
-        return searchList;
+        return getList(responseBody);
     }
 
     //String 타입의 Json text를 Json으로 변환해 List 객체로 만든다.
-    private List<Map> getList(String text){
+    private List<Map<String, String>> getList(String text){
 
         JSONArray jsonArray = new JSONObject(text).getJSONArray("items");
 
-        List<Map> list = new ArrayList<>();
+        List<Map<String, String>> list = new ArrayList<>();
 
         for(int i = 0; i<jsonArray.length(); i++){
             JSONObject object = jsonArray.getJSONObject(i);
