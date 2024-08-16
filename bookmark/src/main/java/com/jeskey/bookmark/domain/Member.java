@@ -34,6 +34,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private FlagYN activated;
 
+    @ColumnDefault("'N'")
+    @Enumerated(EnumType.STRING)
+    private FlagYN sso;
+
     @ElementCollection
     @CollectionTable(name="member_role")
     @Builder.Default
